@@ -66,8 +66,7 @@ export async function getProducts(params: {
     // Transform the response
     const transformedProducts = transformWooCommerceProducts(response);
     
-    // Debug: Log the transformed products
-    console.log('Transformed products:', transformedProducts);
+    
     
     const result: WooCommerceResponse<Product> = {
       data: transformedProducts,
@@ -81,7 +80,6 @@ export async function getProducts(params: {
     
     return result;
   } catch (error) {
-    console.error('Error fetching products:', error);
     throw error;
   }
 }
@@ -107,7 +105,6 @@ export async function getProduct(productId: number): Promise<Product> {
     
     return transformedProduct;
   } catch (error) {
-    console.error(`Error fetching product ${productId}:`, error);
     throw error;
   }
 }
@@ -204,7 +201,6 @@ export async function getFeaturedProducts(
     
     return result;
   } catch (error) {
-    console.error('Error fetching featured products:', error);
     throw error;
   }
 }
@@ -252,7 +248,6 @@ export async function createOrder(orderData: WooCommerceOrder): Promise<OrderCre
       orderNumber: response.number,
     };
   } catch (error) {
-    console.error('Error creating order:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to create order',
@@ -269,7 +264,6 @@ export async function getOrder(orderId: number): Promise<any> {
   try {
     return await apiGet<any>(API_ENDPOINTS.ORDER(orderId));
   } catch (error) {
-    console.error(`Error fetching order ${orderId}:`, error);
     throw error;
   }
 }
@@ -294,7 +288,6 @@ export async function updateOrderStatus(
     
     return await apiPut<any>(API_ENDPOINTS.ORDER(orderId), updateData);
   } catch (error) {
-    console.error(`Error updating order ${orderId}:`, error);
     throw error;
   }
 }
@@ -328,7 +321,6 @@ export async function getCategories(params: {
     
     return response;
   } catch (error) {
-    console.error('Error fetching categories:', error);
     throw error;
   }
 }
@@ -354,7 +346,6 @@ export async function checkProductStock(productId: number): Promise<{
       stockStatus: product.stockStatus,
     };
   } catch (error) {
-    console.error(`Error checking stock for product ${productId}:`, error);
     throw error;
   }
 }

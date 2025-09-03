@@ -12,7 +12,6 @@ interface ProductGridProps {
   error?: string | null;
   onRetry?: () => void;
   onViewDetails?: (product: Product) => void;
-  onAddToWishlist?: (product: Product) => void;
   variant?: 'grid' | 'compact' | 'list';
   columns?: 1 | 2 | 3 | 4 | 5 | 6;
   className?: string;
@@ -24,21 +23,20 @@ export function ProductGrid({
   error = null,
   onRetry,
   onViewDetails,
-  onAddToWishlist,
   variant = 'grid',
   columns = 4,
   className = '',
 }: ProductGridProps) {
   const getGridClasses = () => {
-    const baseClasses = 'grid gap-4 sm:gap-6';
+    const baseClasses = 'grid gap-2 sm:gap-6';
     switch (columns) {
       case 1: return `${baseClasses} grid-cols-1`;
-      case 2: return `${baseClasses} grid-cols-1 sm:grid-cols-2`;
-      case 3: return `${baseClasses} grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`;
-      case 4: return `${baseClasses} grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`;
-      case 5: return `${baseClasses} grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5`;
-      case 6: return `${baseClasses} grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6`;
-      default: return `${baseClasses} grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`;
+      case 2: return `${baseClasses} grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`;
+      case 3: return `${baseClasses} grid-cols-2 sm:grid-cols-2 lg:grid-cols-3`;
+      case 4: return `${baseClasses} grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`;
+      case 5: return `${baseClasses} grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5`;
+      case 6: return `${baseClasses} grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6`;
+      default: return `${baseClasses} grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`;
     }
   };
 
@@ -103,9 +101,9 @@ export function ProductGrid({
 
   return (
     <div className={`${getGridClasses()} ${className}`}>
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product} onViewDetails={onViewDetails} onAddToWishlist={onAddToWishlist} />
-      ))}
+              {products.map((product) => (
+          <ProductCard key={product.id} product={product} onViewDetails={onViewDetails} />
+        ))}
     </div>
   );
 }

@@ -1,0 +1,9 @@
+.slider-frame {
+    display: block;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    contain: paint;
+    will-change: transform;
+    opacity: 0.9999; /* Safari/iOS repaint hint */
+  }
+  

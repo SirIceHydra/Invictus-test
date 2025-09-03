@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingCart, Heart, Eye } from 'lucide-react';
+import { ShoppingCart, Eye } from 'lucide-react';
 import { Product } from '../../types/product';
 import { useCart } from '../core/cart/CartContext';
 import { formatPrice, isProductInStock, getStockStatusText } from '../../utils/helpers';
@@ -8,11 +8,10 @@ import { Loading } from '../../components/ui/Loading';
 interface ProductCardProps {
   product: Product;
   onViewDetails?: (product: Product) => void;
-  onAddToWishlist?: (product: Product) => void;
   className?: string;
 }
 
-export function ProductCard({ product, onViewDetails, onAddToWishlist, className = '' }: ProductCardProps) {
+export function ProductCard({ product, onViewDetails, className = '' }: ProductCardProps) {
   const { addToCart, isInCart, getCartItemQuantity } = useCart();
   const [imageLoading, setImageLoading] = useState(true);
   const [addingToCart, setAddingToCart] = useState(false);
@@ -28,7 +27,7 @@ export function ProductCard({ product, onViewDetails, onAddToWishlist, className
 
   return (
     <div className={`group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 ease-out flex flex-col h-full ${className}`}>
-      <div className="relative w-full h-64 bg-white overflow-hidden">
+      <div className="relative w-full h-48 sm:h-64 bg-white overflow-hidden">
         {imageLoading && (
           <div className="absolute inset-0 flex items-center justify-center"><Loading size="sm" /></div>
         )}
@@ -57,16 +56,9 @@ export function ProductCard({ product, onViewDetails, onAddToWishlist, className
           >
             <Eye className="w-5 h-5 text-gray-600 group-hover:text-rose-500 transition-colors duration-200" />
           </button>
-          <button 
-            onClick={() => onAddToWishlist?.(product)} 
-            className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center hover:bg-white hover:scale-110 hover:shadow-xl transition-all duration-200" 
-            title="Add to Wishlist"
-          >
-            <Heart className="w-5 h-5 text-gray-600 group-hover:text-rose-500 transition-colors duration-200" />
-          </button>
         </div>
       </div>
-      <div className="p-4 flex flex-col flex-1">
+      <div className="p-3 sm:p-4 flex flex-col flex-1">
         {product.categories?.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-2">
             {product.categories.slice(0,2).map((c, i) => (

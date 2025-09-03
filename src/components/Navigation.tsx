@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ShoppingCart } from 'lucide-react';
+import { Menu, X, ShoppingCart, ChevronDown, ChevronUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCart } from '@shop/core/cart/CartContext';
 import { useBrands } from '../hooks/useBrands';
@@ -12,6 +12,9 @@ interface NavigationProps {
 
 export function Navigation({ isScrolled }: NavigationProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileBrandsOpen, setMobileBrandsOpen] = useState(false);
+  const [mobileCategoriesOpen, setMobileCategoriesOpen] = useState(false);
+  const [mobileWorkoutOpen, setMobileWorkoutOpen] = useState(false);
   const { cart } = useCart();
   const { brands, loading: brandsLoading } = useBrands();
   const { categories, loading: categoriesLoading } = useCategories();
@@ -29,7 +32,7 @@ export function Navigation({ isScrolled }: NavigationProps) {
 
   return (
     <nav
-      className="fixed w-full z-50 transition-all duration-300 bg-white/95 py-8 shadow-lg"
+      className="fixed w-full z-[9999] transition-all duration-300 bg-white/95 pt-8 pb-8 shadow-lg top-0"
     >
       <div className="container mx-auto px-4 flex items-center justify-between max-w-full">
         {/* LOGO */}
@@ -178,66 +181,102 @@ export function Navigation({ isScrolled }: NavigationProps) {
               SPECIALS
             </Link>
             
-            {/* Mobile Brands Section */}
+            {/* Mobile Brands Section (collapsible) */}
             <div className="border-l-2 border-rose-200 pl-4">
-              <div className="text-sm text-gray-600 mb-2">BRANDS</div>
-              {brandsLoading ? (
-                <div className="text-gray-500 py-1">Loading brands...</div>
-              ) : brands.length > 0 ? (
-                brands.map((brand) => (
-                  <Link
-                    key={brand.id}
-                    to={`/shop?brand=${brand.name}`}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block py-1 hover:text-rose-400 transition-colors"
-                  >
-                    {brand.name}
-                  </Link>
-                ))
-              ) : (
-                <div className="text-gray-500 py-1">No brands available</div>
+              <button
+                className="w-full text-left text-sm text-gray-600 mb-2 flex items-center justify-between"
+                onClick={() => setMobileBrandsOpen(!mobileBrandsOpen)}
+                aria-expanded={mobileBrandsOpen}
+                aria-controls="mobile-brands-list"
+              >
+                <span>BRANDS</span>
+                {mobileBrandsOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+              </button>
+              {mobileBrandsOpen && (
+                <div id="mobile-brands-list">
+                  {brandsLoading ? (
+                    <div className="text-gray-500 py-1">Loading brands...</div>
+                  ) : brands.length > 0 ? (
+                    brands.map((brand) => (
+                      <Link
+                        key={brand.id}
+                        to={`/shop?brand=${brand.name}`}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block py-1 hover:text-rose-400 transition-colors"
+                      >
+                        {brand.name}
+                      </Link>
+                    ))
+                  ) : (
+                    <div className="text-gray-500 py-1">No brands available</div>
+                  )}
+                </div>
               )}
             </div>
 
-            {/* Mobile Category Section */}
+            {/* Mobile Category Section (collapsible) */}
             <div className="border-l-2 border-rose-200 pl-4">
-              <div className="text-sm text-gray-600 mb-2">CATEGORY</div>
-              {categoriesLoading ? (
-                <div className="text-gray-500 py-1">Loading categories...</div>
-              ) : categories.length > 0 ? (
-                categories.map((category) => (
-                  <Link
-                    key={category.id}
-                    to={`/shop?category=${category.id}`}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block py-1 hover:text-rose-400 transition-colors"
-                  >
-                    {category.name}
-                  </Link>
-                ))
-              ) : (
-                <div className="text-gray-500 py-1">No categories available</div>
+              <button
+                className="w-full text-left text-sm text-gray-600 mb-2 flex items-center justify-between"
+                onClick={() => setMobileCategoriesOpen(!mobileCategoriesOpen)}
+                aria-expanded={mobileCategoriesOpen}
+                aria-controls="mobile-categories-list"
+              >
+                <span>CATEGORY</span>
+                {mobileCategoriesOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+              </button>
+              {mobileCategoriesOpen && (
+                <div id="mobile-categories-list">
+                  {categoriesLoading ? (
+                    <div className="text-gray-500 py-1">Loading categories...</div>
+                  ) : categories.length > 0 ? (
+                    categories.map((category) => (
+                      <Link
+                        key={category.id}
+                        to={`/shop?category=${category.id}`}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block py-1 hover:text-rose-400 transition-colors"
+                      >
+                        {category.name}
+                      </Link>
+                    ))
+                  ) : (
+                    <div className="text-gray-500 py-1">No categories available</div>
+                  )}
+                </div>
               )}
             </div>
 
-            {/* Mobile Workout Plans Section */}
+            {/* Mobile Workout Plans Section (collapsible) */}
             <div className="border-l-2 border-rose-200 pl-4">
-              <div className="text-sm text-gray-600 mb-2">WORKOUT PLANS</div>
-              {wordpressCategoriesLoading ? (
-                <div className="text-gray-500 py-1">Loading workout plans...</div>
-              ) : workoutCategories.length > 0 ? (
-                workoutCategories.map((category) => (
-                  <Link
-                    key={category.id}
-                    to={`/posts?category=${category.slug}`}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block py-1 hover:text-rose-400 transition-colors"
-                  >
-                    {category.name}
-                  </Link>
-                ))
-              ) : (
-                <div className="text-gray-500 py-1">No workout plans available</div>
+              <button
+                className="w-full text-left text-sm text-gray-600 mb-2 flex items-center justify-between"
+                onClick={() => setMobileWorkoutOpen(!mobileWorkoutOpen)}
+                aria-expanded={mobileWorkoutOpen}
+                aria-controls="mobile-workout-list"
+              >
+                <span>WORKOUT PLANS</span>
+                {mobileWorkoutOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+              </button>
+              {mobileWorkoutOpen && (
+                <div id="mobile-workout-list">
+                  {wordpressCategoriesLoading ? (
+                    <div className="text-gray-500 py-1">Loading workout plans...</div>
+                  ) : workoutCategories.length > 0 ? (
+                    workoutCategories.map((category) => (
+                      <Link
+                        key={category.id}
+                        to={`/posts?category=${category.slug}`}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block py-1 hover:text-rose-400 transition-colors"
+                      >
+                        {category.name}
+                      </Link>
+                    ))
+                  ) : (
+                    <div className="text-gray-500 py-1">No workout plans available</div>
+                  )}
+                </div>
               )}
             </div>
 

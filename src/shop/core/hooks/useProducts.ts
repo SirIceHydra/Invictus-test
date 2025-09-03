@@ -49,15 +49,10 @@ export function useProducts(initial: UseProductsOptions = {}) {
       if (opts.brand || defaults.brand) {
         const brandFilter = opts.brand ?? defaults.brand;
         if (brandFilter) {
-          console.log('Brand filter applied:', brandFilter);
-          console.log('Available products with brands:', resp.data.map(p => ({ name: p.name, brand: p.brand })));
-          console.log('Products with brand info:', resp.data.filter(p => p.brand).length, 'out of', resp.data.length);
           filteredProducts = resp.data.filter(product => {
             const matches = product.brand && product.brand.toLowerCase() === brandFilter.toLowerCase();
-            console.log(`Product "${product.name}" brand: "${product.brand}" matches "${brandFilter}": ${matches}`);
             return matches;
           });
-          console.log('Filtered products count:', filteredProducts.length);
         }
       }
 
@@ -65,9 +60,7 @@ export function useProducts(initial: UseProductsOptions = {}) {
       if (opts.onSale || defaults.onSale) {
         const onSaleFilter = opts.onSale ?? defaults.onSale;
         if (onSaleFilter) {
-          console.log('On Sale filter applied:', onSaleFilter);
           filteredProducts = filteredProducts.filter(product => product.onSale);
-          console.log('On Sale filtered products count:', filteredProducts.length);
         }
       }
       

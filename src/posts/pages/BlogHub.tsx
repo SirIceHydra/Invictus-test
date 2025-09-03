@@ -35,6 +35,7 @@ const BlogHub: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
+  const [mobileOpenParentId, setMobileOpenParentId] = useState<number | null>(null);
   
   const navigate = useNavigate();
 
@@ -63,13 +64,10 @@ const BlogHub: React.FC = () => {
         fetchCategories(),
         fetchPosts({ perPage: 12, orderBy: 'date', order: 'desc' })
       ]);
-      console.log('📊 BlogHub: Fetched categories:', fetchedCategories);
-      console.log('📊 BlogHub: Fetched posts:', fetchedPosts.posts.length);
       setCategories(fetchedCategories);
       setPosts(fetchedPosts.posts);
     } catch (err) {
       setError('Failed to load data');
-      console.error('Error fetching data:', err);
     } finally {
       setLoading(false);
     }
@@ -89,7 +87,6 @@ const BlogHub: React.FC = () => {
       });
       setPosts(postsData.posts);
     } catch (err) {
-      console.error('Error fetching posts for category:', err);
       setError('Failed to load category posts');
     } finally {
       setCategoryLoading(false);
@@ -114,7 +111,7 @@ const BlogHub: React.FC = () => {
           });
           allPosts.push(...postsData.posts);
         } catch (err) {
-          console.error(`Error fetching posts for ${child.slug}:`, err);
+          // Continue to next child category
         }
       }
       // Sort by date and take first 12
@@ -123,7 +120,6 @@ const BlogHub: React.FC = () => {
         .slice(0, 12);
       setPosts(sortedPosts);
     } catch (err) {
-      console.error('Error fetching posts for parent:', err);
       setError('Failed to load parent category posts');
     } finally {
       setCategoryLoading(false);
@@ -143,7 +139,6 @@ const BlogHub: React.FC = () => {
       });
       setPosts(postsData.posts);
     } catch (err) {
-      console.error('Error fetching all posts:', err);
       setError('Failed to load posts');
     } finally {
       setCategoryLoading(false);
@@ -181,8 +176,6 @@ const BlogHub: React.FC = () => {
   // Define the parent categories dynamically from WordPress data
   const getParentCategories = (): ParentCategory[] => {
     const parentCategories = categories.filter(cat => cat.parent === 0);
-    
-    console.log('📊 BlogHub: Parent categories found:', parentCategories);
     
     return parentCategories.map(parent => {
       const children = categories.filter(cat => cat.parent === parent.id);
@@ -282,9 +275,72 @@ const BlogHub: React.FC = () => {
       </div>
 
       {/* Category Navigation Bar */}
-      <div className="bg-white border-b border-gray-100 sticky top-0 z-10">
+      <div className="bg-white border-b border-gray-100 md:sticky md:top-0 md:z-10">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between py-4">
+          {/* Mobile: vertical accordion */}
+          <div className="md:hidden py-4 space-y-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+              <input
+                type="text"
+                placeholder="Search posts..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                disabled={categoryLoading}
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <button
+                onClick={handleAllPosts}
+                disabled={categoryLoading}
+                className={`w-full text-left text-sm font-semibold uppercase tracking-wide transition-colors flex items-center justify-between gap-2 ${
+                  !selectedParent && !selectedCategory 
+                    ? 'text-rose-400'
+                    : 'text-gray-700 hover:text-rose-400'
+                } ${categoryLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                <span>ALL POSTS</span>
+              </button>
+
+              {parentCategories.map((parent) => (
+                <div key={parent.id}>
+                  <button
+                    onClick={() => setMobileOpenParentId(mobileOpenParentId === parent.id ? null : parent.id)}
+                    disabled={categoryLoading}
+                    className={`w-full text-left text-sm font-semibold uppercase tracking-wide transition-colors flex items-center justify-between gap-2 ${
+                      selectedParent?.id === parent.id 
+                        ? 'text-rose-400' 
+                        : 'text-gray-700 hover:text-rose-400'
+                    } ${categoryLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  >
+                    <span className="flex items-center gap-2">{parent.icon}{parent.name}</span>
+                    <span className="text-xs text-gray-400">{mobileOpenParentId === parent.id ? '−' : '+'}</span>
+                  </button>
+                  {mobileOpenParentId === parent.id && parent.children.length > 0 && (
+                    <div className="mt-2 pl-4 space-y-1">
+                      {parent.children.map((child) => (
+                        <button
+                          key={child.id}
+                          onClick={() => handleCategorySelect(child)}
+                          disabled={categoryLoading}
+                          className={`w-full text-left px-2 py-1 text-sm text-gray-700 rounded hover:text-rose-400 hover:bg-gray-50 ${
+                            categoryLoading ? 'opacity-50 cursor-not-allowed' : ''
+                          }`}
+                        >
+                          {child.name} <span className="text-gray-400">({child.count})</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop */}
+          <div className="hidden md:flex items-center justify-between py-4">
             <div className="flex items-center space-x-8">
               <button
                 onClick={handleAllPosts}
@@ -400,13 +456,6 @@ const BlogHub: React.FC = () => {
         {!categoryLoading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredPosts.map((post) => {
-              console.log('📝 Rendering post:', {
-                id: post.id,
-                title: post.title,
-                categories: post.categories,
-                excerpt: post.excerpt?.substring(0, 50) + '...'
-              });
-              
               return (
                 <article key={post.id} className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
                   {/* Featured Image */}
@@ -524,7 +573,7 @@ const BlogHub: React.FC = () => {
             </div>
           </div>
           <div className="mt-12 pt-8 border-t border-gray-200 text-center text-gray-600">
-            © 2025 INVICTUS NUTRITION. ALL RIGHTS RESERVED. Website designed &amp; hosted by{' '}
+            © 2025 INVICTUS NUTRITION. ALL RIGHTS RESERVED. Website designed & hosted by{' '}
             <a
               href="https://www.kaizentech.co.za"
               target="_blank"

@@ -74,7 +74,7 @@ export function useProducts(initialOptions: UseProductsOptions = {}): UseProduct
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : ERROR_MESSAGES.API_ERROR;
       setError(errorMessage);
-      console.error('Error fetching products:', err);
+
     } finally {
       setLoading(false);
     }
@@ -88,7 +88,6 @@ export function useProducts(initialOptions: UseProductsOptions = {}): UseProduct
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : ERROR_MESSAGES.PRODUCT_NOT_FOUND;
       setError(errorMessage);
-      console.error(`Error fetching product ${id}:`, err);
       return null;
     }
   }, []);
@@ -116,7 +115,7 @@ export function useProducts(initialOptions: UseProductsOptions = {}): UseProduct
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : ERROR_MESSAGES.API_ERROR;
       setError(errorMessage);
-      console.error('Error fetching featured products:', err);
+
     } finally {
       setLoading(false);
     }
@@ -136,7 +135,7 @@ export function useProducts(initialOptions: UseProductsOptions = {}): UseProduct
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : ERROR_MESSAGES.API_ERROR;
       setError(errorMessage);
-      console.error('Error fetching sale products:', err);
+
     } finally {
       setLoading(false);
     }
@@ -207,7 +206,6 @@ export function useProduct(): UseProductReturn {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : ERROR_MESSAGES.PRODUCT_NOT_FOUND;
       setError(errorMessage);
-      console.error(`Error fetching product ${id}:`, err);
     } finally {
       setLoading(false);
     }
@@ -261,7 +259,7 @@ export function useCategories(): UseCategoriesReturn {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : ERROR_MESSAGES.API_ERROR;
       setError(errorMessage);
-      console.error('Error fetching categories:', err);
+
     } finally {
       setLoading(false);
     }

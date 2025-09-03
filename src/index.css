@@ -102,6 +102,8 @@
   display: none;  /* Safari and Chrome */
 }
 
+
+
 /* Scroll-triggered animations */
 .reveal {
   opacity: 0;
@@ -429,3 +431,4 @@ button, a, input, select, textarea {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+

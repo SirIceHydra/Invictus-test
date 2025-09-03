@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, ShoppingCart, Heart, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Product } from '../../types/product';
 import { useCart } from '../core/cart/CartContext';
 import { formatPrice, isProductInStock, getStockStatusText } from '../../utils/helpers';
@@ -60,25 +60,25 @@ export function ProductDetailsModal({ product, isOpen, onClose }: ProductDetails
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+    <div className="fixed inset-0 z-[9999] overflow-y-auto">
       <div className="fixed inset-0 bg-black/50" onClick={onClose} />
-      <div className="flex min-h-full items-center justify-center p-4">
-        <div className="relative bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
+      <div className="flex min-h-full items-start justify-center p-2 sm:p-4 pt-20">
+        <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[95vh] overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-200">
-            <h2 className="text-2xl font-bold">PRODUCT DETAILS</h2>
+          <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-white sticky top-0 z-10">
+            <h2 className="text-xl sm:text-2xl font-bold">PRODUCT DETAILS</h2>
             <button 
               onClick={onClose} 
-              className="text-gray-400 hover:text-gray-600 transition-colors"
+              className="text-gray-400 hover:text-gray-600 transition-colors p-2"
             >
-              <X size={24} />
+              <X size={20} />
             </button>
           </div>
 
-          <div className="flex flex-col lg:flex-row max-h-[calc(90vh-120px)] overflow-hidden">
+          <div className="flex flex-col lg:flex-row max-h-[calc(95vh-80px)] overflow-y-auto">
             {/* Left Side - Image Gallery */}
-            <div className="lg:w-1/2 p-6">
-              <div className="relative w-full h-96 bg-white rounded-lg overflow-hidden">
+            <div className="lg:w-1/2 p-4 sm:p-6">
+              <div className="relative w-full h-64 sm:h-96 bg-white rounded-lg overflow-hidden">
                 {/* Main Image */}
                 {imageLoading && (
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -101,18 +101,18 @@ export function ProductDetailsModal({ product, isOpen, onClose }: ProductDetails
                   <>
                     <button
                       onClick={previousImage}
-                      className="absolute left-2 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110"
+                      className="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 bg-white/80 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110"
                       title="Previous Image"
                     >
-                      <ChevronLeft className="w-5 h-5 text-gray-700" />
+                      <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700" />
                     </button>
                     
                     <button
                       onClick={nextImage}
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110"
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 bg-white/80 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110"
                       title="Next Image"
                     >
-                      <ChevronRight className="w-5 h-5 text-gray-700" />
+                      <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700" />
                     </button>
 
                     {/* Image Counter */}
@@ -131,7 +131,7 @@ export function ProductDetailsModal({ product, isOpen, onClose }: ProductDetails
                       <button
                         key={index}
                         onClick={() => selectImage(index)}
-                        className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                        className={`flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
                           index === currentImageIndex
                             ? 'border-rose-400 shadow-lg'
                             : 'border-gray-200 hover:border-gray-300'
@@ -150,22 +150,22 @@ export function ProductDetailsModal({ product, isOpen, onClose }: ProductDetails
             </div>
 
             {/* Right Side - Product Information */}
-            <div className="lg:w-1/2 p-6 overflow-y-auto">
-              <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
+            <div className="lg:w-1/2 p-4 sm:p-6">
+              <h1 className="text-2xl sm:text-3xl font-bold mb-4">{product.name}</h1>
               
               {/* Price */}
               <div className="flex items-center gap-3 mb-4">
                 {product.onSale && product.salePrice ? (
                   <>
-                    <span className="text-3xl font-bold text-rose-500">
+                    <span className="text-2xl sm:text-3xl font-bold text-rose-500">
                       {formatPrice(product.salePrice)}
                     </span>
-                    <span className="text-lg text-gray-500 line-through">
+                    <span className="text-base sm:text-lg text-gray-500 line-through">
                       {formatPrice(product.regularPrice)}
                     </span>
                   </>
                 ) : (
-                  <span className="text-3xl font-bold">
+                  <span className="text-2xl sm:text-3xl font-bold">
                     {formatPrice(product.price)}
                   </span>
                 )}
@@ -195,25 +195,18 @@ export function ProductDetailsModal({ product, isOpen, onClose }: ProductDetails
                 </div>
               )}
 
-              {/* Action Buttons */}
-              <div className="flex gap-3 pt-4 border-t border-gray-200">
+              {/* Action Buttons - Sticky on mobile */}
+              <div className="flex gap-3 pt-4 border-t border-gray-200 bg-white sticky bottom-0 pb-2">
                 <button 
                   onClick={handleAdd} 
                   disabled={!inStock || adding} 
-                  className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all ${
+                  className={`w-full py-3 px-4 sm:px-6 rounded-lg font-semibold transition-all ${
                     inStock 
                       ? 'bg-gradient-to-r from-rose-400 to-amber-400 text-white hover:scale-105' 
                       : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                   }`}
                 >
                   {adding ? 'Adding...' : 'Add to Cart'}
-                </button>
-                
-                <button 
-                  className="p-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" 
-                  title="Wishlist"
-                >
-                  <Heart className="w-5 h-5 text-gray-600" />
                 </button>
               </div>
             </div>

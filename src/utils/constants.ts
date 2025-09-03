@@ -12,7 +12,7 @@ export const APP_CONFIG = {
   IS_PRODUCTION: import.meta.env.PROD,
   
   // Base URLs
-  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api',
+  API_BASE_URL: import.meta.env.VITE_API_BASE_URL,
   
   // Pagination
   DEFAULT_PAGE_SIZE: 12,
@@ -42,9 +42,9 @@ export const PAYFAST_CONFIG = {
   PRODUCTION_URL: 'https://www.payfast.co.za/eng/process',
   
   // Return URLs
-  RETURN_URL: import.meta.env.VITE_PAYFAST_RETURN_URL || 'http://localhost:5173/payment/success',
-  CANCEL_URL: import.meta.env.VITE_PAYFAST_CANCEL_URL || 'http://localhost:5173/payment/cancel',
-  NOTIFY_URL: import.meta.env.VITE_PAYFAST_NOTIFY_URL || 'http://local-woocommerce.local/wc-api/payfast',
+  RETURN_URL: import.meta.env.VITE_PAYFAST_RETURN_URL ,
+  CANCEL_URL: import.meta.env.VITE_PAYFAST_CANCEL_URL ,
+  NOTIFY_URL: import.meta.env.VITE_PAYFAST_NOTIFY_URL ,
   
   // Test mode
   TEST_MODE: import.meta.env.VITE_PAYFAST_TEST_MODE === 'true' || true,
@@ -53,12 +53,12 @@ export const PAYFAST_CONFIG = {
 // WooCommerce Configuration
 export const WOOCOMMERCE_CONFIG = {
   // Base URL (should be in environment variables)
-  BASE_URL: import.meta.env.VITE_WOOCOMMERCE_URL || 'https://local-woocommerce.local',
+  BASE_URL: import.meta.env.VITE_WOOCOMMERCE_URL,
   
   // API Configuration
   API_VERSION: 'wc/v3',
-  CONSUMER_KEY: import.meta.env.VITE_WOOCOMMERCE_CONSUMER_KEY || '',
-  CONSUMER_SECRET: import.meta.env.VITE_WOOCOMMERCE_CONSUMER_SECRET || '',
+  CONSUMER_KEY: import.meta.env.VITE_WOOCOMMERCE_CONSUMER_KEY,
+  CONSUMER_SECRET: import.meta.env.VITE_WOOCOMMERCE_CONSUMER_SECRET,
   
   // Pagination
   PRODUCTS_PER_PAGE: 12,

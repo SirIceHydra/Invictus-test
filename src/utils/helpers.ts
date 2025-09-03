@@ -22,24 +22,17 @@ export function stripHtmlTags(html: string): string {
  * @returns Simplified Product object for React components
  */
 export function transformWooCommerceProduct(wooProduct: WooCommerceProduct): Product {
-  // Extract brand from attributes - try multiple approaches
+  // Extract brand from attributes
   let brand = undefined;
   
-  // Try to find brand attribute by ID 3 (common for brands)
-  const brandAttributeById = wooProduct.attributes.find(attr => attr.id === 3);
-  if (brandAttributeById?.options?.[0]) {
-    brand = brandAttributeById.options[0];
-  }
-  
-  // If not found by ID, try by name
-  if (!brand) {
-    const brandAttributeByName = wooProduct.attributes.find(attr => 
+  if (wooProduct.attributes && wooProduct.attributes.length > 0) {
+    const brandAttr = wooProduct.attributes.find(attr => 
       attr.name.toLowerCase() === 'brand' || 
-      attr.name.toLowerCase() === 'manufacturer' ||
-      attr.name.toLowerCase() === 'make'
+      attr.name.toLowerCase() === 'pa_brand'
     );
-    if (brandAttributeByName?.options?.[0]) {
-      brand = brandAttributeByName.options[0];
+    
+    if (brandAttr && brandAttr.options && brandAttr.options.length > 0) {
+      brand = brandAttr.options[0];
     }
   }
   
@@ -60,17 +53,7 @@ export function transformWooCommerceProduct(wooProduct: WooCommerceProduct): Pro
     }
   }
   
-  // Debug logging for brand extraction
-  if (wooProduct.attributes.length > 0) {
-    console.log(`Product "${wooProduct.name}" attributes:`, wooProduct.attributes.map(attr => ({
-      id: attr.id,
-      name: attr.name,
-      options: attr.options
-    })));
-    console.log(`Product "${wooProduct.name}" extracted brand:`, brand);
-  } else {
-    console.log(`Product "${wooProduct.name}" has no attributes`);
-  }
+
 
   return {
     id: wooProduct.id,
@@ -222,11 +205,6 @@ export function validateCheckoutForm(formData: any): { isValid: boolean; errors:
  * @returns MD5 signature string
  */
 export function generatePayFastSignature(data: Record<string, string>, passphrase: string = ''): string {
-  console.log('=== PayFast Signature Generation Debug ===');
-  console.log('Input Data:', data);
-  console.log('Input Passphrase:', passphrase);
-  console.log('Data Keys Order:', Object.keys(data));
-  
   // Step 1: Concatenation of name=value pairs with '&' as separator
   // The pairs must be listed in the order in which they appear in the attributes description
   // Do NOT use the alphabetical signature format, which uses alphabetical ordering!
@@ -246,38 +224,24 @@ export function generatePayFastSignature(data: Record<string, string>, passphras
         const encodedValue = encodeURIComponent(value.trim()).replace(/%20/g, '+');
         pfOutput += `${key}=${encodedValue}`;
         includedFields.push(`${key}=${encodedValue}`);
-        console.log(`Added field: ${key}=${encodedValue}`);
-      } else {
-        console.log(`Skipped empty field: ${key}=${value}`);
       }
     }
   }
-  
-  console.log('Included Fields:', includedFields);
-  console.log('Parameter String (before passphrase):', pfOutput);
   
   // Step 2: Add passphrase to the end of the string
   // The passphrase is an extra security feature and is set by the Merchant
   if (passphrase && passphrase.trim() !== '') {
     const encodedPassphrase = encodeURIComponent(passphrase.trim()).replace(/%20/g, '+');
     pfOutput += `&passphrase=${encodedPassphrase}`;
-    console.log(`Added passphrase: passphrase=${encodedPassphrase}`);
-  } else {
-    console.log('No passphrase added (empty or undefined)');
   }
   
   // Remove last ampersand if present
   if (pfOutput.endsWith('&')) {
     pfOutput = pfOutput.slice(0, -1);
-    console.log('Removed trailing ampersand');
   }
-  
-  console.log('FINAL PARAMETER STRING:', pfOutput);
   
   // Step 3: MD5 the parameter string and pass it as a hidden input named "signature"
   const signature = MD5(pfOutput).toString().toLowerCase();
-  console.log('FINAL GENERATED SIGNATURE:', signature);
-  console.log('==========================================');
   
   return signature;
 }
@@ -289,7 +253,7 @@ export function generatePayFastSignature(data: Record<string, string>, passphras
  * @returns Debounced function
  */
 export function debounce<T extends (...args: any[]) => any>(func: T, wait: number): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout;
+  let timeout: number;
   return (...args: Parameters<T>) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => func(...args), wait);
@@ -322,7 +286,7 @@ export const storage = {
       const item = localStorage.getItem(key);
       return item ? JSON.parse(item) : null;
     } catch (error) {
-      console.error('Error reading from localStorage:', error);
+
       return null;
     }
   },
@@ -331,7 +295,7 @@ export const storage = {
     try {
       localStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
-      console.error('Error writing to localStorage:', error);
+
     }
   },
   
@@ -339,7 +303,7 @@ export const storage = {
     try {
       localStorage.removeItem(key);
     } catch (error) {
-      console.error('Error removing from localStorage:', error);
+
     }
   },
   
@@ -347,7 +311,7 @@ export const storage = {
     try {
       localStorage.clear();
     } catch (error) {
-      console.error('Error clearing localStorage:', error);
+
     }
   },
 };

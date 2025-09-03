@@ -35,19 +35,14 @@ const PostsPage: React.FC = () => {
   // Handle URL parameters for category filtering
   useEffect(() => {
     const categoryFromUrl = searchParams.get('category');
-    console.log('🔍 PostsPage: Category from URL:', categoryFromUrl);
-    console.log('🔍 PostsPage: Current filters.category:', filters.category);
     if (categoryFromUrl && categoryFromUrl !== filters.category) {
-      console.log('🎯 PostsPage: Setting category filter to:', categoryFromUrl);
       setCategory(categoryFromUrl);
     }
   }, [searchParams, setCategory, filters.category]);
 
   // Debug posts changes
   useEffect(() => {
-    console.log('📊 PostsPage: Posts updated:', posts.length, 'posts');
     if (filters.category) {
-      console.log('📊 PostsPage: Posts for category:', filters.category);
     }
   }, [posts, filters.category]);
 

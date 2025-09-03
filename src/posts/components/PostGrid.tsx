@@ -24,7 +24,6 @@ export const PostGrid: React.FC<PostGridProps> = ({
   imageSize = 'medium',
   className = '',
 }) => {
-  console.log('🎨 PostGrid: Received props:', { posts, loading, error, postsLength: posts?.length });
   const getGridColumns = () => {
     switch (columns) {
       case 1:

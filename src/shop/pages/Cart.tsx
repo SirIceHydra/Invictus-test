@@ -76,27 +76,33 @@ export default function Cart({ className = '' }: CartProps) {
             <ArrowLeft className="w-5 h-5" /> Continue Shopping
           </Link>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-lg border border-gray-100">
-              <div className="p-6 border-b border-gray-200"><h2 className="text-xl font-semibold text-gray-900">Cart Items ({cart.itemCount})</h2></div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8 overflow-hidden">
+          <div className="lg:col-span-2 overflow-hidden">
+            <div className="bg-white rounded-lg shadow-lg border border-gray-100 overflow-hidden">
+              <div className="p-4 sm:p-6 border-b border-gray-200"><h2 className="text-xl font-semibold text-gray-900">Cart Items ({cart.itemCount})</h2></div>
               <div className="divide-y divide-gray-200">
                 {cart.items.map(item => (
-                  <div key={item.id} className="p-6 hover:bg-gray-50 transition-colors">
-                    <div className="flex items-center gap-6">
-                      <div className="flex-shrink-0"><img src={item.image || '/placeholder-product.jpg'} alt={item.name} className="w-24 h-24 object-cover rounded-lg shadow-sm" /></div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">{item.name}</h3>
+                  <div key={item.id} className="p-4 sm:p-6 hover:bg-gray-50 transition-colors">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+                      <div className="flex-shrink-0 flex justify-center sm:justify-start">
+                        <img src={item.image || '/placeholder-product.jpg'} alt={item.name} className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg shadow-sm" />
+                      </div>
+                      <div className="flex-1 min-w-0 text-center sm:text-left">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2 break-words">{item.name}</h3>
                         <p className="text-rose-500 font-medium text-lg">{formatPrice(item.price)}</p>
                         <p className="text-sm text-gray-500 mt-1">Stock: {item.stockStatus === 'instock' ? 'In Stock' : 'Limited'}</p>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <button onClick={() => handleQuantityChange(item.productId, item.quantity - 1)} disabled={updatingItem === item.id} className="w-10 h-10 flex items-center justify-center border-2 border-gray-300 rounded-full hover:border-rose-400 hover:bg-rose-50 disabled:opacity-50 transition-all"><Minus className="w-4 h-4" /></button>
-                        <span className="w-16 text-center font-semibold text-lg">{updatingItem === item.id ? <Loading size="sm" /> : item.quantity}</span>
-                        <button onClick={() => handleQuantityChange(item.productId, item.quantity + 1)} disabled={updatingItem === item.id} className="w-10 h-10 flex items-center justify-center border-2 border-gray-300 rounded-full hover:border-rose-400 hover:bg-rose-50 disabled:opacity-50 transition-all"><Plus className="w-4 h-4" /></button>
+                      <div className="flex items-center justify-center sm:justify-end gap-3">
+                        <button onClick={() => handleQuantityChange(item.productId, item.quantity - 1)} disabled={updatingItem === item.productId} className="w-10 h-10 flex items-center justify-center border-2 border-gray-300 rounded-full hover:border-rose-400 hover:bg-rose-50 disabled:opacity-50 transition-all"><Minus className="w-4 h-4" /></button>
+                        <span className="w-16 text-center font-semibold text-lg">{updatingItem === item.productId ? <Loading size="sm" /> : item.quantity}</span>
+                        <button onClick={() => handleQuantityChange(item.productId, item.quantity + 1)} disabled={updatingItem === item.productId} className="w-10 h-10 flex items-center justify-center border-2 border-gray-300 rounded-full hover:border-rose-400 hover:bg-rose-50 disabled:opacity-50 transition-all"><Plus className="w-4 h-4" /></button>
                       </div>
-                      <div className="text-right"><p className="text-xl font-bold text-gray-900">{formatPrice(item.price * item.quantity)}</p></div>
-                      <button onClick={() => removeFromCart(item.productId)} className="text-gray-400 hover:text-red-500 transition-colors p-2" title="Remove item"><Trash2 className="w-5 h-5" /></button>
+                      <div className="text-center sm:text-right">
+                        <p className="text-xl font-bold text-gray-900">{formatPrice(item.price * item.quantity)}</p>
+                      </div>
+                      <div className="flex justify-center sm:justify-end">
+                        <button onClick={() => removeFromCart(item.productId)} className="text-gray-400 hover:text-red-500 transition-colors p-2" title="Remove item"><Trash2 className="w-5 h-5" /></button>
+                      </div>
                     </div>
                   </div>
                 ))}

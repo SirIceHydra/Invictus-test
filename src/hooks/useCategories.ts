@@ -21,7 +21,6 @@ export function useCategories(): UseCategoriesReturn {
       setCategories(categoriesData);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch categories');
-      console.error('Error fetching categories:', err);
     } finally {
       setLoading(false);
     }

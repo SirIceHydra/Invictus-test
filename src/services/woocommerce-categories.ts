@@ -57,7 +57,6 @@ class WooCommerceCategoriesService {
         .filter(category => category.count && category.count > 0)
         .sort((a, b) => a.name.localeCompare(b.name));
     } catch (error) {
-      console.error('Error fetching categories from WooCommerce:', error);
       return [];
     }
   }
@@ -81,7 +80,6 @@ class WooCommerceCategoriesService {
       
       return categories;
     } catch (error) {
-      console.error('Error in fetchCategoriesWithFallback:', error);
       // Return fallback categories on error
       return [
         { id: 1, name: 'Protein', slug: 'protein', count: 1 },

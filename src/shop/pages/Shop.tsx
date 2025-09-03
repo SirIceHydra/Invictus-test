@@ -235,7 +235,14 @@ export default function Shop() {
 
       <section className="py-12">
         <div className="container mx-auto px-4">
-          <ProductGrid products={products} loading={loading} error={error} variant={viewMode} columns={viewMode === 'list' ? 1 : 4} onViewDetails={(p) => { setSelectedProduct(p); setModalOpen(true); }} />
+          <ProductGrid 
+            products={products} 
+            loading={loading} 
+            error={error} 
+            variant={viewMode} 
+            columns={viewMode === 'list' ? 1 : 4} 
+            onViewDetails={(p) => { setSelectedProduct(p); setModalOpen(true); }} 
+          />
         </div>
       </section>
       <ProductDetailsModal product={selectedProduct} isOpen={modalOpen} onClose={() => setModalOpen(false)} />

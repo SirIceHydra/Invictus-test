@@ -55,7 +55,6 @@ class WooCommerceBlogCategoriesService {
       // Sort by name and return all categories (including empty ones)
       return data.sort((a, b) => a.name.localeCompare(b.name));
     } catch (error) {
-      console.error('Error fetching blog categories from WordPress:', error);
       return [];
     }
   }
@@ -81,19 +80,8 @@ class WooCommerceBlogCategoriesService {
       
       return categories;
     } catch (error) {
-      console.error('Error in fetchBlogCategoriesWithFallback:', error);
       // Return fallback categories on error
-      return [
-        { id: 1, name: 'Nutrition', slug: 'nutrition', count: 1 },
-        { id: 2, name: 'Workouts', slug: 'workouts', count: 1 },
-        { id: 3, name: 'Supplements', slug: 'supplements', count: 1 },
-        { id: 4, name: 'Fitness Tips', slug: 'fitness-tips', count: 1 },
-        { id: 5, name: 'Weight Loss', slug: 'weight-loss', count: 1 },
-        { id: 6, name: 'Muscle Building', slug: 'muscle-building', count: 1 },
-        { id: 7, name: 'Health & Wellness', slug: 'health-wellness', count: 1 },
-        { id: 8, name: 'Recipes', slug: 'recipes', count: 1 },
-        { id: 9, name: 'Product Reviews', slug: 'product-reviews', count: 1 },
-      ];
+      return [];
     }
   }
 }

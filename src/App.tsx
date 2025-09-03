@@ -56,10 +56,19 @@ function App() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
 
+      // Only target elements with specific reveal classes that are not in the slideshow
       const reveals = document.querySelectorAll(
         '.reveal, .reveal-left, .reveal-right, .reveal-up'
       );
+      
       reveals.forEach((element) => {
+        // Skip any elements that might be part of the slideshow
+        if (element.closest('[style*="z-index: 9999"]') || 
+            element.closest('[style*="position: relative"]') ||
+            element.closest('[style*="position: absolute"]')) {
+          return;
+        }
+        
         const windowHeight = window.innerHeight;
         const elementTop = (element as HTMLElement).getBoundingClientRect().top;
         const elementVisible = 150;
@@ -101,24 +110,30 @@ function App() {
   const HomePage = () => {
     const { products, loading: productsLoading, fetchProducts } = useProducts({ perPage: 4, orderBy: 'date', order: 'desc', featured: true });
     const { products: bestSellers, loading: bestSellersLoading, fetchProducts: fetchBestSellers } = useProducts({ perPage: 4, orderBy: 'popularity', order: 'desc' });
-    const { posts: blogPosts, loading: postsLoading } = usePosts({ 
-      initialFilters: { perPage: 3, orderBy: 'date', order: 'desc' },
-      autoFetch: true 
-    });
     const [selectedProduct, setSelectedProduct] = useState<any>(null);
     const [modalOpen, setModalOpen] = useState(false);
+    const [scrollPositions, setScrollPositions] = useState({ featured: 0, specials: 0, latest: 0 });
 
-    console.log('🏠 HomePage: blogPosts:', blogPosts, 'postsLoading:', postsLoading);
+ 
 
     useEffect(() => {
       fetchProducts();
       fetchBestSellers();
     }, [fetchProducts, fetchBestSellers]);
 
+    const handleScroll = (id: string, e: React.UIEvent<HTMLDivElement>) => {
+      const container = document.getElementById(id);
+      if (container) {
+        setScrollPositions(prev => ({
+          ...prev,
+          [id]: container.scrollLeft
+        }));
+      }
+    };
 
 
     return (
-    <div className="min-h-screen bg-white text-black overflow-x-hidden">
+    <div className="min-h-screen bg-white text-black">
       <SEOHead />
 
       {/* Navigation */}
@@ -142,16 +157,40 @@ function App() {
           {productsLoading ? (
             <div className="flex justify-center"><Loading text="Loading products..." /></div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {products.slice(0, 4).map((product) => (
-                <ProductCard 
-                  key={product.id} 
-                  product={product} 
-                  className="reveal-up hover-lift"
-                  onViewDetails={(p) => { setSelectedProduct(p); setModalOpen(true); }}
-                />
-              ))}
-            </div>
+            <>
+              {/* Mobile: horizontal scroll */}
+              <div className="md:hidden -mx-4 px-4 mt-4 relative group">
+                <div 
+                  id="featured-products"
+                  className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory"
+                  onScroll={(e) => handleScroll('featured', e)}
+                >
+                  {products.slice(0, 8).map((product) => (
+                    <div key={product.id} className="min-w-[260px] max-w-[280px] snap-start">
+                      <ProductCard 
+                        product={product}
+                        className="reveal-up hover-lift"
+                        onViewDetails={(p) => { setSelectedProduct(p); setModalOpen(true); }}
+                      />
+                    </div>
+                  ))}
+                </div>
+                
+                
+              </div>
+
+              {/* Desktop: grid */}
+              <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-6">
+                {products.slice(0, 8).map((product) => (
+                  <ProductCard 
+                    key={product.id} 
+                    product={product} 
+                    className="reveal-up hover-lift"
+                    onViewDetails={(p) => { setSelectedProduct(p); setModalOpen(true); }}
+                  />
+                ))}
+              </div>
+            </>
           )}
           
           <div className="text-center mt-12">
@@ -295,19 +334,46 @@ function App() {
             {productsLoading ? (
               <div className="flex justify-center"><Loading text="Loading special offers..." /></div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {products
-                  .filter(product => product.onSale)
-                  .slice(0, 4)
-                  .map((product) => (
-                    <ProductCard 
-                      key={product.id} 
-                      product={product} 
-                      className="reveal-up hover-lift"
-                      onViewDetails={(p) => { setSelectedProduct(p); setModalOpen(true); }}
-                    />
-                  ))}
-              </div>
+              <>
+                {/* Mobile: horizontal scroll */}
+                <div className="md:hidden -mx-4 px-4 mt-4 relative group">
+                  <div 
+                    id="special-offers"
+                    className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory"
+                    onScroll={(e) => handleScroll('specials', e)}
+                  >
+                    {products
+                      .filter(product => product.onSale)
+                      .slice(0, 12)
+                      .map((product) => (
+                        <div key={product.id} className="min-w-[260px] max-w-[280px] snap-start">
+                          <ProductCard 
+                            product={product} 
+                            className="reveal-up hover-lift"
+                            onViewDetails={(p) => { setSelectedProduct(p); setModalOpen(true); }}
+                          />
+                        </div>
+                      ))}
+                  </div>
+                  
+                  
+                </div>
+
+                {/* Desktop: grid */}
+                <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-6">
+                  {products
+                    .filter(product => product.onSale)
+                    .slice(0, 12)
+                    .map((product) => (
+                      <ProductCard 
+                        key={product.id} 
+                        product={product} 
+                        className="reveal-up hover-lift"
+                        onViewDetails={(p) => { setSelectedProduct(p); setModalOpen(true); }}
+                      />
+                    ))}
+                </div>
+              </>
             )}
             
             {products.filter(product => product.onSale).length === 0 && !productsLoading && (
@@ -420,22 +486,47 @@ function App() {
               </p>
             </div>
            
-                       {bestSellersLoading ? (
+                                   {bestSellersLoading ? (
               <div className="flex justify-center">
                 <Loading text="Loading latest arrivals..." />
               </div>
             ) : bestSellers.length > 0 ? (
-             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-               {bestSellers.slice(0, 4).map((product) => (
-                 <ProductCard
-                   key={product.id}
-                   product={product}
-                   className="reveal-up hover-lift"
-                   onViewDetails={(p) => { setSelectedProduct(p); setModalOpen(true); }}
-                 />
-               ))}
-             </div>
-                       ) : (
+              <>
+                {/* Mobile: horizontal scroll */}
+                <div className="md:hidden -mx-4 px-4 mt-4 relative group">
+                  <div 
+                    id="latest-arrivals"
+                    className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory"
+                    onScroll={(e) => handleScroll('latest', e)}
+                  >
+                    {bestSellers.slice(0, 12).map((product) => (
+                      <div key={product.id} className="min-w-[260px] max-w-[280px] snap-start">
+                        <ProductCard
+                          key={product.id}
+                          product={product}
+                          className="reveal-up hover-lift"
+                          onViewDetails={(p) => { setSelectedProduct(p); setModalOpen(true); }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  
+                  
+                </div>
+
+                {/* Desktop: grid */}
+                <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-6">
+                  {bestSellers.slice(0, 12).map((product) => (
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      className="reveal-up hover-lift"
+                      onViewDetails={(p) => { setSelectedProduct(p); setModalOpen(true); }}
+                    />
+                  ))}
+                </div>
+              </>
+            ) : (
               <div className="text-center py-12">
                 <p className="text-gray-500 text-lg">No latest arrivals available at the moment.</p>
               </div>
