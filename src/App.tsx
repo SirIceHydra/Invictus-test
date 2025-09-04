@@ -56,27 +56,7 @@ function App() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
 
-      // Only target elements with specific reveal classes that are not in the slideshow
-      const reveals = document.querySelectorAll(
-        '.reveal, .reveal-left, .reveal-right, .reveal-up'
-      );
-      
-      reveals.forEach((element) => {
-        // Skip any elements that might be part of the slideshow
-        if (element.closest('[style*="z-index: 9999"]') || 
-            element.closest('[style*="position: relative"]') ||
-            element.closest('[style*="position: absolute"]')) {
-          return;
-        }
-        
-        const windowHeight = window.innerHeight;
-        const elementTop = (element as HTMLElement).getBoundingClientRect().top;
-        const elementVisible = 150;
 
-        if (elementTop < windowHeight - elementVisible) {
-          element.classList.add('active');
-        }
-      });
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -169,7 +149,7 @@ function App() {
                     <div key={product.id} className="min-w-[260px] max-w-[280px] snap-start">
                       <ProductCard 
                         product={product}
-                        className="reveal-up hover-lift"
+                        className="hover-lift"
                         onViewDetails={(p) => { setSelectedProduct(p); setModalOpen(true); }}
                       />
                     </div>
@@ -185,7 +165,7 @@ function App() {
                   <ProductCard 
                     key={product.id} 
                     product={product} 
-                    className="reveal-up hover-lift"
+                    className="hover-lift"
                     onViewDetails={(p) => { setSelectedProduct(p); setModalOpen(true); }}
                   />
                 ))}
@@ -349,7 +329,7 @@ function App() {
                         <div key={product.id} className="min-w-[260px] max-w-[280px] snap-start">
                           <ProductCard 
                             product={product} 
-                            className="reveal-up hover-lift"
+                            className="hover-lift"
                             onViewDetails={(p) => { setSelectedProduct(p); setModalOpen(true); }}
                           />
                         </div>
@@ -368,7 +348,7 @@ function App() {
                       <ProductCard 
                         key={product.id} 
                         product={product} 
-                        className="reveal-up hover-lift"
+                        className="hover-lift"
                         onViewDetails={(p) => { setSelectedProduct(p); setModalOpen(true); }}
                       />
                     ))}
@@ -414,7 +394,7 @@ function App() {
            </div>
            
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-             <div className="text-center reveal-up">
+             <div className="text-center">
                <div className="bg-gradient-to-br from-rose-400 to-amber-400 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -426,7 +406,7 @@ function App() {
                </p>
              </div>
              
-             <div className="text-center reveal-up">
+             <div className="text-center">
                <div className="bg-gradient-to-br from-rose-400 to-amber-400 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -438,7 +418,7 @@ function App() {
                </p>
              </div>
              
-             <div className="text-center reveal-up">
+             <div className="text-center">
                <div className="bg-gradient-to-br from-rose-400 to-amber-400 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25a9.75 9.75 0 100 19.5 9.75 9.75 0 000-19.5z" />
@@ -450,7 +430,7 @@ function App() {
                </p>
              </div>
              
-             <div className="text-center reveal-up">
+             <div className="text-center">
                <div className="bg-gradient-to-br from-rose-400 to-amber-400 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -504,7 +484,7 @@ function App() {
                         <ProductCard
                           key={product.id}
                           product={product}
-                          className="reveal-up hover-lift"
+                          className="hover-lift"
                           onViewDetails={(p) => { setSelectedProduct(p); setModalOpen(true); }}
                         />
                       </div>
@@ -520,7 +500,7 @@ function App() {
                     <ProductCard
                       key={product.id}
                       product={product}
-                      className="reveal-up hover-lift"
+                      className="hover-lift"
                       onViewDetails={(p) => { setSelectedProduct(p); setModalOpen(true); }}
                     />
                   ))}

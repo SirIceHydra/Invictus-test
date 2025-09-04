@@ -46,7 +46,7 @@ export function HeroSlideshow() {
     position: 'relative' as const,
     width: '100%',
     marginTop: '6rem',
-    height: 'clamp(200px, 35vw, 400px)',
+    height: 'clamp(200px, 35vw, 640px)',
     zIndex: 10,
     backgroundColor: '#f3f4f6',
     overflow: 'hidden'

@@ -41,6 +41,49 @@ export const WooCommerceDataProvider: ShopDataProvider = {
       }
     }
     
+    // If price sorting was requested, sort by price numerically
+    if (query?.orderBy === 'price') {
+      console.log('🔍 Price sorting requested:', query?.order);
+      console.log('📊 Products before sorting:', resp.data.map(p => ({ name: p.name, price: p.price, type: typeof p.price })));
+      
+      resp.data.sort((a, b) => {
+        const priceA = parseFloat(a.price.toString());
+        const priceB = parseFloat(b.price.toString());
+        
+        console.log(`🔄 Comparing: ${a.name} (${priceA}) vs ${b.name} (${priceB})`);
+        
+        if (query?.order === 'asc') {
+          return priceA - priceB; // Low to High
+        } else {
+          return priceB - priceA; // High to Low
+        }
+      });
+      
+      console.log('📊 Products after sorting:', resp.data.map(p => ({ name: p.name, price: p.price })));
+      
+      // Limit to the original requested perPage
+      if (query?.perPage && resp.data.length > query.perPage) {
+        resp.data = resp.data.slice(0, query.perPage);
+      }
+    }
+    
+    // Additional case: If orderBy is not 'price' but the user has selected price-related ordering
+    // This handles cases where the UI might not be setting orderBy correctly
+    if (query?.orderBy !== 'price' && (query?.order === 'asc' || query?.order === 'desc') && resp.data.length > 0) {
+      console.log('🔍 Detected price sorting intent from order parameter, applying price sorting');
+      
+      resp.data.sort((a, b) => {
+        const priceA = parseFloat(a.price.toString());
+        const priceB = parseFloat(b.price.toString());
+        
+        if (query?.order === 'asc') {
+          return priceA - priceB; // Low to High
+        } else {
+          return priceB - priceA; // High to Low
+        }
+      });
+    }
+    
     return resp;
   },
   async getProduct(id: number) {

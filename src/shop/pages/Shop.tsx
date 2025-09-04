@@ -16,6 +16,8 @@ export default function Shop() {
   const [categoryId, setCategoryId] = useState<number | ''>('');
   const [brandId, setBrandId] = useState<string>('');
   const [onSale, setOnSale] = useState<boolean>(false);
+  const [orderBy, setOrderBy] = useState<'date' | 'price' | 'name'>('date');
+  const [order, setOrder] = useState<'asc' | 'desc'>('desc');
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const { products, loading, error, fetchProducts } = useProducts({ perPage: 12, orderBy: 'date', order: 'desc' });
