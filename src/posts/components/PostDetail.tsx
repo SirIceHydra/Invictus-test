@@ -75,15 +75,6 @@ export const PostDetail: React.FC<PostDetailProps> = ({
 
   return (
     <div className={`min-h-screen bg-white ${className}`}>
-      {/* Navigation */}
-      <nav className="fixed w-full z-50 bg-white py-4 shadow-lg">
-        <div className="container mx-auto px-4 flex items-center justify-between">
-          <Link to="/">
-            <img src="/assets/Invictus.svg" alt="Invictus Nutrition Logo" className="max-h-8" />
-          </Link>
-        </div>
-      </nav>
-
       {/* Main Content */}
       <div className="container mx-auto px-4 pt-32 pb-20">
         <Link 

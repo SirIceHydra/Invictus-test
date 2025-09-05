@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { Radius } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 type Banner = { image: string; alt?: string; link?: string };
@@ -45,21 +46,25 @@ export function HeroSlideshow() {
   const containerStyle = {
     position: 'relative' as const,
     width: '100%',
-    marginTop: '6rem',
-    height: 'clamp(200px, 35vw, 640px)',
+    marginTop: '4rem',
+    height: 'clamp(200px, 50vw, 640px)', // Increased height for better mobile scaling
     zIndex: 10,
-    backgroundColor: '#f3f4f6',
-    overflow: 'hidden'
+    backgroundColor: '#fff1f1',
+    overflow: 'hidden',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   };
 
   const backgroundStyle = {
     position: 'absolute' as const,
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '100%',
+    height: '100%',
     backgroundPosition: 'center',
-    backgroundSize: 'cover',
+    backgroundSize: 'contain',
     backgroundRepeat: 'no-repeat',
     zIndex: 1,
     transition: 'opacity 0.2s ease-in-out'
@@ -67,8 +72,8 @@ export function HeroSlideshow() {
 
   const ctaStyle = {
     position: 'absolute' as const,
-    right: '2rem',
-    bottom: '2rem',
+    right: 'clamp(1rem, 4vw, 2rem)',
+    bottom: 'clamp(1rem, 4vw, 2rem)',
     zIndex: 20,
     opacity: fadeOpacity,
     transition: 'opacity 0.4s ease-in-out'
@@ -96,12 +101,12 @@ export function HeroSlideshow() {
             <span style={{
               backgroundColor: 'rgba(255, 255, 255, 0.95)',
               color: '#111827',
-              padding: '12px 24px',
+              padding: 'clamp(8px, 2vw, 12px) clamp(16px, 4vw, 24px)',
               borderRadius: '9999px',
               boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
               fontWeight: 600,
               letterSpacing: '0.05em',
-              fontSize: '18px',
+              fontSize: 'clamp(14px, 3vw, 18px)',
               display: 'inline-block'
             }}>
               SHOP NOW
@@ -129,12 +134,12 @@ export function HeroSlideshow() {
           <span style={{
             backgroundColor: 'rgba(255, 255, 255, 0.95)',
             color: '#111827',
-            padding: '12px 24px',
+            padding: 'clamp(8px, 2vw, 12px) clamp(16px, 4vw, 24px)',
             borderRadius: '9999px',
             boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
             fontWeight: 600,
             letterSpacing: '0.05em',
-            fontSize: '18px',
+            fontSize: 'clamp(14px, 3vw, 18px)',
             display: 'inline-block'
           }}>
             SHOP NOW
