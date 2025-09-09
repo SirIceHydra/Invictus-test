@@ -25,7 +25,7 @@ export function Loading({ size = 'md', text, className = '' }: LoadingProps) {
 
   return (
     <div className={`flex flex-col items-center justify-center p-4 ${className}`}>
-      <Loader2 className={`animate-spin text-rose-400 ${sizeClasses[size]}`} />
+      <Loader2 className={`animate-spin text-tertiary ${sizeClasses[size]}`} />
       {text && (
         <p className={`mt-2 text-gray-600 ${textSizes[size]}`}>
           {text}
@@ -59,7 +59,7 @@ interface InlineLoadingProps {
 export function InlineLoading({ size = 'sm', className = '' }: InlineLoadingProps) {
   return (
     <div className={`inline-flex items-center ${className}`}>
-      <Loader2 className={`animate-spin text-rose-400 ${size === 'sm' ? 'w-4 h-4' : size === 'md' ? 'w-5 h-5' : 'w-6 h-6'}`} />
+      <Loader2 className={`animate-spin text-tertiary ${size === 'sm' ? 'w-4 h-4' : size === 'md' ? 'w-5 h-5' : 'w-6 h-6'}`} />
     </div>
   );
 }

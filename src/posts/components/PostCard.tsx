@@ -48,7 +48,7 @@ export const PostCard: React.FC<PostCardProps> = ({
   return (
     <Link
       to={`/posts/${post.slug}`}
-      className={`bg-white rounded-lg shadow-lg overflow-hidden hover-lift transition-all duration-300 ${className}`}
+      className={`bg-white shadow-lg overflow-hidden hover-lift transition-all duration-300 ${className}`}
     >
                 {post.featuredImage && (
             <div className="relative overflow-hidden">
@@ -73,7 +73,7 @@ export const PostCard: React.FC<PostCardProps> = ({
           )}
         </div>
         
-        <h3 className="text-xl font-bold mb-2 line-clamp-2 hover:text-rose-400 transition-colors">
+        <h3 className="text-xl font-bold mb-2 line-clamp-2 hover:text-tertiary transition-colors">
           {decodeHtmlEntities(post.title)}
         </h3>
         
@@ -88,7 +88,7 @@ export const PostCard: React.FC<PostCardProps> = ({
             {post.categories.slice(0, 2).map((category, index) => (
               <span
                 key={index}
-                className="px-2 py-1 bg-rose-100 text-rose-600 text-xs rounded-full"
+                className="px-2 py-1 bg-tertiary/20 text-tertiary text-xs"
               >
                 {category}
               </span>
@@ -96,7 +96,7 @@ export const PostCard: React.FC<PostCardProps> = ({
           </div>
         )}
         
-        <span className="text-rose-400 hover:text-rose-500 transition-colors flex items-center gap-2 text-sm font-medium">
+        <span className="text-tertiary hover:text-primarySupport transition-colors flex items-center gap-2 text-sm font-medium">
           READ MORE <ArrowRight size={16} />
         </span>
       </div>

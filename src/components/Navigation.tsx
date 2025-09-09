@@ -35,7 +35,7 @@ export function Navigation({ isScrolled }: NavigationProps) {
   });
 
   return (
-    <nav className="fixed w-full z-[9999] transition-all duration-300 bg-white/95 pt-8 pb-8 shadow-lg top-0">
+    <nav className="fixed w-full z-[9999] transition-all duration-300 bg-primary/95 pt-8 pb-8 shadow-lg top-0">
       <div className="container mx-auto px-4 flex items-center justify-between max-w-full">
         {/* LOGO */}
         <Link to="/">
@@ -50,14 +50,14 @@ export function Navigation({ isScrolled }: NavigationProps) {
         <div className="hidden md:flex items-center gap-6">
           <Link
             to="/shop?onSale=true"
-            className="hover:text-rose-400 transition-colors font-medium text-lg"
+            className="hover:text-secondary transition-colors font-medium text-lg text-secondary"
           >
             SPECIALS
           </Link>
 
           {/* Brands Dropdown */}
           <div className="relative group">
-            <button className="hover:text-rose-400 transition-colors font-medium text-lg flex items-center gap-1">
+            <button className="hover:text-secondary transition-colors font-medium text-lg flex items-center gap-1 text-secondary">
               BRANDS
               <svg
                 className="w-4 h-4"
@@ -73,21 +73,21 @@ export function Navigation({ isScrolled }: NavigationProps) {
                 />
               </svg>
             </button>
-            <div className="absolute top-full left-0 bg-white shadow-lg rounded-lg py-2 min-w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+            <div className="absolute top-full left-0 bg-primarySupport shadow-lg py-2 min-w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
               {brandsLoading ? (
-                <div className="px-4 py-2 text-gray-500">Loading brands...</div>
+                <div className="px-4 py-2 text-gray-300">Loading brands...</div>
               ) : brands.length > 0 ? (
                 brands.map((brand) => (
                   <Link
                     key={brand.id}
                     to={`/shop?brand=${brand.name}`}
-                    className="block px-4 py-2 hover:bg-rose-50 hover:text-rose-400 transition-colors"
+                    className="block px-4 py-2 hover:bg-gray-600 hover:text-secondary transition-colors text-secondary"
                   >
                     {brand.name}
                   </Link>
                 ))
               ) : (
-                <div className="px-4 py-2 text-gray-500">
+                <div className="px-4 py-2 text-gray-300">
                   No brands available
                 </div>
               )}
@@ -96,7 +96,7 @@ export function Navigation({ isScrolled }: NavigationProps) {
 
           {/* Category Dropdown */}
           <div className="relative group">
-            <button className="hover:text-rose-400 transition-colors font-medium text-lg flex items-center gap-1">
+            <button className="hover:text-secondary transition-colors font-medium text-lg flex items-center gap-1 text-secondary">
               CATEGORY
               <svg
                 className="w-4 h-4"
@@ -112,9 +112,9 @@ export function Navigation({ isScrolled }: NavigationProps) {
                 />
               </svg>
             </button>
-            <div className="absolute top-full left-0 bg-white shadow-lg rounded-lg py-2 min-w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+            <div className="absolute top-full left-0 bg-primarySupport shadow-lg py-2 min-w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
               {categoriesLoading ? (
-                <div className="px-4 py-2 text-gray-500">
+                <div className="px-4 py-2 text-gray-300">
                   Loading categories...
                 </div>
               ) : categories.length > 0 ? (
@@ -122,13 +122,13 @@ export function Navigation({ isScrolled }: NavigationProps) {
                   <Link
                     key={category.id}
                     to={`/shop?category=${category.id}`}
-                    className="block px-4 py-2 hover:bg-rose-50 hover:text-rose-400 transition-colors"
+                    className="block px-4 py-2 hover:bg-gray-600 hover:text-secondary transition-colors text-secondary"
                   >
                     {category.name}
                   </Link>
                 ))
               ) : (
-                <div className="px-4 py-2 text-gray-500">
+                <div className="px-4 py-2 text-gray-300">
                   No categories available
                 </div>
               )}
@@ -137,7 +137,7 @@ export function Navigation({ isScrolled }: NavigationProps) {
 
           {/* Workout Plans Dropdown */}
           <div className="relative group">
-            <button className="hover:text-rose-400 transition-colors font-medium text-lg flex items-center gap-1">
+            <button className="hover:text-secondary transition-colors font-medium text-lg flex items-center gap-1 text-secondary">
               WORKOUT PLANS
               <svg
                 className="w-4 h-4"
@@ -153,23 +153,23 @@ export function Navigation({ isScrolled }: NavigationProps) {
                 />
               </svg>
             </button>
-            <div className="absolute top-full left-0 bg-white shadow-lg rounded-lg py-2 min-w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+            <div className="absolute top-full left-0 bg-primarySupport shadow-lg py-2 min-w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
               {wordpressCategoriesLoading ? (
-                <div className="px-4 py-2 text-gray-500">
+                <div className="px-4 py-2 text-gray-300">
                   Loading workout plans...
                 </div>
               ) : workoutCategories.length > 0 ? (
                 workoutCategories.map((category) => (
                   <Link
                     key={category.id}
-                    to={`/posts?category=${category.slug}`}
-                    className="block px-4 py-2 hover:bg-rose-50 hover:text-rose-400 transition-colors"
+                    to={`/blog-hub?category=${category.slug}`}
+                    className="block px-4 py-2 hover:bg-gray-600 hover:text-secondary transition-colors text-secondary"
                   >
                     {category.name}
                   </Link>
                 ))
               ) : (
-                <div className="px-4 py-2 text-gray-500">
+                <div className="px-4 py-2 text-gray-300">
                   No workout plans available
                 </div>
               )}
@@ -178,42 +178,44 @@ export function Navigation({ isScrolled }: NavigationProps) {
 
           <Link
             to="/shop"
-            className="hover:text-rose-400 transition-colors font-medium text-lg"
+            className="hover:text-secondary transition-colors font-medium text-lg text-secondary"
           >
             SHOP
           </Link>
 
           <Link
             to="/blog-hub"
-            className="hover:text-rose-400 transition-colors font-medium text-lg"
+            className="hover:text-secondary transition-colors font-medium text-lg text-secondary"
           >
             BLOG HUB
           </Link>
 
           <Link
             to="/cart"
-            className="border-2 border-rose-400 px-6 py-2 rounded-full flex items-center gap-2 hover:bg-rose-400 hover:text-white transition-all duration-300 relative"
+            className="relative group px-6 py-2 flex items-center gap-2 transition-all duration-300 text-secondary"
           >
             <ShoppingCart size={20} />
             CART
             {cart.itemCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-rose-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-tertiary text-primary text-xs rounded-full w-5 h-5 flex items-center justify-center">
                 {cart.itemCount}
               </span>
             )}
+            <span className="pointer-events-none absolute left-0 bottom-0 h-0.5 w-0 bg-tertiary transition-all duration-300 group-hover:w-full" />
           </Link>
           <Link
             to="/shop"
-            className="bg-gradient-to-r from-rose-400 to-amber-400 px-6 py-2 rounded-full flex items-center gap-2 hover:scale-105 transition-transform text-white whitespace-nowrap"
+            className="relative group px-6 py-2 flex items-center gap-2 transition-all duration-300 text-secondary whitespace-nowrap overflow-hidden"
           >
             <ShoppingCart size={20} />
             SHOP NOW
+            <span className="pointer-events-none absolute left-0 bottom-0 h-0.5 w-0 bg-tertiary transition-all duration-300 group-hover:w-full" />
           </Link>
         </div>
 
         {/* Hamburger Button (Mobile) */}
         <button
-          className="md:hidden text-black"
+          className="md:hidden text-secondary"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -222,20 +224,20 @@ export function Navigation({ isScrolled }: NavigationProps) {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white shadow-lg w-full">
+        <div className="md:hidden bg-primarySupport shadow-lg w-full">
           <div className="flex flex-col p-4 gap-4">
             <Link
               to="/shop?onSale=true"
               onClick={() => setMobileMenuOpen(false)}
-              className="hover:text-rose-400 transition-colors font-medium"
+              className="hover:text-secondary transition-colors font-medium text-secondary"
             >
               SPECIALS
             </Link>
 
             {/* Mobile Brands Section (collapsible) */}
-            <div className="border-l-2 border-rose-200 pl-4">
+            <div className="border-l-2 border-gray-600 pl-4">
               <button
-                className="w-full text-left text-sm text-gray-600 mb-2 flex items-center justify-between"
+                className="w-full text-left text-sm text-gray-300 mb-2 flex items-center justify-between"
                 onClick={() => setMobileBrandsOpen(!mobileBrandsOpen)}
                 aria-expanded={mobileBrandsOpen}
                 aria-controls="mobile-brands-list"
@@ -250,20 +252,20 @@ export function Navigation({ isScrolled }: NavigationProps) {
               {mobileBrandsOpen && (
                 <div id="mobile-brands-list">
                   {brandsLoading ? (
-                    <div className="text-gray-500 py-1">Loading brands...</div>
+                    <div className="text-gray-300 py-1">Loading brands...</div>
                   ) : brands.length > 0 ? (
                     brands.map((brand) => (
                       <Link
                         key={brand.id}
                         to={`/shop?brand=${brand.name}`}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="block py-1 hover:text-rose-400 transition-colors"
+                        className="block py-1 hover:text-secondary transition-colors text-gray-300"
                       >
                         {brand.name}
                       </Link>
                     ))
                   ) : (
-                    <div className="text-gray-500 py-1">
+                    <div className="text-gray-300 py-1">
                       No brands available
                     </div>
                   )}
@@ -272,9 +274,9 @@ export function Navigation({ isScrolled }: NavigationProps) {
             </div>
 
             {/* Mobile Category Section (collapsible) */}
-            <div className="border-l-2 border-rose-200 pl-4">
+            <div className="border-l-2 border-gray-600 pl-4">
               <button
-                className="w-full text-left text-sm text-gray-600 mb-2 flex items-center justify-between"
+                className="w-full text-left text-sm text-gray-300 mb-2 flex items-center justify-between"
                 onClick={() => setMobileCategoriesOpen(!mobileCategoriesOpen)}
                 aria-expanded={mobileCategoriesOpen}
                 aria-controls="mobile-categories-list"
@@ -289,7 +291,7 @@ export function Navigation({ isScrolled }: NavigationProps) {
               {mobileCategoriesOpen && (
                 <div id="mobile-categories-list">
                   {categoriesLoading ? (
-                    <div className="text-gray-500 py-1">
+                    <div className="text-gray-300 py-1">
                       Loading categories...
                     </div>
                   ) : categories.length > 0 ? (
@@ -298,13 +300,13 @@ export function Navigation({ isScrolled }: NavigationProps) {
                         key={category.id}
                         to={`/shop?category=${category.id}`}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="block py-1 hover:text-rose-400 transition-colors"
+                        className="block py-1 hover:text-secondary transition-colors text-gray-300"
                       >
                         {category.name}
                       </Link>
                     ))
                   ) : (
-                    <div className="text-gray-500 py-1">
+                    <div className="text-gray-300 py-1">
                       No categories available
                     </div>
                   )}
@@ -313,9 +315,9 @@ export function Navigation({ isScrolled }: NavigationProps) {
             </div>
 
             {/* Mobile Workout Plans Section (collapsible) */}
-            <div className="border-l-2 border-rose-200 pl-4">
+            <div className="border-l-2 border-gray-600 pl-4">
               <button
-                className="w-full text-left text-sm text-gray-600 mb-2 flex items-center justify-between"
+                className="w-full text-left text-sm text-gray-300 mb-2 flex items-center justify-between"
                 onClick={() => setMobileWorkoutOpen(!mobileWorkoutOpen)}
                 aria-expanded={mobileWorkoutOpen}
                 aria-controls="mobile-workout-list"
@@ -330,22 +332,22 @@ export function Navigation({ isScrolled }: NavigationProps) {
               {mobileWorkoutOpen && (
                 <div id="mobile-workout-list">
                   {wordpressCategoriesLoading ? (
-                    <div className="text-gray-500 py-1">
+                    <div className="text-gray-300 py-1">
                       Loading workout plans...
                     </div>
                   ) : workoutCategories.length > 0 ? (
                     workoutCategories.map((category) => (
                       <Link
                         key={category.id}
-                        to={`/posts?category=${category.slug}`}
+                        to={`/blog-hub?category=${category.slug}`}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="block py-1 hover:text-rose-400 transition-colors"
+                        className="block py-1 hover:text-secondary transition-colors text-gray-300"
                       >
                         {category.name}
                       </Link>
                     ))
                   ) : (
-                    <div className="text-gray-500 py-1">
+                    <div className="text-gray-300 py-1">
                       No workout plans available
                     </div>
                   )}
@@ -356,7 +358,7 @@ export function Navigation({ isScrolled }: NavigationProps) {
             <Link
               to="/shop"
               onClick={() => setMobileMenuOpen(false)}
-              className="hover:text-rose-400 transition-colors font-medium"
+              className="hover:text-secondary transition-colors font-medium text-secondary"
             >
               SHOP
             </Link>
@@ -364,7 +366,7 @@ export function Navigation({ isScrolled }: NavigationProps) {
             <Link
               to="/blog-hub"
               onClick={() => setMobileMenuOpen(false)}
-              className="hover:text-rose-400 transition-colors font-medium"
+              className="hover:text-secondary transition-colors font-medium text-secondary"
             >
               BLOG HUB
             </Link>
@@ -372,20 +374,21 @@ export function Navigation({ isScrolled }: NavigationProps) {
             <Link
               to="/cart"
               onClick={() => setMobileMenuOpen(false)}
-              className="border-2 border-rose-400 px-6 py-2 rounded-full flex items-center gap-2 hover:bg-rose-400 hover:text-white transition-all duration-300 relative"
+              className="relative group px-6 py-2 flex items-center gap-2 transition-all duration-300 text-secondary"
             >
               <ShoppingCart size={20} />
               CART
               {cart.itemCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-rose-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                <span className="absolute -top-2 -right-2 bg-tertiary text-primary text-xs w-5 h-5 flex items-center justify-center">
                   {cart.itemCount}
                 </span>
               )}
+              <span className="pointer-events-none absolute left-0 bottom-0 h-0.5 w-0 bg-tertiary transition-all duration-300 group-hover:w-full" />
             </Link>
             <Link
               to="/shop"
               onClick={() => setMobileMenuOpen(false)}
-              className="bg-gradient-to-r from-rose-400 to-amber-400 px-6 py-2 rounded-full flex items-center gap-2 hover:scale-105 transition-transform text-white"
+              className="bg-gradient-to-r from-tertiary to-primarySupport px-6 py-2 flex items-center gap-2 hover:scale-105 transition-transform text-white"
             >
               <ShoppingCart size={20} />
               SHOP NOW

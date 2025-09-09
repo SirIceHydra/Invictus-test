@@ -59,7 +59,7 @@ const PostsPage: React.FC = () => {
   const hasActiveFilters = filters.category || filters.tag || filters.search || filters.orderBy !== 'date' || filters.order !== 'desc';
 
   return (
-    <div className="min-h-screen bg-rose-50">
+    <div className="min-h-screen bg-white">
       {/* Header */}
       <div className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-8">
@@ -67,7 +67,7 @@ const PostsPage: React.FC = () => {
             <div className="mb-4">
               <Link
                 to="/blog-hub"
-                className="inline-flex items-center gap-2 text-rose-400 hover:text-rose-500 transition-colors font-semibold"
+                className="inline-flex items-center gap-2 text-tertiary hover:text-primarySupport transition-colors font-semibold"
               >
                 <ArrowLeft size={20} />
                 Back to Blog Hub
@@ -88,7 +88,7 @@ const PostsPage: React.FC = () => {
 
       {/* Search and Filters */}
       <div className="container mx-auto px-4 py-8">
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div className="bg-white shadow-md p-6 mb-8">
           {/* Search Bar */}
           <form onSubmit={handleSearch} className="mb-6">
             <div className="relative">
@@ -98,11 +98,11 @@ const PostsPage: React.FC = () => {
                 placeholder="Search recipes and tips..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-400 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 focus:ring-2 focus:ring-tertiary focus:border-transparent"
               />
               <button
                 type="submit"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-rose-400 text-white px-4 py-1 rounded-md hover:bg-rose-500 transition-colors"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-tertiary text-white px-4 py-1 hover:bg-primarySupport transition-colors"
               >
                 Search
               </button>
@@ -113,7 +113,7 @@ const PostsPage: React.FC = () => {
           <div className="flex items-center justify-between">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 border border-gray-300 hover:bg-gray-50 transition-colors"
             >
               <Filter size={16} />
               Filters
@@ -132,7 +132,7 @@ const PostsPage: React.FC = () => {
 
           {/* Filter Panel */}
           {showFilters && (
-            <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+            <div className="mt-6 p-4 bg-gray-50">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Sort Order */}
                 <div>
@@ -140,7 +140,7 @@ const PostsPage: React.FC = () => {
                   <select
                     value={filters.orderBy || 'date'}
                     onChange={(e) => setOrderBy(e.target.value as 'date' | 'title' | 'modified')}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-rose-400 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 focus:ring-2 focus:ring-tertiary focus:border-transparent"
                   >
                     <option value="date">Date</option>
                     <option value="title">Title</option>
@@ -154,7 +154,7 @@ const PostsPage: React.FC = () => {
                   <select
                     value={filters.order || 'desc'}
                     onChange={(e) => setOrder(e.target.value as 'asc' | 'desc')}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-rose-400 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 focus:ring-2 focus:ring-tertiary focus:border-transparent"
                   >
                     <option value="desc">Newest First</option>
                     <option value="asc">Oldest First</option>
@@ -167,7 +167,7 @@ const PostsPage: React.FC = () => {
                   <select
                     value={filters.perPage || 9}
                     onChange={(e) => setPerPage(Number(e.target.value))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-rose-400 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 focus:ring-2 focus:ring-tertiary focus:border-transparent"
                   >
                     <option value={6}>6</option>
                     <option value={9}>9</option>
@@ -189,13 +189,13 @@ const PostsPage: React.FC = () => {
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <span>Active filters:</span>
               {filters.search && (
-                <span className="px-2 py-1 bg-rose-100 text-rose-600 rounded">Search: {filters.search}</span>
+                <span className="px-2 py-1 bg-tertiary/20 text-tertiary">Search: {filters.search}</span>
               )}
               {filters.category && (
-                <span className="px-2 py-1 bg-rose-100 text-rose-600 rounded">Category: {filters.category}</span>
+                <span className="px-2 py-1 bg-tertiary/20 text-tertiary">Category: {filters.category}</span>
               )}
               {filters.tag && (
-                <span className="px-2 py-1 bg-rose-100 text-rose-600 rounded">Tag: {filters.tag}</span>
+                <span className="px-2 py-1 bg-tertiary/20 text-tertiary">Tag: {filters.tag}</span>
               )}
             </div>
           )}
@@ -220,7 +220,7 @@ const PostsPage: React.FC = () => {
               <button
                 onClick={() => goToPage(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-3 py-2 border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Previous
               </button>
@@ -232,7 +232,7 @@ const PostsPage: React.FC = () => {
                   onClick={() => goToPage(page)}
                   className={`px-3 py-2 border rounded-md ${
                     currentPage === page
-                      ? 'bg-rose-400 text-white border-rose-400'
+                      ? 'bg-tertiary text-white border-tertiary'
                       : 'border-gray-300 hover:bg-gray-50'
                   }`}
                 >
@@ -244,7 +244,7 @@ const PostsPage: React.FC = () => {
               <button
                 onClick={() => goToPage(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-3 py-2 border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Next
               </button>

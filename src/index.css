@@ -5,6 +5,43 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Brand scrollbar styling */
+/* Firefox */
+html {
+  scrollbar-color: #d5b775 transparent;
+  scrollbar-width: thin;
+}
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #d5b775;
+  border-radius: 0;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+/* Scroll progress bar */
+:root {
+  --scroll-progress: 0%;
+}
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: var(--scroll-progress);
+  background-color: #d5b775;
+  z-index: 99999;
+  transition: width 0.1s linear;
+}
+
 @layer base {
   h1, h2, h3, h4, h5, h6 {
     font-family: "Druk Wide Bold", sans-serif;

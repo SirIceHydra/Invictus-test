@@ -79,7 +79,7 @@ export const PostDetail: React.FC<PostDetailProps> = ({
       <div className="container mx-auto px-4 pt-32 pb-20">
         <Link 
           to="/" 
-          className="inline-flex items-center gap-2 text-rose-400 hover:text-rose-500 transition-colors mb-8"
+          className="inline-flex items-center gap-2 text-tertiary hover:text-primarySupport transition-colors mb-8"
         >
           <ArrowLeft size={20} />
           Back to Home
@@ -116,7 +116,7 @@ export const PostDetail: React.FC<PostDetailProps> = ({
                 {post.categories.map((category, index) => (
                   <span
                     key={`category-${index}`}
-                    className="px-3 py-1 bg-rose-100 text-rose-600 text-sm rounded-full"
+                    className="px-3 py-1 bg-tertiary/20 text-tertiary text-sm"
                   >
                     {category}
                   </span>
@@ -124,7 +124,7 @@ export const PostDetail: React.FC<PostDetailProps> = ({
                 {post.tags.map((tag, index) => (
                   <span
                     key={`tag-${index}`}
-                    className="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full flex items-center gap-1"
+                    className="px-3 py-1 bg-gray-100 text-gray-600 text-sm flex items-center gap-1"
                   >
                     <Tag size={12} />
                     {tag}
@@ -139,7 +139,7 @@ export const PostDetail: React.FC<PostDetailProps> = ({
             <img
               src={post.featuredImage}
               alt={post.featuredImageAlt}
-              className="w-full h-[400px] object-cover rounded-lg shadow-lg mb-12"
+              className="w-full h-[400px] object-cover shadow-lg mb-12"
             />
           )}
 
@@ -160,7 +160,7 @@ export const PostDetail: React.FC<PostDetailProps> = ({
                   <Link
                     key={relatedPost.id}
                     to={`/posts/${relatedPost.slug}`}
-                    className="bg-white rounded-lg shadow-md overflow-hidden hover-lift transition-all duration-300"
+                    className="bg-white shadow-md overflow-hidden hover-lift transition-all duration-300"
                   >
                     {relatedPost.featuredImage && (
                       <img
@@ -170,7 +170,7 @@ export const PostDetail: React.FC<PostDetailProps> = ({
                       />
                     )}
                     <div className="p-4">
-                      <h3 className="font-semibold mb-2 line-clamp-2 hover:text-rose-400 transition-colors">
+                      <h3 className="font-semibold mb-2 line-clamp-2 hover:text-tertiary transition-colors">
                         {decodeHtmlEntities(relatedPost.title)}
                       </h3>
                       <p className="text-sm text-gray-500">{formatDate(relatedPost.date)}</p>

@@ -5,6 +5,7 @@ import { useCart } from '../core/cart/CartContext';
 import { useCheckout } from '../core/hooks/useCheckout';
 import { formatPrice } from '../../utils/helpers';
 import { Loading } from '../../components/ui/Loading';
+import { Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { CheckoutForm } from '../../types/checkout';
 import { Navigation } from '../../components/Navigation';
@@ -63,11 +64,11 @@ export default function Checkout({ className = '' }: CheckoutProps) {
         <div className="h-20" />
         <Helmet><title>Checkout - Invictus Nutrition</title><meta name="description" content="Complete your purchase" /></Helmet>
         <div className="container mx-auto px-4 py-12">
-          <div className="bg-white rounded-lg shadow-sm p-8 text-center">
+          <div className="bg-white shadow-sm p-8 text-center">
             <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
             <h2 className="text-xl font-semibold text-gray-900 mb-2">Your cart is empty</h2>
             <p className="text-gray-600 mb-6">Please add some products to your cart before checkout.</p>
-            <Link to="/shop" className="inline-flex items-center gap-2 bg-rose-500 text-white px-6 py-3 rounded-lg hover:bg-rose-600 transition-colors">Continue Shopping</Link>
+            <Link to="/shop" className="inline-flex items-center gap-2 bg-tertiary text-white px-6 py-3 hover:bg-primarySupport transition-colors">Continue Shopping</Link>
           </div>
         </div>
       </div>
@@ -81,65 +82,65 @@ export default function Checkout({ className = '' }: CheckoutProps) {
       <Helmet><title>Checkout - Invictus Nutrition</title><meta name="description" content="Complete your purchase" /></Helmet>
       <div className="container mx-auto px-4 py-12">
         <div className="flex items-center justify-between mb-8">
-          <Link to="/cart" className="flex items-center gap-2 text-gray-600 hover:text-rose-400 transition-colors">
+          <Link to="/cart" className="flex items-center gap-2 text-gray-600 hover:text-tertiary transition-colors">
             <ArrowLeft className="w-5 h-5" /> Back to Cart
           </Link>
           <h1 className="text-3xl font-bold text-gray-900">Checkout</h1>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="bg-white shadow-sm p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-6">Shipping Information</h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
-                    <input type="text" id="firstName" name="firstName" value={formData.firstName} onChange={handleInputChange} required className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500" />
+                    <input type="text" id="firstName" name="firstName" value={formData.firstName} onChange={handleInputChange} required className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-tertiary" />
                   </div>
                   <div>
                     <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
-                    <input type="text" id="lastName" name="lastName" value={formData.lastName} onChange={handleInputChange} required className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500" />
+                    <input type="text" id="lastName" name="lastName" value={formData.lastName} onChange={handleInputChange} required className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-tertiary" />
                   </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-                    <input type="email" id="email" name="email" value={formData.email} onChange={handleInputChange} required className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500" />
+                    <input type="email" id="email" name="email" value={formData.email} onChange={handleInputChange} required className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-tertiary" />
                   </div>
                   <div>
                     <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone *</label>
-                    <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleInputChange} required className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500" />
+                    <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleInputChange} required className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-tertiary" />
                   </div>
                 </div>
                 <div>
                   <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">Address *</label>
-                  <input type="text" id="address" name="address" value={formData.address} onChange={handleInputChange} required className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500" />
+                  <input type="text" id="address" name="address" value={formData.address} onChange={handleInputChange} required className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-tertiary" />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
                     <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">City *</label>
-                    <input type="text" id="city" name="city" value={formData.city} onChange={handleInputChange} required className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500" />
+                    <input type="text" id="city" name="city" value={formData.city} onChange={handleInputChange} required className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-tertiary" />
                   </div>
                   <div>
                     <label htmlFor="postalCode" className="block text-sm font-medium text-gray-700 mb-1">Postal Code *</label>
-                    <input type="text" id="postalCode" name="postalCode" value={formData.postalCode} onChange={handleInputChange} required className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500" />
+                    <input type="text" id="postalCode" name="postalCode" value={formData.postalCode} onChange={handleInputChange} required className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-tertiary" />
                   </div>
                   <div>
                     <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">Country *</label>
-                    <input type="text" id="country" name="country" value={formData.country} onChange={handleInputChange} required className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rose-500" />
+                    <input type="text" id="country" name="country" value={formData.country} onChange={handleInputChange} required className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-tertiary" />
                   </div>
                 </div>
-                {checkoutError && (<div className="p-3 bg-red-50 border border-red-200 rounded-md"><p className="text-red-600 text-sm">{checkoutError}</p></div>)}
-                <button type="submit" disabled={checkoutLoading} className="w-full bg-rose-500 text-white py-3 px-4 rounded-lg hover:bg-rose-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2">{checkoutLoading ? (<Loading size="sm" text="Processing..." />) : (<><CreditCard className="w-5 h-5" />Complete Order</>)}</button>
+                {checkoutError && (<div className="p-3 bg-red-50 border border-red-200"><p className="text-red-600 text-sm">{checkoutError}</p></div>)}
+                <button type="submit" disabled={checkoutLoading} className="w-full bg-tertiary text-white py-3 px-4 hover:bg-primarySupport disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2">{checkoutLoading ? (<><Loader2 className="w-5 h-5 animate-spin" />Processing...</>) : (<><CreditCard className="w-5 h-5" />Complete Order</>)}</button>
               </form>
             </div>
           </div>
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm p-6 sticky top-4">
+            <div className="bg-white shadow-sm p-6 sticky top-4">
               <h2 className="text-xl font-semibold text-gray-900 mb-6">Order Summary</h2>
               <div className="space-y-4 mb-6">
                 {cart.items.map(item => (
-                  <div key={item.id} className="flex items-center gap-4"><img src={item.image || '/placeholder-product.jpg'} alt={item.name} className="w-12 h-12 object-cover rounded-md" /><div className="flex-1"><h3 className="font-medium text-gray-900">{item.name}</h3><p className="text-sm text-gray-600">Qty: {item.quantity}</p></div><p className="font-medium text-gray-900">{formatPrice(item.price * item.quantity)}</p></div>
+                  <div key={item.id} className="flex items-center gap-4"><img src={item.image || '/placeholder-product.jpg'} alt={item.name} className="w-12 h-12 object-cover" /><div className="flex-1"><h3 className="font-medium text-gray-900">{item.name}</h3><p className="text-sm text-gray-600">Qty: {item.quantity}</p></div><p className="font-medium text-gray-900">{formatPrice(item.price * item.quantity)}</p></div>
                 ))}
               </div>
               <div className="border-t border-gray-200 pt-4 space-y-3">
@@ -147,7 +148,7 @@ export default function Checkout({ className = '' }: CheckoutProps) {
                 <div className="flex justify-between"><span className="text-gray-600">Shipping</span><span className="font-medium">Free</span></div>
                 <div className="border-t border-gray-200 pt-3"><div className="flex justify-between"><span className="text-lg font-semibold text-gray-900">Total</span><span className="text-lg font-semibold text-gray-900">{formatPrice(cart.total)}</span></div></div>
               </div>
-              <div className="mt-6 p-4 bg-gray-50 rounded-md"><div className="flex items-center gap-2 mb-2"><Shield className="w-5 h-5 text-green-600" /><span className="text-sm font-medium text-gray-900">Secure Checkout</span></div><p className="text-xs text-gray-600">Your payment information is encrypted and secure. We use PayFast for secure payment processing.</p></div>
+              <div className="mt-6 p-4 bg-gray-50"><div className="flex items-center gap-2 mb-2"><Shield className="w-5 h-5 text-green-600" /><span className="text-sm font-medium text-gray-900">Secure Checkout</span></div><p className="text-xs text-gray-600">Your payment information is encrypted and secure. We use PayFast for secure payment processing.</p></div>
             </div>
           </div>
         </div>

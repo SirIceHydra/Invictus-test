@@ -7,6 +7,7 @@ import { useProducts } from '../core/hooks/useProducts';
 import { useBrands } from '../../hooks/useBrands';
 import { Search, Filter, Grid, List, ShoppingCart } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { Footer } from '../../components/Footer';
 
 export default function Shop() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -74,7 +75,7 @@ export default function Shop() {
     <div className="min-h-screen bg-white">
       <Navigation isScrolled={isScrolled} />
       <div className="h-20" />
-      <section className="bg-gradient-to-r from-rose-100/60 to-amber-100/60 py-16">
+      <section className="bg-gradient-to-r from-tertiary/20 to-primarySupport/20 py-16">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Our Shop</h1>
@@ -94,11 +95,11 @@ export default function Shop() {
                       onSale: onSale
                     })}
                     placeholder="Search products..."
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-rose-400 focus:border-transparent text-lg"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 focus:ring-2 focus:ring-tertiary focus:border-transparent text-lg"
                   />
                 </div>
               </div>
-              <Link to="/cart" className="flex items-center gap-2 bg-gradient-to-r from-rose-400 to-amber-400 text-white px-6 py-3 rounded-full hover:scale-105 transition-transform font-semibold">
+              <Link to="/cart" className="flex items-center gap-2 bg-gradient-to-r from-tertiary to-primarySupport text-white px-6 py-3 hover:scale-105 transition-transform font-semibold">
                 <ShoppingCart className="w-5 h-5" />
                 <span>Cart</span>
               </Link>
@@ -112,7 +113,7 @@ export default function Shop() {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div className="flex flex-wrap items-center gap-4">
               <div className="flex items-center gap-2">
-                <Filter className="w-5 h-5 text-rose-400" />
+                <Filter className="w-5 h-5 text-tertiary" />
                 <span className="font-medium text-gray-700">Filters:</span>
               </div>
               <select 
@@ -138,7 +139,7 @@ export default function Shop() {
                     onSale: onSale
                   }); 
                 }} 
-                className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rose-400 focus:border-transparent bg-white" 
+                className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-tertiary focus:border-transparent bg-white" 
                 disabled={catsLoading}
               >
                 <option value="">All Categories</option>
@@ -167,7 +168,7 @@ export default function Shop() {
                     onSale: onSale
                   }); 
                 }} 
-                className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rose-400 focus:border-transparent bg-white" 
+                className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-tertiary focus:border-transparent bg-white" 
                 disabled={brandsLoading}
               >
                 <option value="">All Brands</option>
@@ -199,7 +200,7 @@ export default function Shop() {
                       onSale: checked
                     });
                   }}
-                  className="w-4 h-4 text-rose-400 border-gray-300 rounded focus:ring-rose-400 focus:ring-2"
+                  className="w-4 h-4 text-tertiary border-gray-300 rounded focus:ring-tertiary focus:ring-2"
                 />
                 <label htmlFor="onSale" className="text-sm font-medium text-gray-700 cursor-pointer">
                   On Sale
@@ -211,7 +212,7 @@ export default function Shop() {
                 category: categoryId ? Number(categoryId) : undefined,
                 brand: brandId || undefined,
                 onSale: onSale
-              })} className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rose-400 focus:border-transparent bg-white">
+              })} className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-tertiary focus:border-transparent bg-white">
                 <option value="date">Newest</option>
                 <option value="price">Price</option>
                 <option value="name">Name</option>
@@ -222,13 +223,13 @@ export default function Shop() {
                 category: categoryId ? Number(categoryId) : undefined,
                 brand: brandId || undefined,
                 onSale: onSale
-              })} className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-rose-400 focus:border-transparent bg-white">
+              })} className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-tertiary focus:border-transparent bg-white">
                 <option value="desc">High to Low</option>
                 <option value="asc">Low to High</option>
               </select>
               <div className="flex items-center gap-2 border border-gray-300 rounded-lg p-1">
-                <button onClick={() => setViewMode('grid')} className={`p-2 rounded ${viewMode === 'grid' ? 'bg-rose-400 text-white' : 'text-gray-600 hover:bg-gray-100'}`} title="Grid view"><Grid className="w-4 h-4" /></button>
-                <button onClick={() => setViewMode('list')} className={`p-2 rounded ${viewMode === 'list' ? 'bg-rose-400 text-white' : 'text-gray-600 hover:bg-gray-100'}`} title="List view"><List className="w-4 h-4" /></button>
+                <button onClick={() => setViewMode('grid')} className={`p-2 rounded ${viewMode === 'grid' ? 'bg-tertiary text-white' : 'text-gray-600 hover:bg-gray-100'}`} title="Grid view"><Grid className="w-4 h-4" /></button>
+                <button onClick={() => setViewMode('list')} className={`p-2 rounded ${viewMode === 'list' ? 'bg-tertiary text-white' : 'text-gray-600 hover:bg-gray-100'}`} title="List view"><List className="w-4 h-4" /></button>
               </div>
             </div>
           </div>
@@ -246,9 +247,12 @@ export default function Shop() {
             onViewDetails={(p) => { setSelectedProduct(p); setModalOpen(true); }} 
           />
         </div>
+        
       </section>
       <ProductDetailsModal product={selectedProduct} isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      <Footer />
     </div>
+    
   );
 }
 

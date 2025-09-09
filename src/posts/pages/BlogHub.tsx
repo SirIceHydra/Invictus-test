@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, BookOpen, Dumbbell, ChevronRight, Home, FileText, Phone, Mail, MapPin, Search, Loader2 } from 'lucide-react';
 import { fetchCategories } from '../services/wordpress-api';
 import { fetchPosts } from '../services/wordpress-api';
 import { Loading } from '../../components/ui/Loading';
 import { Navigation } from '../../components/Navigation';
 import { Post } from '../types/post';
+import { Footer } from '../../components/Footer';
 
 interface Category {
   id: number;
@@ -38,10 +39,25 @@ const BlogHub: React.FC = () => {
   const [mobileOpenParentId, setMobileOpenParentId] = useState<number | null>(null);
   
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  // Handle URL parameters for category filtering
+  useEffect(() => {
+    const categoryFromUrl = searchParams.get('category');
+    if (categoryFromUrl && categories.length > 0) {
+      // Find the category by slug
+      const category = categories.find(cat => cat.slug === categoryFromUrl);
+      if (category) {
+        setSelectedCategory(category);
+        setSelectedParent(null);
+        setError(null);
+      }
+    }
+  }, [searchParams, categories]);
 
   useEffect(() => {
     if (selectedCategory) {
@@ -236,7 +252,7 @@ const BlogHub: React.FC = () => {
           <p className="text-gray-600">{error}</p>
           <button 
             onClick={fetchData}
-            className="mt-4 px-4 py-2 bg-rose-400 text-white rounded-lg hover:bg-rose-500 transition-colors"
+            className="mt-4 px-4 py-2 bg-tertiary text-white hover:bg-primarySupport transition-colors"
           >
             Try Again
           </button>
@@ -258,7 +274,7 @@ const BlogHub: React.FC = () => {
           <div className="flex items-center gap-4 mb-4">
             <Link 
               to="/" 
-              className="flex items-center gap-2 text-rose-400 hover:text-rose-500 transition-colors"
+              className="flex items-center gap-2 text-tertiary hover:text-primarySupport transition-colors"
             >
               <Home size={20} />
               Home
@@ -287,7 +303,7 @@ const BlogHub: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 disabled={categoryLoading}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-tertiary focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
               />
             </div>
 
@@ -297,8 +313,8 @@ const BlogHub: React.FC = () => {
                 disabled={categoryLoading}
                 className={`w-full text-left text-sm font-semibold uppercase tracking-wide transition-colors flex items-center justify-between gap-2 ${
                   !selectedParent && !selectedCategory 
-                    ? 'text-rose-400'
-                    : 'text-gray-700 hover:text-rose-400'
+                    ? 'text-tertiary'
+                    : 'text-gray-700 hover:text-tertiary'
                 } ${categoryLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <span>ALL POSTS</span>
@@ -311,8 +327,8 @@ const BlogHub: React.FC = () => {
                     disabled={categoryLoading}
                     className={`w-full text-left text-sm font-semibold uppercase tracking-wide transition-colors flex items-center justify-between gap-2 ${
                       selectedParent?.id === parent.id 
-                        ? 'text-rose-400' 
-                        : 'text-gray-700 hover:text-rose-400'
+                        ? 'text-tertiary' 
+                        : 'text-gray-700 hover:text-tertiary'
                     } ${categoryLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     <span className="flex items-center gap-2">{parent.icon}{parent.name}</span>
@@ -325,7 +341,7 @@ const BlogHub: React.FC = () => {
                           key={child.id}
                           onClick={() => handleCategorySelect(child)}
                           disabled={categoryLoading}
-                          className={`w-full text-left px-2 py-1 text-sm text-gray-700 rounded hover:text-rose-400 hover:bg-gray-50 ${
+                          className={`w-full text-left px-2 py-1 text-sm text-gray-700 hover:text-tertiary hover:bg-gray-50 ${
                             categoryLoading ? 'opacity-50 cursor-not-allowed' : ''
                           }`}
                         >
@@ -347,8 +363,8 @@ const BlogHub: React.FC = () => {
                 disabled={categoryLoading}
                 className={`text-sm font-semibold uppercase tracking-wide transition-colors flex items-center gap-2 ${
                   !selectedParent && !selectedCategory 
-                    ? 'text-rose-400 border-b-2 border-rose-400' 
-                    : 'text-gray-600 hover:text-rose-400'
+                    ? 'text-tertiary border-b-2 border-tertiary' 
+                    : 'text-gray-600 hover:text-tertiary'
                 } ${categoryLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 {categoryLoading && !selectedParent && !selectedCategory && (
@@ -363,8 +379,8 @@ const BlogHub: React.FC = () => {
                     disabled={categoryLoading}
                     className={`text-sm font-semibold uppercase tracking-wide transition-colors flex items-center gap-2 ${
                       selectedParent?.id === parent.id 
-                        ? 'text-rose-400 border-b-2 border-rose-400' 
-                        : 'text-gray-600 hover:text-rose-400'
+                        ? 'text-tertiary border-b-2 border-tertiary' 
+                        : 'text-gray-600 hover:text-tertiary'
                     } ${categoryLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     {categoryLoading && selectedParent?.id === parent.id && (
@@ -376,14 +392,14 @@ const BlogHub: React.FC = () => {
                   
                   {/* Dropdown for child categories */}
                   {parent.children.length > 0 && (
-                    <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20">
+                    <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20">
                       <div className="py-2">
                         {parent.children.map((child) => (
                           <button
                             key={child.id}
                             onClick={() => handleCategorySelect(child)}
                             disabled={categoryLoading}
-                            className={`w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-rose-400 transition-colors flex items-center justify-between ${
+                            className={`w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-tertiary transition-colors flex items-center justify-between ${
                               categoryLoading ? 'opacity-50 cursor-not-allowed' : ''
                             }`}
                           >
@@ -412,7 +428,7 @@ const BlogHub: React.FC = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 disabled={categoryLoading}
-                className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                className="pl-10 pr-4 py-2 border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-tertiary focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
               />
             </div>
           </div>
@@ -427,7 +443,7 @@ const BlogHub: React.FC = () => {
             <button 
               onClick={handleBackToParents}
               disabled={categoryLoading}
-              className="flex items-center gap-2 text-rose-400 hover:text-rose-500 transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 text-tertiary hover:text-primarySupport transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <ArrowLeft size={20} />
               Back to All Posts
@@ -439,7 +455,7 @@ const BlogHub: React.FC = () => {
         {categoryLoading && (
           <div className="flex items-center justify-center py-16">
             <div className="text-center">
-              <Loader2 className="w-12 h-12 animate-spin text-rose-400 mx-auto mb-4" />
+              <Loader2 className="w-12 h-12 animate-spin text-tertiary mx-auto mb-4" />
               <p className="text-gray-600">
                 {selectedCategory 
                   ? `Loading ${selectedCategory.name} posts...`
@@ -457,7 +473,7 @@ const BlogHub: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredPosts.map((post) => {
               return (
-                <article key={post.id} className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+                <article key={post.id} className="bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
                   {/* Featured Image */}
                   <div className="aspect-video overflow-hidden">
                     <img
@@ -472,14 +488,14 @@ const BlogHub: React.FC = () => {
                     {/* Category */}
                     {post.categories && post.categories.length > 0 && post.categories[0] && (
                       <div className="mb-3">
-                        <span className="inline-block px-3 py-1 bg-rose-100 text-rose-600 text-xs font-semibold rounded-full uppercase tracking-wide">
+                        <span className="inline-block px-3 py-1 bg-tertiary/20 text-tertiary text-xs font-semibold uppercase tracking-wide">
                           {post.categories[0]}
                         </span>
                       </div>
                     )}
                     
                     {/* Title */}
-                    <h2 className="text-xl font-bold mb-3 line-clamp-2 hover:text-rose-400 transition-colors">
+                    <h2 className="text-xl font-bold mb-3 line-clamp-2 hover:text-tertiary transition-colors">
                       <Link to={`/posts/${post.slug}`}>
                         {post.title}
                       </Link>
@@ -519,72 +535,7 @@ const BlogHub: React.FC = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-gray-50 border-t border-gray-100 py-12">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-8">
-            <img
-              src="/assets/Invictus.svg"
-              alt="Invictus Nutrition Full Logo"
-              className="h-16 mx-auto"
-            />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto text-center">
-            <div>
-              <h4 className="text-xl font-bold mb-4">CONTACT US</h4>
-              <div className="space-y-4">
-                <div className="flex items-center gap-3 justify-center">
-                  <Phone size={20} className="text-rose-400" />
-                  <span>+27 73 951 6670</span>
-                </div>
-                <div className="flex items-center gap-3 justify-center">
-                  <Mail size={20} className="text-rose-400" />
-                  <span>invictusbrands1@gmail.com</span>
-                </div>
-                <div className="flex items-center gap-3 justify-center">
-                  <MapPin size={20} className="text-rose-400" />
-                  <span>Kenilworth, Johannesburg</span>
-                </div>
-              </div>
-            </div>
-            <div>
-              <h4 className="text-xl font-bold mb-4">QUICK LINKS</h4>
-              <ul className="space-y-2">
-                <li>
-                  <Link to="/#about" className="hover:text-rose-400 transition-colors">
-                    ABOUT US
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/shipping-policy" className="hover:text-rose-400 transition-colors">
-                    SHIPPING POLICY
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/return-policy" className="hover:text-rose-400 transition-colors">
-                    RETURN POLICY
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/privacy-policy" className="hover:text-rose-400 transition-colors">
-                    PRIVACY POLICY
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-12 pt-8 border-t border-gray-200 text-center text-gray-600">
-            © 2025 INVICTUS NUTRITION. ALL RIGHTS RESERVED. Website designed & hosted by{' '}
-            <a
-              href="https://www.kaizentech.co.za"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#4682b4] hover:text-[#3a6d96] transition-colors"
-            >
-              Kaizen Technology
-            </a>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

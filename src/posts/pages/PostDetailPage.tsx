@@ -49,7 +49,7 @@ const PostDetailPage: React.FC = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-rose-100 py-12">
+      <footer className="bg-white border-t border-gray-200 py-12">
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
             <img
@@ -63,15 +63,15 @@ const PostDetailPage: React.FC = () => {
               <h4 className="text-xl font-bold mb-4">CONTACT US</h4>
               <div className="space-y-4">
                 <div className="flex items-center gap-3 justify-center">
-                  <Phone size={20} className="text-rose-400" />
+                  <Phone size={20} className="text-tertiary" />
                   <span>+27 73 951 6670</span>
                 </div>
                 <div className="flex items-center gap-3 justify-center">
-                  <Mail size={20} className="text-rose-400" />
+                  <Mail size={20} className="text-tertiary" />
                   <span>invictusbrands1@gmail.com</span>
                 </div>
                 <div className="flex items-center gap-3 justify-center">
-                  <MapPin size={20} className="text-rose-400" />
+                  <MapPin size={20} className="text-tertiary" />
                   <span>Kenilworth, Johannesburg</span>
                 </div>
               </div>
@@ -80,29 +80,29 @@ const PostDetailPage: React.FC = () => {
               <h4 className="text-xl font-bold mb-4">QUICK LINKS</h4>
                              <ul className="space-y-2">
                  <li>
-                   <Link to="/#about" className="hover:text-rose-400 transition-colors">
+                   <Link to="/#about" className="hover:text-tertiary transition-colors">
                      ABOUT US
                    </Link>
                  </li>
                  <li>
-                   <Link to="/shipping-policy" className="hover:text-rose-400 transition-colors">
+                   <Link to="/shipping-policy" className="hover:text-tertiary transition-colors">
                      SHIPPING POLICY
                    </Link>
                  </li>
                  <li>
-                   <Link to="/return-policy" className="hover:text-rose-400 transition-colors">
+                   <Link to="/return-policy" className="hover:text-tertiary transition-colors">
                      RETURN POLICY
                    </Link>
                  </li>
                  <li>
-                   <Link to="/privacy-policy" className="hover:text-rose-400 transition-colors">
+                   <Link to="/privacy-policy" className="hover:text-tertiary transition-colors">
                      PRIVACY POLICY
                    </Link>
                  </li>
                </ul>
             </div>
           </div>
-          <div className="mt-12 pt-8 border-t border-rose-100 text-center text-gray-600">
+          <div className="mt-12 pt-8 border-t border-gray-200 text-center text-gray-600">
             © 2025 INVICTUS NUTRITION. ALL RIGHTS RESERVED. Website designed &amp; hosted by{' '}
             <a
               href="https://www.kaizentech.co.za"

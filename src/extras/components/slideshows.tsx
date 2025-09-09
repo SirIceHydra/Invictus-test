@@ -1,6 +1,5 @@
-import { Radius } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 type Banner = { image: string; alt?: string; link?: string };
 
@@ -8,10 +7,16 @@ export function HeroSlideshow() {
   const [banners, setBanners] = useState<Banner[]>([]);
   const [i, setI] = useState(0);
   const [fadeOpacity, setFadeOpacity] = useState(1);
-  
-  const API =
-    (import.meta as any).env.VITE_SLIDER_COMPONENT_URL;
+  const [isMobile, setIsMobile] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
 
+  const touchStartX = useRef<number | null>(null);
+  const touchDeltaX = useRef(0);
+
+  const API = (import.meta as any).env.VITE_SLIDER_COMPONENT_URL;
+
+  // Fetch banners
   useEffect(() => {
     (async () => {
       try {
@@ -19,133 +24,172 @@ export function HeroSlideshow() {
         if (!response.ok) throw new Error('Failed to fetch banners');
         const data = await response.json();
         setBanners(data);
-      } catch (error) {
-        // Fallback to default banner
+      } catch {
+        // fallback handled by local default below
       }
     })();
   }, [API]);
 
+  // Auto-advance slideshow
   useEffect(() => {
     if (!banners.length) return;
-    
     const t = setInterval(() => {
-      // Start fade out
       setFadeOpacity(0);
-      
-      // After fade out, change image and fade in
       setTimeout(() => {
         setI((x) => (x + 1) % banners.length);
         setFadeOpacity(1);
-      }, 400); // Wait for fade out to complete
-    }, 3000);
-    
+      }, 300);
+    }, 5000);
     return () => clearInterval(t);
   }, [banners.length]);
 
-  // Use inline styles to completely avoid CSS conflicts
-  const containerStyle = {
-    position: 'relative' as const,
-    width: '100%',
-    marginTop: '4rem',
-    height: 'clamp(200px, 50vw, 640px)', // Increased height for better mobile scaling
-    zIndex: 10,
-    backgroundColor: '#fff1f1',
-    overflow: 'hidden',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
+  // Detect mobile screen size
+  useEffect(() => {
+    const mql = window.matchMedia('(max-width: 640px)');
+    const update = () => setIsMobile(mql.matches);
+    update();
+    mql.addEventListener('change', update);
+    return () => mql.removeEventListener('change', update);
+  }, []);
+
+
+  // Touch/swipe handlers
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchDeltaX.current = 0;
+  };
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (touchStartX.current == null) return;
+    touchDeltaX.current = e.touches[0].clientX - touchStartX.current;
+  };
+  const onTouchEnd = () => {
+    const THRESHOLD = 50;
+    if (touchDeltaX.current > THRESHOLD) {
+      setI((x) => (x - 1 + (banners.length || 1)) % (banners.length || 1));
+    } else if (touchDeltaX.current < -THRESHOLD) {
+      setI((x) => (x + 1) % (banners.length || 1));
+    }
+    touchStartX.current = null;
+    touchDeltaX.current = 0;
   };
 
-  const backgroundStyle = {
-    position: 'absolute' as const,
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+  // Click handler - redirect to shop page
+  const onClick = () => {
+    navigate('/shop');
+  };
+
+  // Styles
+  const sectionStyle: React.CSSProperties = {
+    width: '100%',
+    position: 'relative',
+    display: 'flex',
+    justifyContent: 'center',
+    padding: isMobile ? '0 12px' : '0',
+    overflow: 'hidden',
+  };
+
+     const containerStyle: React.CSSProperties = {
+     position: 'relative',
+     width: '100%',
+     maxWidth: '1024px',
+     margin: '0 auto 2rem auto',
+     height: isMobile ? '240px' : '500px',
+     zIndex: 10,
+     backgroundColor: '#fff1f1',
+     overflow: 'hidden',
+     display: 'flex',
+     alignItems: 'center',
+     justifyContent: 'center',
+     borderRadius: isMobile ? '12px' : '16px',
+     border: '1px solid rgba(0,0,0,0.05)',
+     touchAction: 'pan-y',
+     cursor: 'pointer',
+     transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+     transform: isHovered ? 'scale(1.02)' : 'scale(1)',
+     boxShadow: isHovered ? '0 8px 25px rgba(0,0,0,0.15)' : '0 2px 10px rgba(0,0,0,0.05)',
+   };
+
+  const imageStyle: React.CSSProperties = {
+    position: 'absolute',
+    inset: 0,
     width: '100%',
     height: '100%',
-    backgroundPosition: 'center',
-    backgroundSize: 'contain',
-    backgroundRepeat: 'no-repeat',
-    zIndex: 1,
-    transition: 'opacity 0.2s ease-in-out'
-  };
-
-  const ctaStyle = {
-    position: 'absolute' as const,
-    right: 'clamp(1rem, 4vw, 2rem)',
-    bottom: 'clamp(1rem, 4vw, 2rem)',
-    zIndex: 20,
+    objectFit: isMobile ? 'cover' : 'contain',
+    transition: 'opacity 0.2s ease-in-out',
     opacity: fadeOpacity,
-    transition: 'opacity 0.4s ease-in-out'
+    borderRadius: isMobile ? '12px' : '16px',
+    userSelect: 'none',
+    pointerEvents: 'none',
   };
 
-  if (!banners.length) {
-    // Fallback banner for testing
-    const fallbackBanner = {
-      image: '/assets/Banners/on-banner.png',
-      alt: 'Fallback Banner'
-    };
-    
-    return (
-      <div style={containerStyle}>
-        {/* Background image */}
-        <div style={{
-          ...backgroundStyle,
-          backgroundImage: `url(${fallbackBanner.image})`,
-          opacity: fadeOpacity
-        }} aria-hidden="true" />
-        
-        {/* CTA Button */}
-        <div style={ctaStyle}>
-          <Link to="/shop" style={{ display: 'inline-block' }}>
-            <span style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              color: '#111827',
-              padding: 'clamp(8px, 2vw, 12px) clamp(16px, 4vw, 24px)',
-              borderRadius: '9999px',
-              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-              fontWeight: 600,
-              letterSpacing: '0.05em',
-              fontSize: 'clamp(14px, 3vw, 18px)',
-              display: 'inline-block'
-            }}>
-              SHOP NOW
-            </span>
-          </Link>
-        </div>
-      </div>
-    );
-  }
-  
-  const currentBanner = banners[i];
+  const dotsWrapperStyle: React.CSSProperties = {
+    position: 'absolute',
+    bottom: isMobile ? '8px' : '12px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    display: 'flex',
+    gap: isMobile ? '6px' : '8px',
+    zIndex: 5,
+  };
+
+  const dotStyle = (active: boolean): React.CSSProperties => ({
+    width: isMobile ? '6px' : '8px',
+    height: isMobile ? '6px' : '8px',
+    borderRadius: '9999px',
+    background: active ? 'rgba(17,24,39,0.9)' : 'rgba(17,24,39,0.35)',
+    transition: 'transform 0.2s ease',
+    transform: active ? 'scale(1.15)' : 'scale(1)',
+  });
+
+  const fallbackBanner: Banner = {
+    image: '/assets/Banners/on-banner.png',
+    alt: 'Fallback Banner',
+  };
+
+  const currentBanner = banners.length ? banners[i] : fallbackBanner;
 
   return (
-    <div style={containerStyle}>
-      {/* Background image */}
-      <div style={{
-        ...backgroundStyle,
-        backgroundImage: `url(${currentBanner.image})`,
-        opacity: fadeOpacity
-      }} aria-hidden="true" />
+    <section style={sectionStyle}>
+      {/* Video Background */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover z-0"
+        style={{ filter: 'brightness(0.8)' }}
+      >
+        <source src="/assets/Banners/banner_section.mp4" type="video/mp4" />
+      </video>
       
-      {/* CTA Button */}
-      <div style={ctaStyle}>
-        <Link to="/shop" style={{ display: 'inline-block' }}>
-          <span style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-            color: '#111827',
-            padding: 'clamp(8px, 2vw, 12px) clamp(16px, 4vw, 24px)',
-            borderRadius: '9999px',
-            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-            fontWeight: 600,
-            letterSpacing: '0.05em',
-            fontSize: 'clamp(14px, 3vw, 18px)',
-            display: 'inline-block'
-          }}>
-            SHOP NOW
-          </span>
-        </Link>
+      <div
+        style={containerStyle}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        onClick={onClick}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Promotional banners - Click to visit shop"
+        className="relative z-10"
+      >
+        <img
+          src={currentBanner.image}
+          alt={currentBanner.alt ?? 'Banner'}
+          style={imageStyle}
+          draggable={false}
+        />
+
+        {banners.length > 1 && (
+          <div style={dotsWrapperStyle} aria-hidden="true">
+            {banners.map((_, idx) => (
+              <span key={idx} style={dotStyle(idx === i)} />
+            ))}
+          </div>
+        )}
       </div>
-    </div>
+    </section>
   );
 }
