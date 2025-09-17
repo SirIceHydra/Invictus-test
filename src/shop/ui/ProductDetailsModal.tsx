@@ -63,13 +63,13 @@ export function ProductDetailsModal({ product, isOpen, onClose }: ProductDetails
     <div className="fixed inset-0 z-[9999] overflow-y-auto">
       <div className="fixed inset-0 bg-black/50" onClick={onClose} />
       <div className="flex min-h-full items-start justify-center p-2 sm:p-4 pt-20">
-        <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[95vh] overflow-hidden">
+        <div className="relative bg-primary shadow-2xl w-full max-w-6xl max-h-[95vh] overflow-hidden text-tertiary border border-tertiary/30">
           {/* Header */}
-          <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-white sticky top-0 z-10">
-            <h2 className="text-xl sm:text-2xl font-bold">PRODUCT DETAILS</h2>
+          <div className="flex items-center justify-between p-4 sm:p-6 border-b border-tertiary/30 bg-primary sticky top-0 z-10">
+            <h2 className="text-xl sm:text-2xl font-bold text-tertiary">PRODUCT DETAILS</h2>
             <button 
               onClick={onClose} 
-              className="text-gray-400 hover:text-gray-600 transition-colors p-2"
+              className="text-secondary/70 hover:text-secondary transition-colors p-2"
             >
               <X size={20} />
             </button>
@@ -78,7 +78,7 @@ export function ProductDetailsModal({ product, isOpen, onClose }: ProductDetails
           <div className="flex flex-col lg:flex-row max-h-[calc(95vh-80px)] overflow-y-auto">
             {/* Left Side - Image Gallery */}
             <div className="lg:w-1/2 p-4 sm:p-6">
-              <div className="relative w-full h-64 sm:h-96 bg-white rounded-lg overflow-hidden">
+              <div className="relative w-full h-64 sm:h-96 bg-secondary overflow-hidden">
                 {/* Main Image */}
                 {imageLoading && (
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -101,22 +101,22 @@ export function ProductDetailsModal({ product, isOpen, onClose }: ProductDetails
                   <>
                     <button
                       onClick={previousImage}
-                      className="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 bg-white/80 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110"
+                      className="absolute left-2 top-1/2 transform -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 bg-tertiary/20 hover:bg-tertiary/30 text-tertiary shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110"
                       title="Previous Image"
                     >
-                      <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700" />
+                      <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
                     
                     <button
                       onClick={nextImage}
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 bg-white/80 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110"
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 bg-tertiary/20 hover:bg-tertiary/30 text-tertiary shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-110"
                       title="Next Image"
                     >
-                      <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700" />
+                      <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
 
                     {/* Image Counter */}
-                    <div className="absolute bottom-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
+                    <div className="absolute bottom-2 right-2 bg-black/50 text-white text-xs px-2 py-1">
                       {currentImageIndex + 1} / {product.images.length}
                     </div>
                   </>
@@ -131,10 +131,10 @@ export function ProductDetailsModal({ product, isOpen, onClose }: ProductDetails
                       <button
                         key={index}
                         onClick={() => selectImage(index)}
-                        className={`flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                        className={`flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 overflow-hidden border-2 transition-all duration-200 ${
                           index === currentImageIndex
-                            ? 'border-rose-400 shadow-lg'
-                            : 'border-gray-200 hover:border-gray-300'
+                            ? 'border-tertiary shadow-lg'
+                            : 'border-tertiary/30 hover:border-tertiary/50'
                         }`}
                       >
                         <img
@@ -151,59 +151,59 @@ export function ProductDetailsModal({ product, isOpen, onClose }: ProductDetails
 
             {/* Right Side - Product Information */}
             <div className="lg:w-1/2 p-4 sm:p-6">
-              <h1 className="text-2xl sm:text-3xl font-bold mb-4">{product.name}</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold mb-4 text-secondary">{product.name}</h1>
               
               {/* Price */}
               <div className="flex items-center gap-3 mb-4">
                 {product.onSale && product.salePrice ? (
                   <>
-                    <span className="text-2xl sm:text-3xl font-bold text-rose-500">
+                    <span className="text-2xl sm:text-3xl font-bold text-tertiary">
                       {formatPrice(product.salePrice)}
                     </span>
-                    <span className="text-base sm:text-lg text-gray-500 line-through">
+                    <span className="text-base sm:text-lg text-tertiary/70 line-through">
                       {formatPrice(product.regularPrice)}
                     </span>
                   </>
                 ) : (
-                  <span className="text-2xl sm:text-3xl font-bold">
+                  <span className="text-2xl sm:text-3xl font-bold text-tertiary">
                     {formatPrice(product.price)}
                   </span>
                 )}
               </div>
 
               {/* Availability */}
-              <div className="text-sm text-gray-600 mb-6">
+              <div className="text-sm text-secondary/80 mb-6">
                 <span className="font-medium">Availability:</span> {getStockStatusText(product.stockStatus, product.stockQuantity)}
               </div>
 
               {/* Quick Overview */}
               {product.shortDescription && (
                 <div className="mb-6">
-                  <h3 className="text-lg font-semibold mb-2">Quick Overview</h3>
-                  <p className="text-gray-600 leading-relaxed">{product.shortDescription}</p>
+                  <h3 className="text-lg font-semibold mb-2 text-tertiary">Quick Overview</h3>
+                  <p className="text-secondary/90 leading-relaxed">{product.shortDescription}</p>
                 </div>
               )}
 
               {/* Product Description */}
               {product.description && (
                 <div className="mb-6">
-                  <h3 className="text-lg font-semibold mb-2">Product Description</h3>
+                  <h3 className="text-lg font-semibold mb-2 text-tertiary">Product Description</h3>
                   <div 
-                    className="text-gray-600 leading-relaxed prose prose-sm max-w-none" 
+                    className="text-secondary/90 leading-relaxed prose prose-sm max-w-none" 
                     dangerouslySetInnerHTML={{ __html: product.description }} 
                   />
                 </div>
               )}
 
               {/* Action Buttons - Sticky on mobile */}
-              <div className="flex gap-3 pt-4 border-t border-gray-200 bg-white sticky bottom-0 pb-2">
+              <div className="flex gap-3 pt-4 border-t border-tertiary/30 bg-primary sticky bottom-0 pb-2">
                 <button 
                   onClick={handleAdd} 
                   disabled={!inStock || adding} 
-                  className={`w-full py-3 px-4 sm:px-6 rounded-lg font-semibold transition-all ${
+                  className={`w-full py-3 px-4 sm:px-6 font-semibold transition-all ${
                     inStock 
-                      ? 'bg-gradient-to-r from-rose-400 to-amber-400 text-white hover:scale-105' 
-                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      ? 'bg-secondary text-primary hover:bg-tertiary hover:text-secondary hover:scale-105' 
+                      : 'bg-tertiary/20 text-tertiary cursor-not-allowed'
                   }`}
                 >
                   {adding ? 'Adding...' : 'Add to Cart'}

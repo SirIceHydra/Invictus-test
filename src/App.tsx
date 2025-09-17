@@ -20,9 +20,6 @@ import { useProducts } from "@shop/core/hooks/useProducts";
 import { ProductCard } from "@shop/ui/ProductCard";
 import { ProductDetailsModal } from "@shop/ui/ProductDetailsModal";
 import { Loading } from "./components/ui/Loading";
-import { PostGrid } from "./posts/components/PostGrid";
-import { usePosts } from "./posts/hooks/usePosts";
-import { preloadCache } from "./posts/services/wordpress-api";
 import PostsPage from "./posts/pages/PostsPage";
 import PostDetailPage from "./posts/pages/PostDetailPage";
 import BlogHub from "./posts/pages/BlogHub";
@@ -30,6 +27,7 @@ import ShippingPolicy from "./pages/ShippingPolicy";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ReturnPolicy from "./pages/ReturnPolicy";
 import BlogPage from "./pages/BlogPage";
+import BobGoTestPage from "./pages/BobGoTestPage";
 import BrandsSlider from "./components/BrandsSlider";
 
 function App() {
@@ -145,11 +143,11 @@ function App() {
         <HeroSlideshow />
 
         {/* Featured Products Section */}
-        <section className="py-20 bg-secondary">
+        <section className="py-20 bg-primary border-t-2 border-tertiary/30">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h3 className="text-4xl font-bold mb-4 text-primary">FEATURED PRODUCTS</h3>
-              <p className="text-gray-800 text-lg">
+              <h3 className="text-4xl font-bold mb-4 text-tertiary">FEATURED PRODUCTS</h3>
+              <p className=" text-lg">
                 Discover our premium nutrition supplements
               </p>
             </div>
@@ -203,9 +201,10 @@ function App() {
             )}
 
             <div className="text-center mt-12">
-            <Button
+              <Button
                 variant="underline"
                 size="lg"
+                className="text-tertiary after:bg-tertiary"
                 onClick={() => window.location.href = '/shop'}
               >
                 <ArrowRight size={20} /> VIEW ALL PRODUCTS
@@ -310,12 +309,12 @@ function App() {
         </section>
 
         {/* Brands Section */}
-        <section className="py-20 bg-primary">
+        <section className="py-20 bg-primary border-t-2 border-tertiary/30">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className="text-left">
-                <h3 className="text-4xl font-bold mb-4">OUR BRANDS</h3>
-                <p className="text-gray-300 text-lg">
+                <h3 className="text-tertiary text-4xl font-bold mb-4">OUR BRANDS</h3>
+                <p className="text-secondary-300 text-lg">
                   Discover premium nutrition brands trusted by athletes
                   worldwide
                 </p>
@@ -329,11 +328,11 @@ function App() {
         </section>
 
         {/* On Sale Products Section */}
-        <section className="py-20 bg-secondary">
+        <section className="py-20 bg-primary border-t-2 border-tertiary/30">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h3 className="text-4xl font-bold mb-4 text-primary">SPECIAL OFFERS</h3>
-              <p className="text-gray-800 text-lg">
+              <h3 className="text-4xl font-bold mb-4 text-tertiary">SPECIAL OFFERS</h3>
+              <p className="text-secondary text-lg">
                 Limited time deals on premium nutrition supplements
               </p>
             </div>
@@ -395,9 +394,9 @@ function App() {
             {products.filter((product) => product.onSale).length === 0 &&
               !productsLoading && (
                 <div className="text-center py-12">
-                  <div className="bg-white/50 rounded-lg p-8 max-w-md mx-auto">
+                  <div className="bg-primarySupport rounded-lg p-8 max-w-md mx-auto">
                     <svg
-                      className="w-16 h-16 text-gray-400 mx-auto mb-4"
+                      className="w-16 h-16 text-tertiary mx-auto mb-4"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -409,10 +408,10 @@ function App() {
                         d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                       />
                     </svg>
-                    <h4 className="text-xl font-semibold text-primary mb-2">
+                    <h4 className="text-xl font-semibold text-tertiary mb-2">
                       No Special Offers Right Now
                     </h4>
-                    <p className="text-gray-600">
+                    <p className="text-tertiary">
                       Check back soon for amazing deals on premium supplements!
                     </p>
                   </div>
@@ -422,25 +421,26 @@ function App() {
             {products.filter((product) => product.onSale).length > 0 && (
               <div className="text-center mt-12">
                 <Button
-                variant="underline"
-                size="lg"
-                onClick={() => window.location.href = '/shop'}
-              >
-                <ArrowRight size={20} /> VIEW ALL SPECIALS
-              </Button>
+                  variant="underline"
+                  size="lg"
+                  className="text-tertiary after:bg-tertiary"
+                  onClick={() => window.location.href = '/shop'}
+                >
+                  <ArrowRight size={20} /> VIEW ALL SPECIALS
+                </Button>
               </div>
             )}
           </div>
         </section>
 
         {/* Why Choose Invictus Section */}
-        <section className="py-20 bg-primary">
+        <section className="py-20 bg-primary border-t-2 border-tertiary/30">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h3 className="text-4xl font-bold mb-4">
+              <h3 className="text-4xl font-bold mb-4 text-tertiary">
                 WHY CHOOSE INVICTUS NUTRITION?
               </h3>
-              <p className="text-gray-300 text-lg max-w-3xl mx-auto">
+              <p className="text-secondary text-lg max-w-3xl mx-auto">
                 We're committed to providing you with the highest quality
                 supplements backed by science and delivered with excellence
               </p>
@@ -463,8 +463,8 @@ function App() {
                     />
                   </svg>
                 </div>
-                <h4 className="text-xl font-bold mb-3">PREMIUM QUALITY</h4>
-                <p className="text-gray-300">
+                <h4 className="text-xl font-bold mb-3 text-tertiary">PREMIUM QUALITY</h4>
+                <p className="text-secondary-300">
                   All products are third-party tested and meet the highest
                   industry standards for purity and potency
                 </p>
@@ -486,8 +486,8 @@ function App() {
                     />
                   </svg>
                 </div>
-                <h4 className="text-xl font-bold mb-3">FAST DELIVERY</h4>
-                <p className="text-gray-300">
+                <h4 className="text-xl font-bold mb-3 text-tertiary">FAST DELIVERY</h4>
+                <p className="text-secondary-300">
                   Quick and reliable shipping across South Africa with real-time
                   tracking and secure packaging
                 </p>
@@ -509,8 +509,8 @@ function App() {
                     />
                   </svg>
                 </div>
-                <h4 className="text-xl font-bold mb-3">EXPERT SUPPORT</h4>
-                <p className="text-gray-300">
+                <h4 className="text-xl font-bold mb-3 text-tertiary">EXPERT SUPPORT</h4>
+                <p className="text-secondary-300">
                   Our nutrition experts are here to help you choose the right
                   products for your fitness goals
                 </p>
@@ -532,10 +532,10 @@ function App() {
                     />
                   </svg>
                 </div>
-                <h4 className="text-xl font-bold mb-3">
+                <h4 className="text-xl font-bold mb-3 text-tertiary">
                   CUSTOMER SATISFACTION
                 </h4>
-                <p className="text-gray-300">
+                <p className="text-secondary-300">
                   Join thousands of satisfied customers who trust Invictus for
                   their nutrition needs
                 </p>
@@ -555,11 +555,11 @@ function App() {
         </section>
 
         {/* Latest Arrivals Section */}
-        <section className="py-20 bg-secondary">
+        <section className="py-20 bg-primary border-t-2 border-tertiary/30">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h3 className="text-4xl font-bold mb-4 text-primary">LATEST ARRIVALS</h3>
-              <p className="text-gray-800 text-lg">
+              <h3 className="text-4xl font-bold mb-4 text-tertiary">LATEST ARRIVALS</h3>
+              <p className="text-secondary text-lg">
                 Fresh new products just added to our collection
               </p>
             </div>
@@ -613,7 +613,7 @@ function App() {
               </>
             ) : (
               <div className="text-center py-12">
-                <p className="text-gray-600 text-lg">
+                <p className="text-tertiary text-lg">
                   No latest arrivals available at the moment.
                 </p>
               </div>
@@ -623,6 +623,7 @@ function App() {
               <Button
                 variant="underline"
                 size="lg"
+                className="text-tertiary after:bg-tertiary"
                 onClick={() => window.location.href = '/shop'}
               >
                 <ArrowRight size={20} /> VIEW ALL PRODUCTS
@@ -632,9 +633,9 @@ function App() {
         </section>
 
         {/* FAQ Section */}
-        <section id="faq" className="py-20 bg-primary">
+        <section id="faq" className="py-20 bg-primary border-t-2 border-tertiary/30">
           <div className="container mx-auto px-4">
-            <h3 className="text-4xl font-bold mb-12 text-center">FAQ</h3>
+            <h3 className="text-4xl font-bold mb-12 text-center text-tertiary">FAQ</h3>
             <div className="max-w-3xl mx-auto space-y-6">
               {[
                 {
@@ -725,6 +726,7 @@ function App() {
             <Route path="/shipping-policy" element={<ShippingPolicy />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/return-policy" element={<ReturnPolicy />} />
+            <Route path="/test-bobgo" element={<BobGoTestPage />} />
           </Routes>
         </Router>
       </CartProvider>

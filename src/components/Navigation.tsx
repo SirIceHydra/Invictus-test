@@ -38,7 +38,10 @@ export function Navigation({ isScrolled }: NavigationProps) {
     <nav className="fixed w-full z-[9999] transition-all duration-300 bg-primary/95 pt-8 pb-8 shadow-lg top-0">
       <div className="container mx-auto px-4 flex items-center justify-between max-w-full">
         {/* LOGO */}
-        <Link to="/">
+        <Link 
+          to="/" 
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        >
           <img
             src="/assets/Invictus.svg"
             alt="Invictus Nutrition Logo"
@@ -50,14 +53,14 @@ export function Navigation({ isScrolled }: NavigationProps) {
         <div className="hidden md:flex items-center gap-6">
           <Link
             to="/shop?onSale=true"
-            className="hover:text-secondary transition-colors font-medium text-lg text-secondary"
+            className="hover:text-primarySupport transition-colors font-medium text-lg text-tertiary"
           >
             SPECIALS
           </Link>
 
           {/* Brands Dropdown */}
           <div className="relative group">
-            <button className="hover:text-secondary transition-colors font-medium text-lg flex items-center gap-1 text-secondary">
+            <button className="hover:text-primarySupport transition-colors font-medium text-lg flex items-center gap-1 text-tertiary">
               BRANDS
               <svg
                 className="w-4 h-4"
@@ -75,19 +78,19 @@ export function Navigation({ isScrolled }: NavigationProps) {
             </button>
             <div className="absolute top-full left-0 bg-primarySupport shadow-lg py-2 min-w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
               {brandsLoading ? (
-                <div className="px-4 py-2 text-gray-300">Loading brands...</div>
+                <div className="px-4 py-2 text-tertiary/80">Loading brands...</div>
               ) : brands.length > 0 ? (
                 brands.map((brand) => (
                   <Link
                     key={brand.id}
                     to={`/shop?brand=${brand.name}`}
-                    className="block px-4 py-2 hover:bg-gray-600 hover:text-secondary transition-colors text-secondary"
+                    className="block px-4 py-2 hover:bg-black/30 hover:text-primary transition-colors text-tertiary"
                   >
                     {brand.name}
                   </Link>
                 ))
               ) : (
-                <div className="px-4 py-2 text-gray-300">
+                <div className="px-4 py-2 text-tertiary/80">
                   No brands available
                 </div>
               )}
@@ -96,7 +99,7 @@ export function Navigation({ isScrolled }: NavigationProps) {
 
           {/* Category Dropdown */}
           <div className="relative group">
-            <button className="hover:text-secondary transition-colors font-medium text-lg flex items-center gap-1 text-secondary">
+            <button className="hover:text-primarySupport transition-colors font-medium text-lg flex items-center gap-1 text-tertiary">
               CATEGORY
               <svg
                 className="w-4 h-4"
@@ -114,7 +117,7 @@ export function Navigation({ isScrolled }: NavigationProps) {
             </button>
             <div className="absolute top-full left-0 bg-primarySupport shadow-lg py-2 min-w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
               {categoriesLoading ? (
-                <div className="px-4 py-2 text-gray-300">
+                <div className="px-4 py-2 text-tertiary/80">
                   Loading categories...
                 </div>
               ) : categories.length > 0 ? (
@@ -122,13 +125,13 @@ export function Navigation({ isScrolled }: NavigationProps) {
                   <Link
                     key={category.id}
                     to={`/shop?category=${category.id}`}
-                    className="block px-4 py-2 hover:bg-gray-600 hover:text-secondary transition-colors text-secondary"
+                    className="block px-4 py-2 hover:bg-black/30 hover:text-primary transition-colors text-tertiary"
                   >
                     {category.name}
                   </Link>
                 ))
               ) : (
-                <div className="px-4 py-2 text-gray-300">
+                <div className="px-4 py-2 text-tertiary/80">
                   No categories available
                 </div>
               )}
@@ -137,7 +140,7 @@ export function Navigation({ isScrolled }: NavigationProps) {
 
           {/* Workout Plans Dropdown */}
           <div className="relative group">
-            <button className="hover:text-secondary transition-colors font-medium text-lg flex items-center gap-1 text-secondary">
+            <button className="hover:text-primarySupport transition-colors font-medium text-lg flex items-center gap-1 text-tertiary">
               WORKOUT PLANS
               <svg
                 className="w-4 h-4"
@@ -155,7 +158,7 @@ export function Navigation({ isScrolled }: NavigationProps) {
             </button>
             <div className="absolute top-full left-0 bg-primarySupport shadow-lg py-2 min-w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
               {wordpressCategoriesLoading ? (
-                <div className="px-4 py-2 text-gray-300">
+                <div className="px-4 py-2 text-tertiary/80">
                   Loading workout plans...
                 </div>
               ) : workoutCategories.length > 0 ? (
@@ -163,13 +166,13 @@ export function Navigation({ isScrolled }: NavigationProps) {
                   <Link
                     key={category.id}
                     to={`/blog-hub?category=${category.slug}`}
-                    className="block px-4 py-2 hover:bg-gray-600 hover:text-secondary transition-colors text-secondary"
+                    className="block px-4 py-2 hover:bg-black/30 hover:text-primary transition-colors text-tertiary"
                   >
                     {category.name}
                   </Link>
                 ))
               ) : (
-                <div className="px-4 py-2 text-gray-300">
+                <div className="px-4 py-2 text-tertiary/80">
                   No workout plans available
                 </div>
               )}
@@ -178,21 +181,21 @@ export function Navigation({ isScrolled }: NavigationProps) {
 
           <Link
             to="/shop"
-            className="hover:text-secondary transition-colors font-medium text-lg text-secondary"
+            className="hover:text-primarySupport transition-colors font-medium text-lg text-tertiary"
           >
             SHOP
           </Link>
 
           <Link
             to="/blog-hub"
-            className="hover:text-secondary transition-colors font-medium text-lg text-secondary"
+            className="hover:text-primarySupport transition-colors font-medium text-lg text-tertiary"
           >
             BLOG HUB
           </Link>
 
           <Link
             to="/cart"
-            className="relative group px-6 py-2 flex items-center gap-2 transition-all duration-300 text-secondary"
+            className="relative group px-6 py-2 flex items-center gap-2 transition-all duration-300 text-tertiary"
           >
             <ShoppingCart size={20} />
             CART
@@ -205,7 +208,7 @@ export function Navigation({ isScrolled }: NavigationProps) {
           </Link>
           <Link
             to="/shop"
-            className="relative group px-6 py-2 flex items-center gap-2 transition-all duration-300 text-secondary whitespace-nowrap overflow-hidden"
+            className="relative group px-6 py-2 flex items-center gap-2 transition-all duration-300 text-tertiary whitespace-nowrap overflow-hidden"
           >
             <ShoppingCart size={20} />
             SHOP NOW
@@ -215,7 +218,7 @@ export function Navigation({ isScrolled }: NavigationProps) {
 
         {/* Hamburger Button (Mobile) */}
         <button
-          className="md:hidden text-secondary"
+          className="md:hidden text-tertiary"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -224,7 +227,7 @@ export function Navigation({ isScrolled }: NavigationProps) {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-primarySupport shadow-lg w-full">
+        <div className="md:hidden bg-primarySupport shadow-lg w-full mt-2">
           <div className="flex flex-col p-4 gap-4">
             <Link
               to="/shop?onSale=true"

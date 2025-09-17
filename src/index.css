@@ -8,7 +8,7 @@
 /* Brand scrollbar styling */
 /* Firefox */
 html {
-  scrollbar-color: #d5b775 transparent;
+  scrollbar-color: var(--tertiary) transparent;
   scrollbar-width: thin;
 }
 
@@ -21,7 +21,7 @@ html {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #d5b775;
+  background-color: var(--tertiary);
   border-radius: 0;
   border: 2px solid transparent;
   background-clip: content-box;
@@ -30,6 +30,7 @@ html {
 /* Scroll progress bar */
 :root {
   --scroll-progress: 0%;
+  --tertiary: #d5b775;
 }
 .scroll-progress-bar {
   position: fixed;
@@ -37,7 +38,7 @@ html {
   left: 0;
   height: 3px;
   width: var(--scroll-progress);
-  background-color: #d5b775;
+  background-color: var(--tertiary);
   z-index: 99999;
   transition: width 0.1s linear;
 }
@@ -281,7 +282,7 @@ html {
   left: 50%;
   width: 0;
   height: 2px;
-  background: linear-gradient(to right, #f472b6, #fbbf24);
+  background: linear-gradient(to right, #f472b6, var(--tertiary));
   transition: all 0.3s ease;
   transform: translateX(-50%);
 }
@@ -295,7 +296,7 @@ html {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #f472b6, #fbbf24);
+  background: linear-gradient(135deg, #f472b6, var(--tertiary));
   animation: pulse-dot 1.4s infinite ease-in-out both;
   display: inline-block;
   margin: 0 2px;
@@ -326,7 +327,7 @@ html {
 
 /* Text Effects */
 .text-gradient {
-  background: linear-gradient(135deg, #f472b6, #fbbf24);
+  background: linear-gradient(135deg, #f472b6, var(--tertiary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -439,12 +440,12 @@ button, a, input, select, textarea {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #f472b6, #fbbf24);
+  background: linear-gradient(180deg, #f472b6, var(--tertiary));
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #ec4899, #f59e0b);
+  background: linear-gradient(180deg, #ec4899, var(--tertiary));
 }
 
 /* Line clamp utilities for consistent text truncation */

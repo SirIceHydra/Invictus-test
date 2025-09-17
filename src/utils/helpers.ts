@@ -189,6 +189,7 @@ export function validateCheckoutForm(formData: any): { isValid: boolean; errors:
   if (!isValidPhone(formData.phone)) errors.phone = 'Valid phone number is required';
   if (!formData.address?.trim()) errors.address = 'Address is required';
   if (!formData.city?.trim()) errors.city = 'City is required';
+  if (!formData.province?.trim()) errors.province = 'Province is required';
   if (!formData.postalCode?.trim()) errors.postalCode = 'Postal code is required';
   if (!formData.country?.trim()) errors.country = 'Country is required';
   

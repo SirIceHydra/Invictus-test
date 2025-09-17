@@ -72,18 +72,20 @@ export default function Shop() {
   }, [searchParams]); // Only depend on searchParams, not fetchProducts
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-primary text-tertiary">
       <Navigation isScrolled={isScrolled} />
       <div className="h-20" />
-      <section className="bg-gradient-to-r from-tertiary/20 to-primarySupport/20 py-16">
+      <section className="py-16 relative">
+        <div className="absolute inset-0 bg-cover bg-center opacity-100" style={{ backgroundImage: "url(/assets/Banners/cover-background.png)" }} />
+        <div className="absolute inset-0 bg-black/60" />
         <div className="container mx-auto px-4">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Our Shop</h1>
-            <p className="text-xl text-gray-700 mb-8">Premium nutrition supplements for peak performance</p>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-tertiary relative z-10">OUR SHOP</h1>
+            <p className="text-xl text-tertiary/90 mb-8 relative z-10">PREMIUM NUTRITION SUPPLEMENTS FOR PEAK PERFORMANCE</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <div className="flex-1 max-w-md w-full">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-tertiary" />
                   <input
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -95,7 +97,7 @@ export default function Shop() {
                       onSale: onSale
                     })}
                     placeholder="Search products..."
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 focus:ring-2 focus:ring-tertiary focus:border-transparent text-lg"
+                    className="w-full pl-10 pr-4 py-3 border border-tertiary/40 bg-primary text-tertiary focus:ring-2 focus:ring-tertiary focus:border-transparent text-lg"
                   />
                 </div>
               </div>
@@ -108,7 +110,7 @@ export default function Shop() {
         </div>
       </section>
       {/* Filters and Controls */}
-      <section className="bg-white border-b shadow-sm">
+      <section className="bg-primarySupport border-b border-black/20 shadow-sm">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div className="flex flex-wrap items-center gap-4">
@@ -139,7 +141,7 @@ export default function Shop() {
                     onSale: onSale
                   }); 
                 }} 
-                className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-tertiary focus:border-transparent bg-white" 
+                className="border border-tertiary/40 rounded-lg px-4 py-2 focus:ring-2 focus:ring-tertiary focus:border-transparent bg-primary text-tertiary" 
                 disabled={catsLoading}
               >
                 <option value="">All Categories</option>
@@ -168,7 +170,7 @@ export default function Shop() {
                     onSale: onSale
                   }); 
                 }} 
-                className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-tertiary focus:border-transparent bg-white" 
+                className="border border-tertiary/40 rounded-lg px-4 py-2 focus:ring-2 focus:ring-tertiary focus:border-transparent bg-primary text-tertiary" 
                 disabled={brandsLoading}
               >
                 <option value="">All Brands</option>
@@ -212,7 +214,7 @@ export default function Shop() {
                 category: categoryId ? Number(categoryId) : undefined,
                 brand: brandId || undefined,
                 onSale: onSale
-              })} className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-tertiary focus:border-transparent bg-white">
+              })} className="border border-tertiary/40 rounded-lg px-4 py-2 focus:ring-2 focus:ring-tertiary focus:border-transparent bg-primary text-tertiary">
                 <option value="date">Newest</option>
                 <option value="price">Price</option>
                 <option value="name">Name</option>
@@ -223,7 +225,7 @@ export default function Shop() {
                 category: categoryId ? Number(categoryId) : undefined,
                 brand: brandId || undefined,
                 onSale: onSale
-              })} className="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-tertiary focus:border-transparent bg-white">
+              })} className="border border-tertiary/40 rounded-lg px-4 py-2 focus:ring-2 focus:ring-tertiary focus:border-transparent bg-primary text-tertiary">
                 <option value="desc">High to Low</option>
                 <option value="asc">Low to High</option>
               </select>

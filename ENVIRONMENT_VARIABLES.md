@@ -30,6 +30,9 @@ VITE_WORDPRESS_URL=https://your-wordpress-site.com
 VITE_WORDPRESS_API_VERSION=wp/v2
 VITE_WORDPRESS_POSTS_PER_PAGE=10
 VITE_WORDPRESS_CACHE_DURATION=300000
+
+# Slider Component (Optional)
+VITE_SLIDER_COMPONENT_URL=https://your-wordpress-site.com/slider-component-2/
 ```
 
 ### WooCommerce Configuration
@@ -73,6 +76,9 @@ VITE_WORDPRESS_URL=https://your-production-wordpress-site.com
 VITE_WORDPRESS_API_VERSION=wp/v2
 VITE_WORDPRESS_POSTS_PER_PAGE=10
 VITE_WORDPRESS_CACHE_DURATION=600000
+
+# Slider Component (Optional)
+VITE_SLIDER_COMPONENT_URL=https://your-production-wordpress-site.com/slider-component-2/
 ```
 
 ### WooCommerce Configuration
@@ -117,6 +123,7 @@ VITE_DEBUG_MODE=false
 | `VITE_WORDPRESS_API_VERSION` | WordPress REST API version | `wp/v2` | ✅ |
 | `VITE_WORDPRESS_POSTS_PER_PAGE` | Number of posts per page | `10` | ✅ |
 | `VITE_WORDPRESS_CACHE_DURATION` | Cache duration in milliseconds | `300000` | ✅ |
+| `VITE_SLIDER_COMPONENT_URL` | Slider component API endpoint | `https://your-site.com/slider-component-2/` | ❌ |
 
 ### WooCommerce Variables
 

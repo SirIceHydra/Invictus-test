@@ -16,16 +16,44 @@ export function HeroSlideshow() {
 
   const API = (import.meta as any).env.VITE_SLIDER_COMPONENT_URL;
 
+  // Default fallback banners
+  const defaultBanners: Banner[] = [
+    {
+      image: '/assets/Banners/on-banner.png',
+      alt: 'Optimum Nutrition Banner',
+    },
+    {
+      image: '/assets/Banners/myprotein_banner.png',
+      alt: 'MyProtein Banner',
+    },
+    {
+      image: '/assets/Banners/muscletech_banner.mp4',
+      alt: 'MuscleTech Banner',
+    },
+  ];
+
   // Fetch banners
   useEffect(() => {
     (async () => {
+      // If no API URL is configured, use default banners
+      if (!API) {
+        console.log('📸 No slider API URL configured, using default banners');
+        setBanners(defaultBanners);
+        return;
+      }
+
       try {
+        console.log('📸 Fetching banners from:', API);
         const response = await fetch(API);
-        if (!response.ok) throw new Error('Failed to fetch banners');
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
         const data = await response.json();
+        console.log('✅ Successfully loaded banners:', data);
         setBanners(data);
-      } catch {
-        // fallback handled by local default below
+      } catch (error) {
+        console.warn('⚠️ Failed to fetch banners from API, using defaults:', error);
+        setBanners(defaultBanners);
       }
     })();
   }, [API]);
@@ -95,7 +123,7 @@ export function HeroSlideshow() {
      margin: '0 auto 2rem auto',
      height: isMobile ? '240px' : '500px',
      zIndex: 10,
-     backgroundColor: '#fff1f1',
+     backgroundColor: '#000000',
      overflow: 'hidden',
      display: 'flex',
      alignItems: 'center',
@@ -105,8 +133,8 @@ export function HeroSlideshow() {
      touchAction: 'pan-y',
      cursor: 'pointer',
      transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-     transform: isHovered ? 'scale(1.02)' : 'scale(1)',
-     boxShadow: isHovered ? '0 8px 25px rgba(0,0,0,0.15)' : '0 2px 10px rgba(0,0,0,0.05)',
+     transform: (isHovered && !isMobile) ? 'scale(1.02)' : 'scale(1)',
+     boxShadow: (isHovered && !isMobile) ? '0 8px 25px rgba(0,0,0,0.15)' : '0 2px 10px rgba(0,0,0,0.05)',
    };
 
   const imageStyle: React.CSSProperties = {
@@ -136,31 +164,23 @@ export function HeroSlideshow() {
     width: isMobile ? '6px' : '8px',
     height: isMobile ? '6px' : '8px',
     borderRadius: '9999px',
-    background: active ? 'rgba(17,24,39,0.9)' : 'rgba(17,24,39,0.35)',
+    background: active ? 'var(--tertiary)' : 'rgba(213,183,117,0.4)',
     transition: 'transform 0.2s ease',
     transform: active ? 'scale(1.15)' : 'scale(1)',
   });
 
-  const fallbackBanner: Banner = {
-    image: '/assets/Banners/on-banner.png',
-    alt: 'Fallback Banner',
-  };
-
-  const currentBanner = banners.length ? banners[i] : fallbackBanner;
+  const currentBanner = banners.length ? banners[i] : defaultBanners[0];
 
   return (
     <section style={sectionStyle}>
-      {/* Video Background */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover z-0"
-        style={{ filter: 'brightness(0.8)' }}
-      >
-        <source src="/assets/Banners/banner_section.mp4" type="video/mp4" />
-      </video>
+      {/* Static Background Image */}
+      <div
+        className="absolute inset-0 w-full h-full bg-cover bg-center z-0"
+        style={{ 
+          backgroundImage: 'url(/assets/Banners/cover-background.png)',
+          filter: 'brightness(0.8)' 
+        }}
+      />
       
       <div
         style={containerStyle}
@@ -168,8 +188,8 @@ export function HeroSlideshow() {
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
         onClick={onClick}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        onMouseEnter={() => !isMobile && setIsHovered(true)}
+        onMouseLeave={() => !isMobile && setIsHovered(false)}
         role="region"
         aria-roledescription="carousel"
         aria-label="Promotional banners - Click to visit shop"

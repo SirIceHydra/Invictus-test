@@ -48,7 +48,7 @@ export const PostCard: React.FC<PostCardProps> = ({
   return (
     <Link
       to={`/posts/${post.slug}`}
-      className={`bg-white shadow-lg overflow-hidden hover-lift transition-all duration-300 ${className}`}
+      className={`bg-primarySupport text-tertiary shadow-lg overflow-hidden hover-lift transition-all duration-300 ${className}`}
     >
                 {post.featuredImage && (
             <div className="relative overflow-hidden">

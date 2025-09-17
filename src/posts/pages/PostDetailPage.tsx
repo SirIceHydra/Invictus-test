@@ -33,7 +33,7 @@ const PostDetailPage: React.FC = () => {
   }, [post, fetchRelatedPosts]);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-primary text-tertiary">
       {/* Navigation */}
       <Navigation isScrolled={false} />
 
@@ -49,7 +49,7 @@ const PostDetailPage: React.FC = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 py-12">
+      <footer className="bg-primarySupport border-t border-tertiary/20 py-12">
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
             <img
@@ -60,55 +60,55 @@ const PostDetailPage: React.FC = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto text-center">
             <div>
-              <h4 className="text-xl font-bold mb-4">CONTACT US</h4>
+              <h4 className="text-xl font-bold mb-4 text-tertiary">CONTACT US</h4>
               <div className="space-y-4">
                 <div className="flex items-center gap-3 justify-center">
                   <Phone size={20} className="text-tertiary" />
-                  <span>+27 73 951 6670</span>
+                  <span className="text-secondary">+27 73 951 6670</span>
                 </div>
                 <div className="flex items-center gap-3 justify-center">
                   <Mail size={20} className="text-tertiary" />
-                  <span>invictusbrands1@gmail.com</span>
+                  <span className="text-secondary">invictusbrands1@gmail.com</span>
                 </div>
                 <div className="flex items-center gap-3 justify-center">
                   <MapPin size={20} className="text-tertiary" />
-                  <span>Kenilworth, Johannesburg</span>
+                  <span className="text-secondary">Kenilworth, Johannesburg</span>
                 </div>
               </div>
             </div>
             <div>
-              <h4 className="text-xl font-bold mb-4">QUICK LINKS</h4>
+              <h4 className="text-xl font-bold mb-4 text-tertiary">QUICK LINKS</h4>
                              <ul className="space-y-2">
                  <li>
-                   <Link to="/#about" className="hover:text-tertiary transition-colors">
+                   <Link to="/#about" className="text-secondary hover:text-tertiary transition-colors">
                      ABOUT US
                    </Link>
                  </li>
                  <li>
-                   <Link to="/shipping-policy" className="hover:text-tertiary transition-colors">
+                   <Link to="/shipping-policy" className="text-secondary hover:text-tertiary transition-colors">
                      SHIPPING POLICY
                    </Link>
                  </li>
                  <li>
-                   <Link to="/return-policy" className="hover:text-tertiary transition-colors">
+                   <Link to="/return-policy" className="text-secondary hover:text-tertiary transition-colors">
                      RETURN POLICY
                    </Link>
                  </li>
                  <li>
-                   <Link to="/privacy-policy" className="hover:text-tertiary transition-colors">
+                   <Link to="/privacy-policy" className="text-secondary hover:text-tertiary transition-colors">
                      PRIVACY POLICY
                    </Link>
                  </li>
                </ul>
             </div>
           </div>
-          <div className="mt-12 pt-8 border-t border-gray-200 text-center text-gray-600">
+          <div className="mt-12 pt-8 border-t border-tertiary/20 text-center text-secondary/80">
             © 2025 INVICTUS NUTRITION. ALL RIGHTS RESERVED. Website designed &amp; hosted by{' '}
             <a
               href="https://www.kaizentech.co.za"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#4682b4] hover:text-[#3a6d96] transition-colors"
+              className="text-tertiary hover:text-secondary transition-colors"
             >
               Kaizen Technology
             </a>

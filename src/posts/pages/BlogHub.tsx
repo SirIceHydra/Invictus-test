@@ -233,7 +233,7 @@ const BlogHub: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-primary text-tertiary flex items-center justify-center">
         <Loading text="Loading blog content..." />
       </div>
     );
@@ -241,18 +241,18 @@ const BlogHub: React.FC = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-primary text-tertiary flex items-center justify-center">
         <div className="text-center">
           <div className="text-red-500 mb-4">
             <svg className="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
-          <h3 className="text-lg font-semibold mb-2">Error Loading Content</h3>
-          <p className="text-gray-600">{error}</p>
+          <h3 className="text-lg font-semibold mb-2 text-secondary">Error Loading Content</h3>
+          <p className="text-secondary/80">{error}</p>
           <button 
             onClick={fetchData}
-            className="mt-4 px-4 py-2 bg-tertiary text-white hover:bg-primarySupport transition-colors"
+            className="mt-4 px-4 py-2 bg-tertiary text-primary hover:bg-secondary hover:text-primary transition-colors"
           >
             Try Again
           </button>
@@ -264,13 +264,22 @@ const BlogHub: React.FC = () => {
   const parentCategories = getParentCategories();
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-primary text-tertiary">
       {/* Navigation */}
       <Navigation isScrolled={false} />
       
       {/* Page Header */}
-      <div className="bg-white border-b border-gray-100 pt-32">
-        <div className="container mx-auto px-4 py-8">
+      <div className="relative bg-primarySupport border-b border-tertiary/20 pt-32">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
+          style={{
+            backgroundImage: "url('/assets/Banners/cover-background.png')"
+          }}
+        ></div>
+        
+        {/* Content */}
+        <div className="relative z-10 container mx-auto px-4 py-8">
           <div className="flex items-center gap-4 mb-4">
             <Link 
               to="/" 
@@ -279,31 +288,31 @@ const BlogHub: React.FC = () => {
               <Home size={20} />
               Home
             </Link>
-            <ChevronRight size={16} className="text-gray-400" />
-            <span className="text-gray-600">Blog</span>
+            <ChevronRight size={16} className="text-secondary/60" />
+            <span className="text-secondary/80">Blog</span>
           </div>
           
-          <h1 className="text-4xl font-bold text-center mb-4">BLOG</h1>
-          <p className="text-gray-600 text-center max-w-2xl mx-auto">
+          <h1 className="text-4xl font-bold text-center mb-4 text-tertiary">BLOG</h1>
+          <p className="text-secondary text-center max-w-2xl mx-auto">
             Discover nutrition tips, workout routines, and lifestyle advice to help you achieve your fitness goals.
           </p>
         </div>
       </div>
 
       {/* Category Navigation Bar */}
-      <div className="bg-white border-b border-gray-100 md:sticky md:top-0 md:z-10">
+      <div className="bg-primarySupport border-b border-tertiary/20 md:sticky md:top-0 md:z-10">
         <div className="container mx-auto px-4">
           {/* Mobile: vertical accordion */}
           <div className="md:hidden py-4 space-y-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary/60" size={16} />
               <input
                 type="text"
                 placeholder="Search posts..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 disabled={categoryLoading}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-tertiary focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full pl-10 pr-4 py-2 border border-tertiary/30 text-sm bg-secondary/10 text-secondary placeholder-secondary/50 focus:outline-none focus:ring-2 focus:ring-tertiary focus:border-tertiary disabled:opacity-50 disabled:cursor-not-allowed"
               />
             </div>
 
@@ -314,7 +323,7 @@ const BlogHub: React.FC = () => {
                 className={`w-full text-left text-sm font-semibold uppercase tracking-wide transition-colors flex items-center justify-between gap-2 ${
                   !selectedParent && !selectedCategory 
                     ? 'text-tertiary'
-                    : 'text-gray-700 hover:text-tertiary'
+                    : 'text-secondary/80 hover:text-tertiary'
                 } ${categoryLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <span>ALL POSTS</span>
@@ -328,11 +337,11 @@ const BlogHub: React.FC = () => {
                     className={`w-full text-left text-sm font-semibold uppercase tracking-wide transition-colors flex items-center justify-between gap-2 ${
                       selectedParent?.id === parent.id 
                         ? 'text-tertiary' 
-                        : 'text-gray-700 hover:text-tertiary'
+                        : 'text-secondary/80 hover:text-tertiary'
                     } ${categoryLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     <span className="flex items-center gap-2">{parent.icon}{parent.name}</span>
-                    <span className="text-xs text-gray-400">{mobileOpenParentId === parent.id ? '−' : '+'}</span>
+                    <span className="text-xs text-secondary/60">{mobileOpenParentId === parent.id ? '−' : '+'}</span>
                   </button>
                   {mobileOpenParentId === parent.id && parent.children.length > 0 && (
                     <div className="mt-2 pl-4 space-y-1">
@@ -341,11 +350,11 @@ const BlogHub: React.FC = () => {
                           key={child.id}
                           onClick={() => handleCategorySelect(child)}
                           disabled={categoryLoading}
-                          className={`w-full text-left px-2 py-1 text-sm text-gray-700 hover:text-tertiary hover:bg-gray-50 ${
+                          className={`w-full text-left px-2 py-1 text-sm text-secondary/80 hover:text-tertiary hover:bg-tertiary/10 ${
                             categoryLoading ? 'opacity-50 cursor-not-allowed' : ''
                           }`}
                         >
-                          {child.name} <span className="text-gray-400">({child.count})</span>
+                          {child.name} <span className="text-secondary/60">({child.count})</span>
                         </button>
                       ))}
                     </div>
@@ -364,7 +373,7 @@ const BlogHub: React.FC = () => {
                 className={`text-sm font-semibold uppercase tracking-wide transition-colors flex items-center gap-2 ${
                   !selectedParent && !selectedCategory 
                     ? 'text-tertiary border-b-2 border-tertiary' 
-                    : 'text-gray-600 hover:text-tertiary'
+                    : 'text-secondary/80 hover:text-tertiary'
                 } ${categoryLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 {categoryLoading && !selectedParent && !selectedCategory && (
@@ -380,7 +389,7 @@ const BlogHub: React.FC = () => {
                     className={`text-sm font-semibold uppercase tracking-wide transition-colors flex items-center gap-2 ${
                       selectedParent?.id === parent.id 
                         ? 'text-tertiary border-b-2 border-tertiary' 
-                        : 'text-gray-600 hover:text-tertiary'
+                        : 'text-secondary/80 hover:text-tertiary'
                     } ${categoryLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     {categoryLoading && selectedParent?.id === parent.id && (
@@ -392,20 +401,20 @@ const BlogHub: React.FC = () => {
                   
                   {/* Dropdown for child categories */}
                   {parent.children.length > 0 && (
-                    <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20">
+                    <div className="absolute top-full left-0 mt-2 w-64 bg-primarySupport border border-tertiary/20 shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20">
                       <div className="py-2">
                         {parent.children.map((child) => (
                           <button
                             key={child.id}
                             onClick={() => handleCategorySelect(child)}
                             disabled={categoryLoading}
-                            className={`w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-tertiary transition-colors flex items-center justify-between ${
+                            className={`w-full text-left px-4 py-2 text-sm text-secondary/80 hover:bg-tertiary/10 hover:text-tertiary transition-colors flex items-center justify-between ${
                               categoryLoading ? 'opacity-50 cursor-not-allowed' : ''
                             }`}
                           >
                             <span>{child.name}</span>
                             <div className="flex items-center gap-2">
-                              <span className="text-gray-400">({child.count})</span>
+                              <span className="text-secondary/60">({child.count})</span>
                               {categoryLoading && selectedCategory?.id === child.id && (
                                 <Loader2 className="w-3 h-3 animate-spin" />
                               )}
@@ -421,14 +430,14 @@ const BlogHub: React.FC = () => {
             
             {/* Search */}
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary/60" size={16} />
               <input
                 type="text"
                 placeholder="Search posts..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 disabled={categoryLoading}
-                className="pl-10 pr-4 py-2 border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-tertiary focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                className="pl-10 pr-4 py-2 border border-tertiary/30 text-sm bg-secondary/10 text-secondary placeholder-secondary/50 focus:outline-none focus:ring-2 focus:ring-tertiary focus:border-tertiary disabled:opacity-50 disabled:cursor-not-allowed"
               />
             </div>
           </div>
@@ -456,7 +465,7 @@ const BlogHub: React.FC = () => {
           <div className="flex items-center justify-center py-16">
             <div className="text-center">
               <Loader2 className="w-12 h-12 animate-spin text-tertiary mx-auto mb-4" />
-              <p className="text-gray-600">
+              <p className="text-secondary/80">
                 {selectedCategory 
                   ? `Loading ${selectedCategory.name} posts...`
                   : selectedParent 
@@ -473,7 +482,7 @@ const BlogHub: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredPosts.map((post) => {
               return (
-                <article key={post.id} className="bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+                <article key={post.id} className="bg-primary border border-tertiary/20 overflow-hidden shadow-sm hover:shadow-md hover:border-tertiary/40 transition-all duration-300">
                   {/* Featured Image */}
                   <div className="aspect-video overflow-hidden">
                     <img
@@ -495,19 +504,19 @@ const BlogHub: React.FC = () => {
                     )}
                     
                     {/* Title */}
-                    <h2 className="text-xl font-bold mb-3 line-clamp-2 hover:text-tertiary transition-colors">
+                    <h2 className="text-xl font-bold mb-3 line-clamp-2 text-secondary hover:text-tertiary transition-colors">
                       <Link to={`/posts/${post.slug}`}>
                         {post.title}
                       </Link>
                     </h2>
                     
                     {/* Excerpt */}
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                    <p className="text-secondary/80 text-sm mb-4 line-clamp-3">
                       {post.excerpt || 'No excerpt available'}
                     </p>
                     
                     {/* Meta */}
-                    <div className="flex items-center justify-between text-xs text-gray-500">
+                    <div className="flex items-center justify-between text-xs text-secondary/60">
                       <span>{new Date(post.date).toLocaleDateString()}</span>
                       <span>{post.readingTime || 1} min read</span>
                     </div>
@@ -521,15 +530,15 @@ const BlogHub: React.FC = () => {
         {/* No Posts Message */}
         {!categoryLoading && filteredPosts.length === 0 && (
           <div className="text-center py-12">
-            <div className="text-gray-400 mb-4">
-              <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-semibold mb-2">No Posts Found</h3>
-            <p className="text-gray-600">
-              {searchQuery ? `No posts match "${searchQuery}"` : 'No posts available in this category.'}
-            </p>
+          <div className="text-secondary/60 mb-4">
+            <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+          <h3 className="text-lg font-semibold mb-2 text-secondary">No Posts Found</h3>
+          <p className="text-secondary/80">
+            {searchQuery ? `No posts match "${searchQuery}"` : 'No posts available in this category.'}
+          </p>
           </div>
         )}
       </div>
