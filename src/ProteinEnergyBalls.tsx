@@ -3,9 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, Clock } from 'lucide-react';
 
 const ProteinEnergyBalls = () => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  // Scroll restoration is now handled globally by ScrollRestoration component
 
   return (
     <div className="min-h-screen bg-white">

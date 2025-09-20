@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 @import url('https://fonts.cdnfonts.com/css/druk-wide-bold');
+@import url('https://fonts.googleapis.com/css2?family=GFS+Didot&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -8,7 +10,7 @@
 /* Brand scrollbar styling */
 /* Firefox */
 html {
-  scrollbar-color: #d5b775 transparent;
+  scrollbar-color: var(--tertiary) transparent;
   scrollbar-width: thin;
 }
 
@@ -21,7 +23,7 @@ html {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #d5b775;
+  background-color: var(--tertiary);
   border-radius: 0;
   border: 2px solid transparent;
   background-clip: content-box;
@@ -30,6 +32,7 @@ html {
 /* Scroll progress bar */
 :root {
   --scroll-progress: 0%;
+  --tertiary: #d5b775;
 }
 .scroll-progress-bar {
   position: fixed;
@@ -37,21 +40,63 @@ html {
   left: 0;
   height: 3px;
   width: var(--scroll-progress);
-  background-color: #d5b775;
+  background-color: var(--tertiary);
   z-index: 99999;
   transition: width 0.1s linear;
 }
 
 @layer base {
-  h1, h2, h3, h4, h5, h6 {
+  h5, h6 {
     font-family: "Druk Wide Bold", sans-serif;
     text-transform: uppercase;
   }
   
-  body {
-    font-family: "Anton", sans-serif;
+  h1{
+    font-family: "Open Sans", serif;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-weight: 500; /* Match navbar font-medium weight */
+    font-size: 4rem;
+  }
+
+  h2{
+    font-family: "Open Sans", sans-serif;
+    text-transform: uppercase;
+    font-weight: 300;
+    font-size: 3rem;
+  }
+
+  h3 {
+    font-family: "Open Sans", sans-serif;
+    text-transform: none;
+    font-weight: 500; /* Match navbar font-medium weight */
+    font-size: 2.5rem; /* 36px */
+  }
+
+  h4 {
+    font-family: "Open Sans", sans-serif;
+    text-transform: none;
+    font-weight: 300;
+    font-size: 1.5rem; /* 36px */
+  }
+  h5{
+    font-family: "Open Sans", sans-serif;
+    text-transform: none;
+    font-weight: 300;
+    font-size: 1.25rem; /* 36px */
+  }
+  
+  
+  p {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: normal;
+  }
+  
+  body {
+    font-family: "Open Sans", sans-serif;
+    text-transform: none;
+    letter-spacing: normal;
   }
 }
 
@@ -109,6 +154,24 @@ html {
   }
 }
 
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-down {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
 .float-animation {
   animation: float 3s ease-in-out infinite;
 }
@@ -127,6 +190,14 @@ html {
 
 .animate-scale-up {
   animation: scale-up 1.2s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.5s ease-out;
+}
+
+.animate-slide-in-down {
+  animation: slide-in-down 0.5s ease-out;
 }
 
 /* Hide scrollbar for slider */
@@ -209,6 +280,62 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Product description spacing */
+.product-description p {
+  margin-bottom: 0.5rem !important;
+  line-height: 1.4 !important;
+}
+
+/* WordPress list variations */
+.product-description ul,
+.product-description ol {
+  margin-bottom: 0.25rem !important;
+  padding-left: 1rem !important;
+}
+
+.product-description ul {
+  list-style-type: disc !important;
+}
+
+.product-description ol {
+  list-style-type: decimal !important;
+}
+
+.product-description li {
+  margin-bottom: 0 !important;
+  display: list-item !important;
+  line-height: 1.3 !important;
+}
+
+/* WordPress sometimes uses divs with classes for lists */
+.product-description .wp-block-list,
+.product-description .wp-block-group {
+  margin-bottom: 0.25rem !important;
+  padding-left: 1rem !important;
+}
+
+/* WordPress list items in divs */
+.product-description .wp-block-list li,
+.product-description .wp-block-group li {
+  margin-bottom: 0 !important;
+  display: list-item !important;
+  line-height: 1.3 !important;
+  list-style-type: disc !important;
+}
+
+/* Handle WordPress block editor list items */
+.product-description .wp-block-list-item {
+  margin-bottom: 0 !important;
+  display: list-item !important;
+  line-height: 1.3 !important;
+  list-style-type: disc !important;
+}
+
+/* WordPress sometimes uses br tags for line breaks */
+.product-description br {
+  line-height: 0.5 !important;
+}
+
 /* Gradient text animation */
 .bg-gradient-to-r {
   background-size: 200% 200%;
@@ -281,7 +408,7 @@ html {
   left: 50%;
   width: 0;
   height: 2px;
-  background: linear-gradient(to right, #f472b6, #fbbf24);
+  background: linear-gradient(to right, #f472b6, var(--tertiary));
   transition: all 0.3s ease;
   transform: translateX(-50%);
 }
@@ -295,7 +422,7 @@ html {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #f472b6, #fbbf24);
+  background: linear-gradient(135deg, #f472b6, var(--tertiary));
   animation: pulse-dot 1.4s infinite ease-in-out both;
   display: inline-block;
   margin: 0 2px;
@@ -326,7 +453,7 @@ html {
 
 /* Text Effects */
 .text-gradient {
-  background: linear-gradient(135deg, #f472b6, #fbbf24);
+  background: linear-gradient(135deg, #f472b6, var(--tertiary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -439,12 +566,12 @@ button, a, input, select, textarea {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #f472b6, #fbbf24);
+  background: linear-gradient(180deg, #f472b6, var(--tertiary));
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #ec4899, #f59e0b);
+  background: linear-gradient(180deg, #ec4899, var(--tertiary));
 }
 
 /* Line clamp utilities for consistent text truncation */

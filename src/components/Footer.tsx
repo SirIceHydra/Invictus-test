@@ -21,7 +21,7 @@ export const Footer: React.FC = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto text-center">
           <div>
-            <h4 className="text-xl font-bold mb-4 text-white">CONTACT US</h4>
+            <h4 className="mb-4 text-tertiary">CONTACT US</h4>
             <div className="space-y-4">
               <div className="flex items-center gap-3 justify-center">
                 <Phone size={20} className="text-tertiary" />
@@ -38,11 +38,16 @@ export const Footer: React.FC = () => {
             </div>
           </div>
           <div>
-            <h4 className="text-xl font-bold mb-4 text-white">QUICK LINKS</h4>
+            <h4 className="mb-4 text-tertiary">QUICK LINKS</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/#about" className="hover:text-tertiary transition-colors text-white">
+                <Link to="/about" className="hover:text-tertiary transition-colors text-white">
                   ABOUT US
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="hover:text-tertiary transition-colors text-white">
+                  CONTACT US
                 </Link>
               </li>
               <li>

@@ -9,6 +9,10 @@ export default {
         tertiary: '#d5b775',
         primarySupport: '#36454F',
       },
+      fontFamily: {
+        'primary': ['GFS Didot', 'serif'],
+        'secondary': ['Open Sans', 'sans-serif'],
+      },
     },
   },
   plugins: [

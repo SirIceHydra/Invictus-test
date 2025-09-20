@@ -4,6 +4,7 @@ import { CartItem } from '../../../types/cart';
 import { CheckoutForm } from '../../../types/checkout';
 import { OrderStatus, PaymentResult } from '../../../types/order';
 import { PayFastPaymentData } from '../../../types/cart';
+import { ShippingOption } from '../../../shipping/types/shipping';
 import { generatePayFastPaymentData, submitPayFastPayment } from '../../../services/payfast';
 import { createOrder, updateOrderStatus } from '../../../services/orders';
 import { validateCheckoutForm } from '../../../utils/helpers';
@@ -14,7 +15,7 @@ interface UseCheckoutReturn {
   error: string | null;
   orderId: number | null;
   paymentUrl: string | null;
-  createOrder: (cartItems: CartItem[], formData: CheckoutForm) => Promise<PaymentResult>;
+  createOrder: (cartItems: CartItem[], formData: CheckoutForm, shippingOption?: ShippingOption) => Promise<PaymentResult>;
   processPayment: (orderId: number, orderNumber: string, customerData: any) => Promise<PaymentResult>;
   clearError: () => void;
   resetCheckout: () => void;
@@ -28,7 +29,8 @@ export function useCheckout(): UseCheckoutReturn {
 
   const createOrderHandler = useCallback(async (
     cartItems: CartItem[],
-    formData: CheckoutForm
+    formData: CheckoutForm,
+    shippingOption?: ShippingOption
   ): Promise<PaymentResult> => {
     setLoading(true);
     setError(null);
@@ -44,7 +46,13 @@ export function useCheckout(): UseCheckoutReturn {
         throw new Error(ERROR_MESSAGES.CART_EMPTY);
       }
 
-      const order = await createOrder(cartItems, formData);
+      console.log('=== USECHECKOUT DEBUG ===');
+      console.log('About to call createOrder with shippingOption:', shippingOption);
+      console.log('shippingOption type:', typeof shippingOption);
+      console.log('shippingOption is null?', shippingOption === null);
+      console.log('shippingOption is undefined?', shippingOption === undefined);
+      
+      const order = await createOrder(cartItems, formData, shippingOption);
       setOrderId(order.id);
 
       return { success: true, orderId: order.id, message: SUCCESS_MESSAGES.ORDER_CREATED };

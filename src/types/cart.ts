@@ -121,30 +121,22 @@ export interface PayFastResponse {
 
 // Checkout form interfaces
 export interface CheckoutForm {
-  billing: {
-    firstName: string;
-    lastName: string;
-    company: string;
-    address1: string;
-    address2: string;
-    city: string;
-    state: string;
-    postcode: string;
-    country: string;
-    email: string;
-    phone: string;
-  };
-  shipping: {
-    firstName: string;
-    lastName: string;
-    company: string;
-    address1: string;
-    address2: string;
-    city: string;
-    state: string;
-    postcode: string;
-    country: string;
-  };
-  orderNotes: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  address: string;
+  city: string;
+  postalCode: string;
+  country: string;
+  province: string;
+  orderNotes?: string;
   paymentMethod: 'payfast';
+}
+
+// Extended checkout form for BobGo integration
+export interface CheckoutFormWithShipping extends CheckoutForm {
+  localArea?: string;
+  zone?: string;
+  company?: string;
 } 

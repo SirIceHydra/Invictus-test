@@ -53,8 +53,8 @@ export const PostDetail: React.FC<PostDetailProps> = ({
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
           </svg>
         </div>
-        <h3 className="text-lg font-semibold mb-2">Error Loading Post</h3>
-        <p className="text-gray-600">{error}</p>
+        <h3 className="text-lg font-semibold mb-2 text-tertiary">Error Loading Post</h3>
+        <p className="text-secondary/90">{error}</p>
       </div>
     );
   }
@@ -62,24 +62,24 @@ export const PostDetail: React.FC<PostDetailProps> = ({
   if (!post) {
     return (
       <div className="text-center py-12">
-        <div className="text-gray-400 mb-4">
+        <div className="text-secondary/60 mb-4">
           <svg className="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
         </div>
-        <h3 className="text-lg font-semibold mb-2">Post Not Found</h3>
-        <p className="text-gray-600">The post you're looking for doesn't exist.</p>
+        <h3 className="text-lg font-semibold mb-2 text-tertiary">Post Not Found</h3>
+        <p className="text-secondary/90">The post you're looking for doesn't exist.</p>
       </div>
     );
   }
 
   return (
-    <div className={`min-h-screen bg-white ${className}`}>
+    <div className={`min-h-screen bg-primary text-tertiary ${className}`}>
       {/* Main Content */}
       <div className="container mx-auto px-4 pt-32 pb-20">
         <Link 
           to="/" 
-          className="inline-flex items-center gap-2 text-tertiary hover:text-primarySupport transition-colors mb-8"
+          className="inline-flex items-center gap-2 text-secondary hover:text-tertiary transition-colors mb-8"
         >
           <ArrowLeft size={20} />
           Back to Home
@@ -88,23 +88,23 @@ export const PostDetail: React.FC<PostDetailProps> = ({
         <article className="max-w-4xl mx-auto">
           {/* Header */}
           <header className="mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">{decodeHtmlEntities(post.title)}</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-tertiary">{decodeHtmlEntities(post.title)}</h1>
             
             {/* Meta Information */}
-            <div className="flex flex-wrap items-center gap-4 text-gray-500 mb-6">
+            <div className="flex flex-wrap items-center gap-4 text-secondary/70 mb-6">
               <div className="flex items-center gap-2">
-                <Calendar size={16} />
+                <Calendar size={16} className="text-tertiary" />
                 <span>{formatDate(post.date)}</span>
               </div>
               
               <div className="flex items-center gap-2">
-                <Clock size={16} />
+                <Clock size={16} className="text-tertiary" />
                 <span>{post.readingTime} min read</span>
               </div>
               
               {post.author && (
                 <div className="flex items-center gap-2">
-                  <User size={16} />
+                  <User size={16} className="text-tertiary" />
                   <span>{post.author}</span>
                 </div>
               )}
@@ -124,7 +124,7 @@ export const PostDetail: React.FC<PostDetailProps> = ({
                 {post.tags.map((tag, index) => (
                   <span
                     key={`tag-${index}`}
-                    className="px-3 py-1 bg-gray-100 text-gray-600 text-sm flex items-center gap-1"
+                    className="px-3 py-1 bg-tertiary/20 text-tertiary text-sm flex items-center gap-1"
                   >
                     <Tag size={12} />
                     {tag}
@@ -144,7 +144,7 @@ export const PostDetail: React.FC<PostDetailProps> = ({
           )}
 
           {/* Content */}
-          <div className="prose prose-lg max-w-none">
+          <div className="prose prose-lg max-w-none prose-headings:text-tertiary prose-p:text-secondary/80 prose-strong:text-tertiary prose-a:text-tertiary prose-a:no-underline hover:prose-a:underline prose-li:text-secondary prose-ol:text-secondary prose-ul:text-secondary prose-blockquote:text-secondary prose-code:text-secondary prose-pre:text-secondary">
             <div 
               dangerouslySetInnerHTML={{ __html: post.content }}
               className="space-y-6"
@@ -153,14 +153,14 @@ export const PostDetail: React.FC<PostDetailProps> = ({
 
           {/* Related Posts */}
           {showRelatedPosts && relatedPosts.length > 0 && (
-            <section className="mt-16 pt-8 border-t border-gray-200">
-              <h2 className="text-2xl font-bold mb-6">Related Posts</h2>
+            <section className="mt-16 pt-8 border-t border-tertiary/20">
+              <h2 className="text-2xl font-bold mb-6 text-tertiary">Related Posts</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {relatedPosts.map((relatedPost) => (
                   <Link
                     key={relatedPost.id}
                     to={`/posts/${relatedPost.slug}`}
-                    className="bg-white shadow-md overflow-hidden hover-lift transition-all duration-300"
+                    className="bg-primary border border-tertiary/20 shadow-md overflow-hidden hover:border-tertiary/40 hover:shadow-lg transition-all duration-300"
                   >
                     {relatedPost.featuredImage && (
                       <img
@@ -170,10 +170,10 @@ export const PostDetail: React.FC<PostDetailProps> = ({
                       />
                     )}
                     <div className="p-4">
-                      <h3 className="font-semibold mb-2 line-clamp-2 hover:text-tertiary transition-colors">
+                      <h3 className="font-semibold mb-2 line-clamp-2 text-secondary hover:text-tertiary transition-colors">
                         {decodeHtmlEntities(relatedPost.title)}
                       </h3>
-                      <p className="text-sm text-gray-500">{formatDate(relatedPost.date)}</p>
+                      <p className="text-sm text-secondary/80">{formatDate(relatedPost.date)}</p>
                     </div>
                   </Link>
                 ))}

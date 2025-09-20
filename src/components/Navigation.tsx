@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Menu, X, ShoppingCart, ChevronDown, ChevronUp } from "lucide-react";
+import { useState } from "react";
+import { Menu, X, ShoppingCart, ChevronDown, ChevronUp, Truck, Gift, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCart } from "@shop/core/cart/CartContext";
 import { useBrands } from "../hooks/useBrands";
@@ -10,7 +10,7 @@ interface NavigationProps {
   isScrolled: boolean;
 }
 
-export function Navigation({ isScrolled }: NavigationProps) {
+export function Navigation({}: NavigationProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileBrandsOpen, setMobileBrandsOpen] = useState(false);
   const [mobileCategoriesOpen, setMobileCategoriesOpen] = useState(false);
@@ -34,11 +34,18 @@ export function Navigation({ isScrolled }: NavigationProps) {
     return workoutPlansParent && cat.parent === workoutPlansParent.id;
   });
 
+  const freeShippingThreshold = parseFloat(import.meta.env.VITE_FREE_SHIPPING_THRESHOLD || '1000');
+
   return (
-    <nav className="fixed w-full z-[9999] transition-all duration-300 bg-primary/95 pt-8 pb-8 shadow-lg top-0">
-      <div className="container mx-auto px-4 flex items-center justify-between max-w-full">
+    <nav className="fixed w-full z-[9999] transition-all duration-300 bg-primary/95 shadow-lg top-0">
+      {/* Main Navigation */}
+      <div className="pt-8 pb-8">
+        <div className="container mx-auto px-4 flex items-center justify-between max-w-full">
         {/* LOGO */}
-        <Link to="/">
+        <Link 
+          to="/" 
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        >
           <img
             src="/assets/Invictus.svg"
             alt="Invictus Nutrition Logo"
@@ -50,14 +57,14 @@ export function Navigation({ isScrolled }: NavigationProps) {
         <div className="hidden md:flex items-center gap-6">
           <Link
             to="/shop?onSale=true"
-            className="hover:text-secondary transition-colors font-medium text-lg text-secondary"
+            className="hover:text-white transition-colors font-medium text-base text-tertiary"
           >
             SPECIALS
           </Link>
 
           {/* Brands Dropdown */}
           <div className="relative group">
-            <button className="hover:text-secondary transition-colors font-medium text-lg flex items-center gap-1 text-secondary">
+            <button className="hover:text-white transition-colors font-medium text-base flex items-center gap-1 text-tertiary">
               BRANDS
               <svg
                 className="w-4 h-4"
@@ -73,21 +80,21 @@ export function Navigation({ isScrolled }: NavigationProps) {
                 />
               </svg>
             </button>
-            <div className="absolute top-full left-0 bg-primarySupport shadow-lg py-2 min-w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+            <div className="absolute top-full left-0 bg-primary shadow-lg py-2 min-w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
               {brandsLoading ? (
-                <div className="px-4 py-2 text-gray-300">Loading brands...</div>
+                <div className="px-4 py-2 text-tertiary/80">Loading brands...</div>
               ) : brands.length > 0 ? (
                 brands.map((brand) => (
                   <Link
                     key={brand.id}
                     to={`/shop?brand=${brand.name}`}
-                    className="block px-4 py-2 hover:bg-gray-600 hover:text-secondary transition-colors text-secondary"
+                    className="block px-4 py-2 hover:bg-primary hover:text-white transition-colors text-tertiary"
                   >
                     {brand.name}
                   </Link>
                 ))
               ) : (
-                <div className="px-4 py-2 text-gray-300">
+                <div className="px-4 py-2 text-tertiary/80">
                   No brands available
                 </div>
               )}
@@ -96,7 +103,7 @@ export function Navigation({ isScrolled }: NavigationProps) {
 
           {/* Category Dropdown */}
           <div className="relative group">
-            <button className="hover:text-secondary transition-colors font-medium text-lg flex items-center gap-1 text-secondary">
+            <button className="hover:text-white transition-colors font-medium text-base flex items-center gap-1 text-tertiary">
               CATEGORY
               <svg
                 className="w-4 h-4"
@@ -112,9 +119,9 @@ export function Navigation({ isScrolled }: NavigationProps) {
                 />
               </svg>
             </button>
-            <div className="absolute top-full left-0 bg-primarySupport shadow-lg py-2 min-w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+            <div className="absolute top-full left-0 bg-primary shadow-lg py-2 min-w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
               {categoriesLoading ? (
-                <div className="px-4 py-2 text-gray-300">
+                <div className="px-4 py-2 text-tertiary/80">
                   Loading categories...
                 </div>
               ) : categories.length > 0 ? (
@@ -122,13 +129,13 @@ export function Navigation({ isScrolled }: NavigationProps) {
                   <Link
                     key={category.id}
                     to={`/shop?category=${category.id}`}
-                    className="block px-4 py-2 hover:bg-gray-600 hover:text-secondary transition-colors text-secondary"
+                    className="block px-4 py-2 hover:bg-primary hover:text-white transition-colors text-tertiary"
                   >
                     {category.name}
                   </Link>
                 ))
               ) : (
-                <div className="px-4 py-2 text-gray-300">
+                <div className="px-4 py-2 text-tertiary/80">
                   No categories available
                 </div>
               )}
@@ -137,7 +144,7 @@ export function Navigation({ isScrolled }: NavigationProps) {
 
           {/* Workout Plans Dropdown */}
           <div className="relative group">
-            <button className="hover:text-secondary transition-colors font-medium text-lg flex items-center gap-1 text-secondary">
+            <button className="hover:text-white transition-colors font-medium text-base flex items-center gap-1 text-tertiary">
               WORKOUT PLANS
               <svg
                 className="w-4 h-4"
@@ -153,9 +160,9 @@ export function Navigation({ isScrolled }: NavigationProps) {
                 />
               </svg>
             </button>
-            <div className="absolute top-full left-0 bg-primarySupport shadow-lg py-2 min-w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+            <div className="absolute top-full left-0 bg-primary shadow-lg py-2 min-w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
               {wordpressCategoriesLoading ? (
-                <div className="px-4 py-2 text-gray-300">
+                <div className="px-4 py-2 text-tertiary/80">
                   Loading workout plans...
                 </div>
               ) : workoutCategories.length > 0 ? (
@@ -163,13 +170,13 @@ export function Navigation({ isScrolled }: NavigationProps) {
                   <Link
                     key={category.id}
                     to={`/blog-hub?category=${category.slug}`}
-                    className="block px-4 py-2 hover:bg-gray-600 hover:text-secondary transition-colors text-secondary"
+                    className="block px-4 py-2 hover:bg-primary hover:text-white transition-colors text-tertiary"
                   >
                     {category.name}
                   </Link>
                 ))
               ) : (
-                <div className="px-4 py-2 text-gray-300">
+                <div className="px-4 py-2 text-tertiary/80">
                   No workout plans available
                 </div>
               )}
@@ -177,27 +184,27 @@ export function Navigation({ isScrolled }: NavigationProps) {
           </div>
 
           <Link
-            to="/shop"
-            className="hover:text-secondary transition-colors font-medium text-lg text-secondary"
-          >
-            SHOP
-          </Link>
-
-          <Link
             to="/blog-hub"
-            className="hover:text-secondary transition-colors font-medium text-lg text-secondary"
+            className="hover:text-white transition-colors font-medium text-base text-tertiary"
           >
             BLOG HUB
           </Link>
 
           <Link
+            to="/about"
+            className="hover:text-white transition-colors font-medium text-base text-tertiary"
+          >
+            ABOUT
+          </Link>
+
+          <Link
             to="/cart"
-            className="relative group px-6 py-2 flex items-center gap-2 transition-all duration-300 text-secondary"
+            className="relative group flex items-center gap-2 transition-all duration-300 text-tertiary font-medium text-base"
           >
             <ShoppingCart size={20} />
             CART
             {cart.itemCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-tertiary text-primary text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              <span className="absolute -top-4 -right-4 bg-tertiary text-primary text-xs rounded-full w-5 h-5 flex items-center justify-center">
                 {cart.itemCount}
               </span>
             )}
@@ -205,7 +212,7 @@ export function Navigation({ isScrolled }: NavigationProps) {
           </Link>
           <Link
             to="/shop"
-            className="relative group px-6 py-2 flex items-center gap-2 transition-all duration-300 text-secondary whitespace-nowrap overflow-hidden"
+            className="relative group flex items-center gap-2 transition-all duration-300 text-tertiary font-medium text-base whitespace-nowrap overflow-hidden"
           >
             <ShoppingCart size={20} />
             SHOP NOW
@@ -215,7 +222,7 @@ export function Navigation({ isScrolled }: NavigationProps) {
 
         {/* Hamburger Button (Mobile) */}
         <button
-          className="md:hidden text-secondary"
+          className="md:hidden text-tertiary"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -224,7 +231,7 @@ export function Navigation({ isScrolled }: NavigationProps) {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-primarySupport shadow-lg w-full">
+        <div className="md:hidden bg-primarySupport shadow-lg w-full mt-2">
           <div className="flex flex-col p-4 gap-4">
             <Link
               to="/shop?onSale=true"
@@ -356,19 +363,19 @@ export function Navigation({ isScrolled }: NavigationProps) {
             </div>
 
             <Link
-              to="/shop"
-              onClick={() => setMobileMenuOpen(false)}
-              className="hover:text-secondary transition-colors font-medium text-secondary"
-            >
-              SHOP
-            </Link>
-
-            <Link
               to="/blog-hub"
               onClick={() => setMobileMenuOpen(false)}
               className="hover:text-secondary transition-colors font-medium text-secondary"
             >
               BLOG HUB
+            </Link>
+
+            <Link
+              to="/about"
+              onClick={() => setMobileMenuOpen(false)}
+              className="hover:text-secondary transition-colors font-medium text-secondary"
+            >
+              ABOUT
             </Link>
 
             <Link
@@ -396,6 +403,65 @@ export function Navigation({ isScrolled }: NavigationProps) {
           </div>
         </div>
       )}
+      </div>
+
+      {/* Free Shipping Bar - Integrated into Navigation */}
+      <div className="transition-all duration-500 ease-out overflow-hidden max-h-16 opacity-100">
+        <div className="bg-gradient-to-r from-primary to-primarySupport border-t border-tertiary/20">
+          <div className="container mx-auto px-4 py-2">
+            <div className="flex items-center justify-center">
+              {/* Centered Content */}
+              <div className="flex items-center gap-6 text-center">
+                <div className="flex items-center gap-2">
+                  <div className="bg-tertiary/20 p-1.5 rounded-full">
+                    <Truck className="w-4 h-4 text-tertiary" />
+                  </div>
+                  <div>
+                    <span className="text-tertiary font-bold text-sm">Free Shipping on orders over R{freeShippingThreshold}</span>
+
+                  </div>
+                </div>
+                
+                <div className="hidden sm:flex items-center gap-4 text-secondary/80 text-xs">
+                  <div className="flex items-center gap-1">
+                    <Gift className="w-3 h-3 text-tertiary" />
+                    <span>Track your order</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Clock className="w-3 h-3 text-tertiary" />
+                    <span>3-5 day delivery</span>
+                  </div>
+                  <Link 
+                    to="/shipping-policy" 
+                    className="text-blue-400 hover:text-blue-300 underline transition-colors"
+                  >
+                    View shipping policy
+                  </Link>
+                </div>
+
+                {/* Shop Now Button - Centered */}
+                <button
+                  onClick={() => window.location.href = '/shop'}
+                  className="bg-primary text-white border-2 border-tertiary hover:bg-tertiary hover:text-primary hover:scale-105 hover:shadow-lg transition-all duration-300 px-4 py-1.5 text-sm font-medium"
+                >
+                  Shop Now
+                </button>
+              </div>
+
+            </div>
+          </div>
+          
+          {/* Mobile shipping policy link */}
+          <div className="sm:hidden px-4 pb-2">
+            <Link 
+              to="/shipping-policy" 
+              className="text-blue-400 hover:text-blue-300 underline text-xs transition-colors"
+            >
+              View shipping policy
+            </Link>
+          </div>
+        </div>
+      </div>
     </nav>
   );
 }

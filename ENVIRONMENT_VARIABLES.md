@@ -35,7 +35,7 @@ VITE_WORDPRESS_CACHE_DURATION=300000
 ### WooCommerce Configuration
 ```env
 # WooCommerce Configuration
-VITE_WOOCOMMERCE_URL=https://your-wordpress-site.com
+VITE_WORDPRESS_URL=https://your-wordpress-site.com
 VITE_WOOCOMMERCE_CONSUMER_KEY=ck_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 VITE_WOOCOMMERCE_CONSUMER_SECRET=cs_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
@@ -78,7 +78,7 @@ VITE_WORDPRESS_CACHE_DURATION=600000
 ### WooCommerce Configuration
 ```env
 # WooCommerce Configuration
-VITE_WOOCOMMERCE_URL=https://your-production-wordpress-site.com
+VITE_WORDPRESS_URL=https://your-production-wordpress-site.com
 VITE_WOOCOMMERCE_CONSUMER_KEY=your_production_consumer_key
 VITE_WOOCOMMERCE_CONSUMER_SECRET=your_production_consumer_secret
 ```
@@ -122,7 +122,7 @@ VITE_DEBUG_MODE=false
 
 | Variable | Description | Example | Required |
 |----------|-------------|---------|----------|
-| `VITE_WOOCOMMERCE_URL` | Your WooCommerce site URL | `https://your-site.com` | ✅ |
+| `VITE_WORDPRESS_URL` | Your WooCommerce site URL | `https://your-site.com` | ✅ |
 | `VITE_WOOCOMMERCE_CONSUMER_KEY` | WooCommerce API consumer key | `ck_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx` | ✅ |
 | `VITE_WOOCOMMERCE_CONSUMER_SECRET` | WooCommerce API consumer secret | `cs_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx` | ✅ |
 
@@ -172,7 +172,7 @@ VITE_PAYFAST_MERCHANT_KEY=your_real_merchant_key
 ```bash
 # Always use HTTPS in production
 VITE_WORDPRESS_URL=https://your-production-site.com
-VITE_WOOCOMMERCE_URL=https://your-production-site.com
+VITE_WORDPRESS_URL=https://your-production-site.com
 VITE_PAYFAST_RETURN_URL=https://your-react-domain.com/payment/success
 ```
 
@@ -184,7 +184,7 @@ VITE_PAYFAST_RETURN_URL=https://your-react-domain.com/payment/success
 ```typescript
 // Add this to your main component to verify variables
 console.log('WordPress URL:', import.meta.env.VITE_WORDPRESS_URL);
-console.log('WooCommerce URL:', import.meta.env.VITE_WOOCOMMERCE_URL);
+console.log('WooCommerce URL:', import.meta.env.VITE_WORDPRESS_URL);
 console.log('PayFast Test Mode:', import.meta.env.VITE_PAYFAST_TEST_MODE);
 ```
 
@@ -207,7 +207,7 @@ curl -X GET "https://your-wordpress-site.com/wp-json/wc/v3/products" \
 ```env
 # Local Development (.env)
 VITE_WORDPRESS_URL=https://invictus-nutrition-local.local
-VITE_WOOCOMMERCE_URL=https://invictus-nutrition-local.local
+VITE_WORDPRESS_URL=https://invictus-nutrition-local.local
 VITE_WOOCOMMERCE_CONSUMER_KEY=ck_local_consumer_key
 VITE_WOOCOMMERCE_CONSUMER_SECRET=cs_local_consumer_secret
 VITE_PAYFAST_MERCHANT_ID=10000100
@@ -220,7 +220,7 @@ VITE_DEBUG_MODE=true
 ```env
 # Staging Environment (.env.staging)
 VITE_WORDPRESS_URL=https://staging.invictus-nutrition.com
-VITE_WOOCOMMERCE_URL=https://staging.invictus-nutrition.com
+VITE_WORDPRESS_URL=https://staging.invictus-nutrition.com
 VITE_WOOCOMMERCE_CONSUMER_KEY=ck_staging_consumer_key
 VITE_WOOCOMMERCE_CONSUMER_SECRET=cs_staging_consumer_secret
 VITE_PAYFAST_MERCHANT_ID=10000100
@@ -233,7 +233,7 @@ VITE_DEBUG_MODE=false
 ```env
 # Production Environment (.env.production)
 VITE_WORDPRESS_URL=https://invictus-nutrition.com
-VITE_WOOCOMMERCE_URL=https://invictus-nutrition.com
+VITE_WORDPRESS_URL=https://invictus-nutrition.com
 VITE_WOOCOMMERCE_CONSUMER_KEY=ck_production_consumer_key
 VITE_WOOCOMMERCE_CONSUMER_SECRET=cs_production_consumer_secret
 VITE_PAYFAST_MERCHANT_ID=your_real_merchant_id

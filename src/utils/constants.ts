@@ -53,7 +53,7 @@ export const PAYFAST_CONFIG = {
 // WooCommerce Configuration
 export const WOOCOMMERCE_CONFIG = {
   // Base URL (should be in environment variables)
-  BASE_URL: import.meta.env.VITE_WOOCOMMERCE_URL,
+  BASE_URL: import.meta.env.VITE_WORDPRESS_URL,
   
   // API Configuration
   API_VERSION: 'wc/v3',

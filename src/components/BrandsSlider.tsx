@@ -49,27 +49,27 @@ export default function BrandsSlider() {
   }
 
   return (
-    <div className="relative max-w-6xl mx-auto">
+    <div className="relative w-full">
       {/* Brands Container */}
       <div className="overflow-hidden">
         <div 
           className="flex transition-transform duration-500 ease-in-out"
           style={{ 
-            transform: `translateX(-${currentIndex * (100 / Math.min(4, duplicatedBrands.length))}%)`,
-            width: `${Math.max(100, duplicatedBrands.length * 25)}%`
+            transform: `translateX(-${currentIndex * (100 / Math.min(2, brands.length))}%)`,
+            width: `${Math.min(2, brands.length) * 50}%`
           }}
         >
           {duplicatedBrands.map((brand, index) => (
             <div 
               key={`${brand.id}-${index}`}
-              className="flex-shrink-0 px-4"
-              style={{ width: `${100 / Math.min(4, duplicatedBrands.length)}%` }}
+              className="flex-shrink-0 px-2 md:px-4"
+              style={{ width: `${100 / Math.min(2, brands.length)}%` }}
             >
               <Link 
                 to={`/shop?brand=${encodeURIComponent(brand.name)}`}
                 className="block group"
               >
-                <div className="flex items-center justify-center h-32">
+                <div className="flex items-center justify-center h-24 md:h-32 bg-white border-2 border-tertiary/30 rounded-lg p-3 md:p-4 shadow-sm group-hover:shadow-md transition-shadow duration-300">
                   {brand.image?.src ? (
                     <img
                       src={brand.image.src}
@@ -78,7 +78,7 @@ export default function BrandsSlider() {
                       loading="lazy"
                     />
                   ) : (
-                    <div className="text-gray-400 text-lg font-medium">
+                    <div className="text-gray-400 text-sm md:text-lg font-medium text-center">
                       {brand.name}
                     </div>
                   )}

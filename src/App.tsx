@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
-import { ArrowRight, Plus, Minus } from "lucide-react";
+import { Routes, Route } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import { Helmet } from "react-helmet";
 import ProteinPancakes from "./ProteinPancakes";
 import PostWorkoutSmoothie from "./PostWorkoutSmoothie";
@@ -10,19 +10,12 @@ import Cart from "@shop/pages/Cart";
 import Checkout from "@shop/pages/Checkout";
 import PaymentSuccess from "@shop/pages/PaymentSuccess";
 import PaymentFailure from "@shop/pages/PaymentFailure";
-import { ShopProvider } from "@shop/core/ShopProvider";
-import { CartProvider } from "@shop/core/cart/CartContext";
-import { Navigation } from "./components/Navigation";
-import { Footer } from "./components/Footer";
 import { Button } from "./components/ui/Button";
 import { HeroSlideshow } from "./extras/components/slideshows";
 import { useProducts } from "@shop/core/hooks/useProducts";
 import { ProductCard } from "@shop/ui/ProductCard";
 import { ProductDetailsModal } from "@shop/ui/ProductDetailsModal";
 import { Loading } from "./components/ui/Loading";
-import { PostGrid } from "./posts/components/PostGrid";
-import { usePosts } from "./posts/hooks/usePosts";
-import { preloadCache } from "./posts/services/wordpress-api";
 import PostsPage from "./posts/pages/PostsPage";
 import PostDetailPage from "./posts/pages/PostDetailPage";
 import BlogHub from "./posts/pages/BlogHub";
@@ -30,7 +23,11 @@ import ShippingPolicy from "./pages/ShippingPolicy";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ReturnPolicy from "./pages/ReturnPolicy";
 import BlogPage from "./pages/BlogPage";
+import About from "./pages/About";
+import ContactUs from "./pages/ContactUs";
+import BobGoTestPage from "./shipping/pages/BobGoTestPage";
 import BrandsSlider from "./components/BrandsSlider";
+import ProductPage from "./shop/pages/ProductPage";
 
 function App() {
   // Update CSS var for scroll progress bar
@@ -49,28 +46,11 @@ function App() {
       window.removeEventListener('resize', updateProgress);
     };
   }, []);
-  const [isScrolled, setIsScrolled] = useState(false);
 
   // Preload posts cache on app start - temporarily disabled
   // useEffect(() => {
   //   preloadCache();
   // }, []);
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const toggleFaq = (index: number) => {
-    setTimeout(() => {
-      setActiveFaq(activeFaq === index ? null : index);
-    }, 0);
-  };
 
   // Helmet-based SEO metadata
   const SEOHead = () => (
@@ -104,6 +84,15 @@ function App() {
       featured: true,
     });
     const {
+      products: allProducts,
+      loading: allProductsLoading,
+      fetchProducts: fetchAllProducts,
+    } = useProducts({
+      perPage: 20,
+      orderBy: "date",
+      order: "desc",
+    });
+    const {
       products: bestSellers,
       loading: bestSellersLoading,
       fetchProducts: fetchBestSellers,
@@ -118,10 +107,11 @@ function App() {
 
     useEffect(() => {
       fetchProducts();
+      fetchAllProducts();
       fetchBestSellers();
-    }, [fetchProducts, fetchBestSellers]);
+    }, [fetchProducts, fetchAllProducts, fetchBestSellers]);
 
-    const handleScroll = (id: string, e: React.UIEvent<HTMLDivElement>) => {
+    const handleScroll = (id: string, _e: React.UIEvent<HTMLDivElement>) => {
       const container = document.getElementById(id);
       if (container) {
         setScrollPositions((prev) => ({
@@ -132,24 +122,18 @@ function App() {
     };
 
     return (
-      <div className="min-h-screen bg-primary text-secondary">
-        <div className="scroll-progress-bar" />
+      <>
         <SEOHead />
-
-        {/* Navigation */}
-        <Navigation isScrolled={isScrolled} />
-
-        <div className="h-32"></div>
 
         {/* Hero Slideshow */}
         <HeroSlideshow />
 
         {/* Featured Products Section */}
-        <section className="py-20 bg-secondary">
+        <section className="py-20 bg-primary">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h3 className="text-4xl font-bold mb-4 text-primary">FEATURED PRODUCTS</h3>
-              <p className="text-gray-800 text-lg">
+              <h3 className="mb-4 text-tertiary">FEATURED PRODUCTS</h3>
+              <p className=" text-lg">
                 Discover our premium nutrition supplements
               </p>
             </div>
@@ -203,9 +187,10 @@ function App() {
             )}
 
             <div className="text-center mt-12">
-            <Button
+              <Button
                 variant="underline"
                 size="lg"
+                className="text-tertiary after:bg-tertiary"
                 onClick={() => window.location.href = '/shop'}
               >
                 <ArrowRight size={20} /> VIEW ALL PRODUCTS
@@ -310,18 +295,20 @@ function App() {
         </section>
 
         {/* Brands Section */}
-        <section className="py-20 bg-primary">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div className="text-left">
-                <h3 className="text-4xl font-bold mb-4">OUR BRANDS</h3>
-                <p className="text-gray-300 text-lg">
+        <section className="py-12 md:py-20 bg-primary border-t-2 border-tertiary/30 relative">
+          <div className="absolute inset-0 bg-cover bg-center opacity-100" style={{ backgroundImage: "url(/assets/Banners/cover-background.png)" }} />
+          <div className="absolute inset-0 bg-black/60" />
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+              <div className="text-center lg:text-left mb-8 lg:mb-0">
+                <h3 className="text-tertiary mb-4 text-2xl md:text-3xl">OUR BRANDS</h3>
+                <p className="text-white text-base md:text-lg">
                   Discover premium nutrition brands trusted by athletes
                   worldwide
                 </p>
               </div>
 
-              <div>
+              <div className="w-full">
                 <BrandsSlider />
               </div>
             </div>
@@ -329,16 +316,16 @@ function App() {
         </section>
 
         {/* On Sale Products Section */}
-        <section className="py-20 bg-secondary">
+        <section className="py-20 bg-primary border-t-2 border-tertiary/30">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h3 className="text-4xl font-bold mb-4 text-primary">SPECIAL OFFERS</h3>
-              <p className="text-gray-800 text-lg">
+              <h3 className="mb-4 text-tertiary">SPECIAL OFFERS</h3>
+              <p className="text-secondary text-lg">
                 Limited time deals on premium nutrition supplements
               </p>
             </div>
 
-            {productsLoading ? (
+            {allProductsLoading ? (
               <div className="flex justify-center">
                 <Loading text="Loading special offers..." />
               </div>
@@ -351,7 +338,7 @@ function App() {
                     className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory"
                     onScroll={(e) => handleScroll("specials", e)}
                   >
-                    {products
+                    {allProducts
                       .filter((product) => product.onSale)
                       .slice(0, 12)
                       .map((product) => (
@@ -374,7 +361,7 @@ function App() {
 
                 {/* Desktop: grid */}
                 <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-6">
-                  {products
+                  {allProducts
                     .filter((product) => product.onSale)
                     .slice(0, 12)
                     .map((product) => (
@@ -392,12 +379,12 @@ function App() {
               </>
             )}
 
-            {products.filter((product) => product.onSale).length === 0 &&
-              !productsLoading && (
+            {allProducts.filter((product) => product.onSale).length === 0 &&
+              !allProductsLoading && (
                 <div className="text-center py-12">
-                  <div className="bg-white/50 rounded-lg p-8 max-w-md mx-auto">
+                  <div className="bg-primarySupport rounded-lg p-8 max-w-md mx-auto">
                     <svg
-                      className="w-16 h-16 text-gray-400 mx-auto mb-4"
+                      className="w-16 h-16 text-tertiary mx-auto mb-4"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -409,38 +396,39 @@ function App() {
                         d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                       />
                     </svg>
-                    <h4 className="text-xl font-semibold text-primary mb-2">
+                    <h4 className="text-xl font-semibold text-tertiary mb-2">
                       No Special Offers Right Now
                     </h4>
-                    <p className="text-gray-600">
+                    <p className="text-tertiary">
                       Check back soon for amazing deals on premium supplements!
                     </p>
                   </div>
                 </div>
               )}
 
-            {products.filter((product) => product.onSale).length > 0 && (
+            {allProducts.filter((product) => product.onSale).length > 0 && (
               <div className="text-center mt-12">
                 <Button
-                variant="underline"
-                size="lg"
-                onClick={() => window.location.href = '/shop'}
-              >
-                <ArrowRight size={20} /> VIEW ALL SPECIALS
-              </Button>
+                  variant="underline"
+                  size="lg"
+                  className="text-tertiary after:bg-tertiary"
+                  onClick={() => window.location.href = '/shop'}
+                >
+                  <ArrowRight size={20} /> VIEW ALL SPECIALS
+                </Button>
               </div>
             )}
           </div>
         </section>
 
         {/* Why Choose Invictus Section */}
-        <section className="py-20 bg-primary">
+        <section className="py-20 bg-primary border-t-2 border-tertiary/30">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h3 className="text-4xl font-bold mb-4">
+              <h3 className="mb-4 text-tertiary">
                 WHY CHOOSE INVICTUS NUTRITION?
               </h3>
-              <p className="text-gray-300 text-lg max-w-3xl mx-auto">
+              <p className="text-secondary text-lg max-w-3xl mx-auto">
                 We're committed to providing you with the highest quality
                 supplements backed by science and delivered with excellence
               </p>
@@ -463,8 +451,8 @@ function App() {
                     />
                   </svg>
                 </div>
-                <h4 className="text-xl font-bold mb-3">PREMIUM QUALITY</h4>
-                <p className="text-gray-300">
+                <h4 className="text-xl font-bold mb-3 text-tertiary">PREMIUM QUALITY</h4>
+                <p className="text-secondary-300">
                   All products are third-party tested and meet the highest
                   industry standards for purity and potency
                 </p>
@@ -486,8 +474,8 @@ function App() {
                     />
                   </svg>
                 </div>
-                <h4 className="text-xl font-bold mb-3">FAST DELIVERY</h4>
-                <p className="text-gray-300">
+                <h4 className="text-xl font-bold mb-3 text-tertiary">FAST DELIVERY</h4>
+                <p className="text-secondary-300">
                   Quick and reliable shipping across South Africa with real-time
                   tracking and secure packaging
                 </p>
@@ -509,8 +497,8 @@ function App() {
                     />
                   </svg>
                 </div>
-                <h4 className="text-xl font-bold mb-3">EXPERT SUPPORT</h4>
-                <p className="text-gray-300">
+                <h4 className="text-xl font-bold mb-3 text-tertiary">EXPERT SUPPORT</h4>
+                <p className="text-secondary-300">
                   Our nutrition experts are here to help you choose the right
                   products for your fitness goals
                 </p>
@@ -532,10 +520,10 @@ function App() {
                     />
                   </svg>
                 </div>
-                <h4 className="text-xl font-bold mb-3">
+                <h4 className="text-xl font-bold mb-3 text-tertiary">
                   CUSTOMER SATISFACTION
                 </h4>
-                <p className="text-gray-300">
+                <p className="text-secondary-300">
                   Join thousands of satisfied customers who trust Invictus for
                   their nutrition needs
                 </p>
@@ -555,11 +543,11 @@ function App() {
         </section>
 
         {/* Latest Arrivals Section */}
-        <section className="py-20 bg-secondary">
+        <section className="py-20 bg-primary border-t-2 border-tertiary/30">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h3 className="text-4xl font-bold mb-4 text-primary">LATEST ARRIVALS</h3>
-              <p className="text-gray-800 text-lg">
+              <h3 className="mb-4 text-tertiary">LATEST ARRIVALS</h3>
+              <p className="text-secondary text-lg">
                 Fresh new products just added to our collection
               </p>
             </div>
@@ -613,7 +601,7 @@ function App() {
               </>
             ) : (
               <div className="text-center py-12">
-                <p className="text-gray-600 text-lg">
+                <p className="text-tertiary text-lg">
                   No latest arrivals available at the moment.
                 </p>
               </div>
@@ -623,6 +611,7 @@ function App() {
               <Button
                 variant="underline"
                 size="lg"
+                className="text-tertiary after:bg-tertiary"
                 onClick={() => window.location.href = '/shop'}
               >
                 <ArrowRight size={20} /> VIEW ALL PRODUCTS
@@ -632,76 +621,69 @@ function App() {
         </section>
 
         {/* FAQ Section */}
-        <section id="faq" className="py-20 bg-primary">
+        <section className="py-20 bg-primary border-t-2 border-tertiary/30">
           <div className="container mx-auto px-4">
-            <h3 className="text-4xl font-bold mb-12 text-center">FAQ</h3>
-            <div className="max-w-3xl mx-auto space-y-6">
-              {[
-                {
-                  q: "WHEN SHOULD I TAKE PROTEIN POWDER?",
-                  a: "FOR OPTIMAL RESULTS, CONSUME WITHIN 30 MINUTES AFTER YOUR WORKOUT. YOU CAN ALSO TAKE IT ANY TIME OF DAY TO MEET YOUR PROTEIN REQUIREMENTS.",
-                },
-                {
-                  q: "HOW MUCH PROTEIN DO I NEED?",
-                  a: "GENERALLY, ACTIVE INDIVIDUALS NEED 1.6-2.2G OF PROTEIN PER KG OF BODY WEIGHT DAILY. ATHLETES MAY REQUIRE MORE BASED ON TRAINING INTENSITY.",
-                },
-                {
-                  q: "IS THIS PRODUCT THIRD-PARTY TESTED?",
-                  a: "YES, OUR PRODUCTS UNDERGO RIGOROUS THIRD-PARTY TESTING TO ENSURE QUALITY, PURITY, AND LABEL ACCURACY.",
-                },
-              ].map((item, index) => (
-                <div
-                  key={index}
-                    className="bg-primarySupport overflow-hidden transition-colors"
-                >
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleFaq(index);
-                    }}
-                    className="w-full p-6 flex justify-between items-center cursor-pointer hover:bg-gray-600 transition-colors"
+            <div className="text-center mb-12">
+              <h3 className="mb-4 text-tertiary">FAQ</h3>
+              <p className="text-white text-lg">Frequently Asked Questions About Our Products and Services</p>
+            </div>
+            <div className="max-w-6xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  {
+                    q: "HOW LONG DOES SHIPPING TAKE?",
+                    a: "We offer free shipping on orders over R2000. Standard delivery takes 3-5 business days across South Africa. Express shipping options are available for faster delivery.",
+                  },
+                  {
+                    q: "WHAT IS YOUR RETURN POLICY?",
+                    a: "We offer a 30-day return policy for unopened products in original packaging. If you're not satisfied with your purchase, contact our customer service team for assistance.",
+                  },
+                  {
+                    q: "ARE YOUR SUPPLEMENTS SAFE AND TESTED?",
+                    a: "Yes, all our products undergo rigorous third-party testing to ensure quality, purity, and label accuracy. We only stock supplements from trusted, certified manufacturers.",
+                  },
+                  {
+                    q: "HOW SHOULD I STORE MY SUPPLEMENTS?",
+                    a: "Store supplements in a cool, dry place away from direct sunlight. Keep containers tightly closed and follow any specific storage instructions on the product label.",
+                  },
+                  {
+                    q: "DO YOU OFFER PAYMENT PLANS OR INSTALLMENTS?",
+                    a: "We accept all major credit cards, EFT, and offer secure payment through PayFast. Contact us for information about payment plan options for larger orders.",
+                  },
+                  {
+                    q: "WHAT IF I HAVE ALLERGIES OR DIETARY RESTRICTIONS?",
+                    a: "All our products clearly list ingredients and allergens. We offer options for various dietary needs including vegan, gluten-free, and lactose-free products. Contact us for specific product recommendations.",
+                  },
+                ].map((item, index) => (
+                  <div
+                    key={index}
+                    className="bg-primary border-2 border-tertiary/30 rounded-lg p-6 hover:bg-tertiary hover:text-primary transition-all duration-300 group"
                   >
-                    <h4 className="text-xl font-semibold text-left">
+                    <h4 className="text-lg font-semibold text-tertiary group-hover:text-primary mb-4 transition-colors duration-300">
                       {item.q}
                     </h4>
-                    {activeFaq === index ? (
-                      <Minus size={20} className="text-secondary flex-shrink-0" />
-                    ) : (
-                      <Plus size={20} className="text-secondary flex-shrink-0" />
-                    )}
-                  </button>
-                  <div
-                    className={`transition-all duration-300 ease-in-out ${
-                      activeFaq === index
-                        ? "max-h-96 opacity-100"
-                        : "max-h-0 opacity-0"
-                    } overflow-hidden bg-primary/50`}
-                  >
-                    <p className="p-6 text-gray-300">{item.a}</p>
+                    <p className="text-white group-hover:text-primary leading-relaxed transition-colors duration-300">
+                      {item.a}
+                    </p>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Footer */}
-        <Footer />
 
         <ProductDetailsModal
           product={selectedProduct}
           isOpen={modalOpen}
           onClose={() => setModalOpen(false)}
         />
-      </div>
+      </>
     );
   };
 
   return (
-    <ShopProvider>
-      <CartProvider>
-        <Router>
-          <Routes>
+    <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/protein-pancakes" element={<ProteinPancakes />} />
             <Route
@@ -716,7 +698,10 @@ function App() {
             <Route path="/posts/:slug" element={<PostDetailPage />} />
             <Route path="/blog-hub" element={<BlogHub />} />
             <Route path="/blog" element={<BlogPage />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<ContactUs />} />
             <Route path="/shop" element={<Shop />} />
+            <Route path="/product/:id" element={<ProductPage />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/payment/success" element={<PaymentSuccess />} />
@@ -725,10 +710,8 @@ function App() {
             <Route path="/shipping-policy" element={<ShippingPolicy />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/return-policy" element={<ReturnPolicy />} />
+            <Route path="/test-bobgo" element={<BobGoTestPage />} />
           </Routes>
-        </Router>
-      </CartProvider>
-    </ShopProvider>
   );
 }
 

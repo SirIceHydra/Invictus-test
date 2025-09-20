@@ -481,7 +481,7 @@ VITE_WORDPRESS_POSTS_PER_PAGE=10
 VITE_WORDPRESS_CACHE_DURATION=300000
 
 # WooCommerce Configuration
-VITE_WOOCOMMERCE_URL=https://your-wordpress-site.com
+VITE_WORDPRESS_URL=https://your-wordpress-site.com
 VITE_WOOCOMMERCE_CONSUMER_KEY=ck_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 VITE_WOOCOMMERCE_CONSUMER_SECRET=cs_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -506,7 +506,7 @@ VITE_DEBUG_MODE=true
 ```env
 # Production .env
 VITE_WORDPRESS_URL=https://your-production-wordpress-site.com
-VITE_WOOCOMMERCE_URL=https://your-production-wordpress-site.com
+VITE_WORDPRESS_URL=https://your-production-wordpress-site.com
 VITE_WOOCOMMERCE_CONSUMER_KEY=your_production_consumer_key
 VITE_WOOCOMMERCE_CONSUMER_SECRET=your_production_consumer_secret
 VITE_PAYFAST_MERCHANT_ID=your_production_merchant_id

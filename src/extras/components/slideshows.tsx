@@ -16,16 +16,44 @@ export function HeroSlideshow() {
 
   const API = (import.meta as any).env.VITE_SLIDER_COMPONENT_URL;
 
+  // Default fallback banners
+  const defaultBanners: Banner[] = [
+    {
+      image: '/assets/Banners/on-banner.png',
+      alt: 'Optimum Nutrition Banner',
+    },
+    {
+      image: '/assets/Banners/myprotein_banner.png',
+      alt: 'MyProtein Banner',
+    },
+    {
+      image: '/assets/Banners/muscletech_banner.mp4',
+      alt: 'MuscleTech Banner',
+    },
+  ];
+
   // Fetch banners
   useEffect(() => {
     (async () => {
+      // If no API URL is configured, use default banners
+      if (!API) {
+        console.log('📸 No slider API URL configured, using default banners');
+        setBanners(defaultBanners);
+        return;
+      }
+
       try {
+        console.log('📸 Fetching banners from:', API);
         const response = await fetch(API);
-        if (!response.ok) throw new Error('Failed to fetch banners');
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
         const data = await response.json();
+        console.log('✅ Successfully loaded banners:', data);
         setBanners(data);
-      } catch {
-        // fallback handled by local default below
+      } catch (error) {
+        console.warn('⚠️ Failed to fetch banners from API, using defaults:', error);
+        setBanners(defaultBanners);
       }
     })();
   }, [API]);
@@ -85,6 +113,8 @@ export function HeroSlideshow() {
     display: 'flex',
     justifyContent: 'center',
     padding: isMobile ? '0 12px' : '0',
+    paddingTop: isMobile ? '80px' : '60px', // Reduced top padding to make banner shorter
+    paddingBottom: isMobile ? '0px' : '0px', // No bottom padding for tightest spacing
     overflow: 'hidden',
   };
 
@@ -93,9 +123,9 @@ export function HeroSlideshow() {
      width: '100%',
      maxWidth: '1024px',
      margin: '0 auto 2rem auto',
-     height: isMobile ? '240px' : '500px',
+     height: isMobile ? '280px' : '500px', // Increased mobile height for better image display
      zIndex: 10,
-     backgroundColor: '#fff1f1',
+     backgroundColor: '#000000',
      overflow: 'hidden',
      display: 'flex',
      alignItems: 'center',
@@ -105,8 +135,8 @@ export function HeroSlideshow() {
      touchAction: 'pan-y',
      cursor: 'pointer',
      transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-     transform: isHovered ? 'scale(1.02)' : 'scale(1)',
-     boxShadow: isHovered ? '0 8px 25px rgba(0,0,0,0.15)' : '0 2px 10px rgba(0,0,0,0.05)',
+     transform: (isHovered && !isMobile) ? 'scale(1.02)' : 'scale(1)',
+     boxShadow: (isHovered && !isMobile) ? '0 8px 25px rgba(0,0,0,0.15)' : '0 2px 10px rgba(0,0,0,0.05)',
    };
 
   const imageStyle: React.CSSProperties = {
@@ -114,7 +144,8 @@ export function HeroSlideshow() {
     inset: 0,
     width: '100%',
     height: '100%',
-    objectFit: isMobile ? 'cover' : 'contain',
+    objectFit: 'contain', // Use contain for both mobile and desktop to show full product
+    objectPosition: 'center',
     transition: 'opacity 0.2s ease-in-out',
     opacity: fadeOpacity,
     borderRadius: isMobile ? '12px' : '16px',
@@ -136,31 +167,26 @@ export function HeroSlideshow() {
     width: isMobile ? '6px' : '8px',
     height: isMobile ? '6px' : '8px',
     borderRadius: '9999px',
-    background: active ? 'rgba(17,24,39,0.9)' : 'rgba(17,24,39,0.35)',
+    background: active ? 'var(--tertiary)' : 'rgba(213,183,117,0.4)',
     transition: 'transform 0.2s ease',
     transform: active ? 'scale(1.15)' : 'scale(1)',
   });
 
-  const fallbackBanner: Banner = {
-    image: '/assets/Banners/on-banner.png',
-    alt: 'Fallback Banner',
-  };
-
-  const currentBanner = banners.length ? banners[i] : fallbackBanner;
+  const currentBanner = banners.length ? banners[i] : defaultBanners[0];
 
   return (
-    <section style={sectionStyle}>
-      {/* Video Background */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover z-0"
-        style={{ filter: 'brightness(0.8)' }}
-      >
-        <source src="/assets/Banners/banner_section.mp4" type="video/mp4" />
-      </video>
+    <section style={sectionStyle} className="border-b-2 border-tertiary/30">
+      {/* Static Background Image with Extended Height and Fade */}
+      <div
+        className="absolute inset-0 w-full h-full bg-cover bg-center z-0"
+        style={{ 
+          backgroundImage: 'url(/assets/Banners/cover-background.png)',
+          filter: 'brightness(0.8)',
+          height: '120%', // Extend the background beyond the section
+          top: '-10%', // Position it higher to create the extended effect
+        }}
+      />
+      
       
       <div
         style={containerStyle}
@@ -168,8 +194,8 @@ export function HeroSlideshow() {
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
         onClick={onClick}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        onMouseEnter={() => !isMobile && setIsHovered(true)}
+        onMouseLeave={() => !isMobile && setIsHovered(false)}
         role="region"
         aria-roledescription="carousel"
         aria-label="Promotional banners - Click to visit shop"
@@ -189,6 +215,51 @@ export function HeroSlideshow() {
             ))}
           </div>
         )}
+
+        {/* Shop Now Button - Bottom Right */}
+        <div 
+          style={{
+            position: 'absolute',
+            bottom: isMobile ? '12px' : '16px',
+            right: isMobile ? '12px' : '16px',
+            zIndex: 6,
+          }}
+        >
+          <button
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent slideshow click
+              navigate('/shop');
+            }}
+            style={{
+              padding: isMobile ? '8px 16px' : '12px 24px',
+              backgroundColor: 'var(--tertiary)',
+              color: 'var(--primary)',
+              border: 'none',
+              borderRadius: isMobile ? '6px' : '8px',
+              fontSize: isMobile ? '12px' : '14px',
+              fontWeight: '700',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+              transform: 'scale(1)',
+              whiteSpace: 'nowrap',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.05)';
+              e.currentTarget.style.backgroundColor = 'var(--tertiary)';
+              e.currentTarget.style.opacity = '0.9';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.backgroundColor = 'var(--tertiary)';
+              e.currentTarget.style.opacity = '1';
+            }}
+          >
+            SHOP NOW
+          </button>
+        </div>
       </div>
     </section>
   );

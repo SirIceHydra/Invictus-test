@@ -24,7 +24,7 @@ class WooCommerceBlogCategoriesService {
   private consumerSecret: string;
 
   constructor() {
-    this.baseUrl = import.meta.env.VITE_WOOCOMMERCE_URL || '';
+    this.baseUrl = import.meta.env.VITE_WORDPRESS_URL || '';
     this.consumerKey = import.meta.env.VITE_WOOCOMMERCE_CONSUMER_KEY || '';
     this.consumerSecret = import.meta.env.VITE_WOOCOMMERCE_CONSUMER_SECRET || '';
   }

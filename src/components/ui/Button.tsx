@@ -34,42 +34,42 @@ export const Button: React.FC<ButtonProps> = ({
 
   const variantStyles = {
     primary: `
-      bg-black text-white border-2 border-black
-      hover:bg-white hover:text-black hover:border-black
-      focus:ring-black
-      before:absolute before:inset-0 before:bg-gradient-to-r before:from-yellow-400 before:to-yellow-600
+      bg-primary text-tertiary border-2 border-tertiary
+      hover:bg-tertiary hover:text-primary hover:border-tertiary
+      focus:ring-tertiary
+      before:absolute before:inset-0 before:bg-tertiary
       before:opacity-0 before:transition-opacity before:duration-300
       hover:before:opacity-10
     `,
     secondary: `
-      bg-white text-black border-2 border-black
-      hover:bg-black hover:text-white hover:border-black
-      focus:ring-black
-      before:absolute before:inset-0 before:bg-gradient-to-r before:from-yellow-400 before:to-yellow-600
+      bg-transparent text-tertiary border-2 border-tertiary
+      hover:bg-tertiary hover:text-primary hover:border-tertiary
+      focus:ring-tertiary
+      before:absolute before:inset-0 before:bg-tertiary
       before:opacity-0 before:transition-opacity before:duration-300
       hover:before:opacity-10
     `,
     outline: `
-      bg-transparent text-black border-2 border-black
-      hover:bg-black hover:text-white hover:border-black
-      focus:ring-black
-      before:absolute before:inset-0 before:bg-gradient-to-r before:from-yellow-400 before:to-yellow-600
+      bg-transparent text-tertiary border-2 border-tertiary
+      hover:bg-tertiary hover:text-primary hover:border-tertiary
+      focus:ring-tertiary
+      before:absolute before:inset-0 before:bg-tertiary
       before:opacity-0 before:transition-opacity before:duration-300
       hover:before:opacity-10
     `,
     ghost: `
-      bg-transparent text-black border-2 border-transparent
-      hover:bg-black hover:text-white hover:border-black
-      focus:ring-black
-      before:absolute before:inset-0 before:bg-gradient-to-r before:from-yellow-400 before:to-yellow-600
+      bg-transparent text-tertiary border-2 border-transparent
+      hover:bg-tertiary hover:text-primary hover:border-tertiary
+      focus:ring-tertiary
+      before:absolute before:inset-0 before:bg-tertiary
       before:opacity-0 before:transition-opacity before:duration-300
       hover:before:opacity-10
     `,
     underline: `
-      bg-transparent border-0 text-black
-      focus:ring-black
-      after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-0 after:bg-black
-      after:transition-all after:duration-300 group-hover:after:w-full
+      bg-transparent border-0 text-tertiary
+      focus:ring-tertiary
+      relative after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-0 after:bg-tertiary
+      after:transition-all after:duration-300 hover:after:w-full
     `,
   } as const;
 
@@ -88,9 +88,6 @@ export const Button: React.FC<ButtonProps> = ({
       className={combinedStyles}
     >
       <span className="relative z-10 flex items-center gap-2">{children}</span>
-      {variant === 'underline' ? (
-        <span className="pointer-events-none absolute left-0 bottom-0 h-0.5 w-0 bg-black transition-all duration-300 group-hover:w-full" />
-      ) : null}
     </button>
   );
 };

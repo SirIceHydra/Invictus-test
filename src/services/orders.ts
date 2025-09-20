@@ -2,6 +2,7 @@ import { apiPost, apiGet, apiPut } from './api';
 import { WooCommerceOrder, Order, OrderStatus } from '../types/order';
 import { CartItem } from '../types/cart';
 import { CheckoutForm } from '../types/checkout';
+import { ShippingOption } from '../shipping/types/shipping';
 import { WOOCOMMERCE_CONFIG, ERROR_MESSAGES } from '../utils/constants';
 
 const API_ENDPOINTS = {
@@ -14,9 +15,20 @@ const API_ENDPOINTS = {
  */
 export async function createOrder(
   cartItems: CartItem[],
-  customerData: CheckoutForm
+  customerData: CheckoutForm,
+  shippingOption?: ShippingOption
 ): Promise<Order> {
   try {
+    console.log('=== ORDER CREATION DEBUG ===');
+    console.log('shippingOption received:', shippingOption);
+    console.log('shippingOption type:', typeof shippingOption);
+    console.log('shippingOption is null?', shippingOption === null);
+    console.log('shippingOption is undefined?', shippingOption === undefined);
+    console.log('shippingOption keys:', shippingOption ? Object.keys(shippingOption) : 'N/A');
+    console.log('shippingOption.id:', shippingOption?.id);
+    console.log('shippingOption.name:', shippingOption?.name);
+    console.log('shippingOption.price:', shippingOption?.price);
+    
     // Transform cart items to WooCommerce line items
     const lineItems = cartItems.map(item => ({
       product_id: item.productId,
@@ -27,8 +39,8 @@ export async function createOrder(
 
     // Calculate totals
     const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const shipping = 0; // Free shipping for now
-    const total = subtotal + shipping;
+    const shippingCost = shippingOption ? shippingOption.price : 0;
+    const total = subtotal + shippingCost;
 
     // Prepare order data
     const orderData: WooCommerceOrder = {
@@ -42,6 +54,7 @@ export async function createOrder(
         phone: customerData.phone,
         address_1: customerData.address,
         city: customerData.city,
+        state: customerData.province,
         postcode: customerData.postalCode,
         country: customerData.country,
       },
@@ -50,11 +63,18 @@ export async function createOrder(
         last_name: customerData.lastName,
         address_1: customerData.address,
         city: customerData.city,
+        state: customerData.province,
         postcode: customerData.postalCode,
         country: customerData.country,
       },
       line_items: lineItems,
-      shipping_lines: [
+      shipping_lines: shippingOption ? [
+        {
+          method_id: shippingOption.id,
+          method_title: shippingOption.name,
+          total: shippingOption.price.toFixed(2),
+        },
+      ] : [
         {
           method_id: 'free_shipping',
           method_title: 'Free Shipping',
@@ -67,6 +87,8 @@ export async function createOrder(
     };
 
     console.log('Creating WooCommerce order with data:', orderData);
+    console.log('Shipping option passed:', shippingOption);
+    console.log('Shipping lines in order data:', orderData.shipping_lines);
 
     const response = await apiPost<WooCommerceOrder>(API_ENDPOINTS.ORDERS, orderData);
     

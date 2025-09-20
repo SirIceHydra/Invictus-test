@@ -23,7 +23,7 @@ npm install -D tailwindcss postcss autoprefixer
 ### 3. Configure Environment Variables
 ```env
 # .env
-VITE_WOOCOMMERCE_URL=https://your-wordpress-site.com
+VITE_WORDPRESS_URL=https://your-wordpress-site.com
 VITE_WOOCOMMERCE_CONSUMER_KEY=your_consumer_key
 VITE_WOOCOMMERCE_CONSUMER_SECRET=your_consumer_secret
 VITE_PAYFAST_MERCHANT_ID=your_merchant_id
@@ -322,7 +322,7 @@ import { PaymentFailure } from './shop/pages/PaymentFailure';
 export const SHOP_CONFIG = {
   // WooCommerce settings
   WOOCOMMERCE: {
-    BASE_URL: import.meta.env.VITE_WOOCOMMERCE_URL,
+    BASE_URL: import.meta.env.VITE_WORDPRESS_URL,
     CONSUMER_KEY: import.meta.env.VITE_WOOCOMMERCE_CONSUMER_KEY,
     CONSUMER_SECRET: import.meta.env.VITE_WOOCOMMERCE_CONSUMER_SECRET,
     PRODUCTS_PER_PAGE: 12,
@@ -413,7 +413,7 @@ npm run build
 ### Environment Variables
 ```env
 # Production .env
-VITE_WOOCOMMERCE_URL=https://your-production-site.com
+VITE_WORDPRESS_URL=https://your-production-site.com
 VITE_WOOCOMMERCE_CONSUMER_KEY=your_production_key
 VITE_WOOCOMMERCE_CONSUMER_SECRET=your_production_secret
 VITE_PAYFAST_MERCHANT_ID=your_production_merchant_id
