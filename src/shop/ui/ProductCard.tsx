@@ -49,9 +49,9 @@ export function ProductCard({ product, onViewDetails, className = '' }: ProductC
         )}
       </div>
       <div className="p-3 sm:p-4 flex flex-col flex-1">
-        <h5 className="text-secondary mb-3 line-clamp-2 min-h-[2.5rem] flex items-start transition-colors duration-200">
+        <h6 className="text-secondary mb-3 line-clamp-2 min-h-[2.5rem] flex items-start transition-colors duration-200">
           {product.name}
-        </h5>
+        </h6>
         <div className="flex items-center justify-center gap-2 mb-4">
           {product.onSale && product.salePrice ? (
             <>

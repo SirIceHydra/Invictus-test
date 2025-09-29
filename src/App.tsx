@@ -22,6 +22,7 @@ import BlogHub from "./posts/pages/BlogHub";
 import ShippingPolicy from "./pages/ShippingPolicy";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ReturnPolicy from "./pages/ReturnPolicy";
+import { CookiesPolicy } from "./pages/CookiesPolicy";
 import BlogPage from "./pages/BlogPage";
 import About from "./pages/About";
 import ContactUs from "./pages/ContactUs";
@@ -710,6 +711,7 @@ function App() {
             <Route path="/shipping-policy" element={<ShippingPolicy />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/return-policy" element={<ReturnPolicy />} />
+            <Route path="/cookies-policy" element={<CookiesPolicy />} />
             <Route path="/test-bobgo" element={<BobGoTestPage />} />
           </Routes>
   );

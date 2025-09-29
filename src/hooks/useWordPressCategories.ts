@@ -27,7 +27,13 @@ export function useWordPressCategories(): UseWordPressCategoriesReturn {
       setLoading(true);
       setError(null);
       const categoriesData = await fetchCategories();
-      setCategories(categoriesData);
+      
+      // Filter out slideshow category from categories
+      const filteredCategories = categoriesData.filter(cat => 
+        cat.slug.toLowerCase() !== 'slideshow'
+      );
+      
+      setCategories(filteredCategories);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch WordPress categories');
       console.error('Error fetching WordPress categories:', err);

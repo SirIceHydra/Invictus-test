@@ -4,6 +4,7 @@ import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import App from './App.tsx';
 import { Navigation } from './components/Navigation.tsx';
 import { Footer } from './components/Footer.tsx';
+import { CookiesPopup } from './components/CookiesPopup.tsx';
 import { ShopProvider } from './shop/core/ShopProvider';
 import { CartProvider } from './shop/core/cart/CartContext';
 import './index.css';
@@ -49,6 +50,9 @@ function RootComponent() {
             
             {/* Footer */}
             <Footer />
+            
+            {/* Cookies Popup */}
+            <CookiesPopup />
           </div>
         </Router>
       </CartProvider>

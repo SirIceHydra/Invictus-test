@@ -80,8 +80,19 @@ const BlogHub: React.FC = () => {
         fetchCategories(),
         fetchPosts({ perPage: 12, orderBy: 'date', order: 'desc' })
       ]);
-      setCategories(fetchedCategories);
-      setPosts(fetchedPosts.posts);
+      
+      // Filter out slideshow category from categories
+      const filteredCategories = fetchedCategories.filter(cat => 
+        cat.slug.toLowerCase() !== 'slideshow'
+      );
+      
+      // Filter out posts that belong to slideshow category
+      const filteredPosts = fetchedPosts.posts.filter(post => 
+        !post.categories.some(cat => cat.toLowerCase() === 'slideshow')
+      );
+      
+      setCategories(filteredCategories);
+      setPosts(filteredPosts);
     } catch (err) {
       setError('Failed to load data');
     } finally {
@@ -101,7 +112,13 @@ const BlogHub: React.FC = () => {
         order: 'desc',
         category: categorySlug
       });
-      setPosts(postsData.posts);
+      
+      // Filter out posts that belong to slideshow category
+      const filteredPosts = postsData.posts.filter(post => 
+        !post.categories.some(cat => cat.toLowerCase() === 'slideshow')
+      );
+      
+      setPosts(filteredPosts);
     } catch (err) {
       setError('Failed to load category posts');
     } finally {
@@ -130,11 +147,14 @@ const BlogHub: React.FC = () => {
           // Continue to next child category
         }
       }
-      // Sort by date and take first 12
-      const sortedPosts = allPosts
+      
+      // Filter out posts that belong to slideshow category and sort by date
+      const filteredPosts = allPosts
+        .filter(post => !post.categories.some(cat => cat.toLowerCase() === 'slideshow'))
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
         .slice(0, 12);
-      setPosts(sortedPosts);
+        
+      setPosts(filteredPosts);
     } catch (err) {
       setError('Failed to load parent category posts');
     } finally {
@@ -153,7 +173,13 @@ const BlogHub: React.FC = () => {
         orderBy: 'date', 
         order: 'desc' 
       });
-      setPosts(postsData.posts);
+      
+      // Filter out posts that belong to slideshow category
+      const filteredPosts = postsData.posts.filter(post => 
+        !post.categories.some(cat => cat.toLowerCase() === 'slideshow')
+      );
+      
+      setPosts(filteredPosts);
     } catch (err) {
       setError('Failed to load posts');
     } finally {

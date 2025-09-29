@@ -19,7 +19,12 @@ export default function Shop() {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { products, loading, error, fetchProducts } = useProducts({ perPage: 12, orderBy: 'date', order: 'desc' });
+  const { products, loading, error, fetchProducts } = useProducts({ 
+    perPage: 12, 
+    orderBy: 'date', 
+    order: 'desc',
+    useEnhancedSearch: true // Enable enhanced search by default
+  });
   const { categories, loading: catsLoading, fetchCategories } = useCategories();
   const { brands, loading: brandsLoading, error: brandsError, refetch: fetchBrands } = useBrands();
   
@@ -65,7 +70,8 @@ export default function Shop() {
       page: 1, 
       category: categoryParam ? parseInt(categoryParam) : undefined,
       brand: brandParam || undefined,
-      onSale: onSaleParam === 'true'
+      onSale: onSaleParam === 'true',
+      useEnhancedSearch: true
     });
   }, [searchParams]); // Only depend on searchParams, not fetchProducts
 
@@ -77,7 +83,8 @@ export default function Shop() {
         search: searchTerm,
         category: categoryId ? Number(categoryId) : undefined,
         brand: brandId || undefined,
-        onSale: onSale
+        onSale: onSale,
+        useEnhancedSearch: true
       });
     }, 300); // 300ms delay
 
@@ -151,7 +158,8 @@ export default function Shop() {
                     search: searchTerm,
                     category: val ? Number(val) : undefined,
                     brand: brandId || undefined,
-                    onSale: onSale
+                    onSale: onSale,
+                    useEnhancedSearch: true
                   }); 
                 }} 
                 className="border border-tertiary/40 rounded-lg px-4 py-2 focus:ring-2 focus:ring-tertiary focus:border-transparent bg-primary text-tertiary" 
@@ -181,7 +189,8 @@ export default function Shop() {
                     search: searchTerm,
                     category: categoryId ? Number(categoryId) : undefined,
                     brand: val || undefined,
-                    onSale: onSale
+                    onSale: onSale,
+                    useEnhancedSearch: true
                   }); 
                 }} 
                 className="border border-tertiary/40 rounded-lg px-4 py-2 focus:ring-2 focus:ring-tertiary focus:border-transparent bg-primary text-tertiary" 
@@ -214,7 +223,8 @@ export default function Shop() {
                       search: searchTerm,
                       category: categoryId ? Number(categoryId) : undefined,
                       brand: brandId || undefined,
-                      onSale: checked
+                      onSale: checked,
+                      useEnhancedSearch: true
                     });
                   }}
                   className="w-4 h-4 text-tertiary border-gray-300 rounded focus:ring-tertiary focus:ring-2"
@@ -229,7 +239,8 @@ export default function Shop() {
                 orderBy: e.target.value as any,
                 category: categoryId ? Number(categoryId) : undefined,
                 brand: brandId || undefined,
-                onSale: onSale
+                onSale: onSale,
+                useEnhancedSearch: true
               })} className="border border-tertiary/40 rounded-lg px-4 py-2 focus:ring-2 focus:ring-tertiary focus:border-transparent bg-primary text-tertiary">
                 <option value="date">Newest</option>
                 <option value="price">Price</option>
@@ -241,7 +252,8 @@ export default function Shop() {
                 order: e.target.value as any,
                 category: categoryId ? Number(categoryId) : undefined,
                 brand: brandId || undefined,
-                onSale: onSale
+                onSale: onSale,
+                useEnhancedSearch: true
               })} className="border border-tertiary/40 rounded-lg px-4 py-2 focus:ring-2 focus:ring-tertiary focus:border-transparent bg-primary text-tertiary">
                 <option value="desc">High to Low</option>
                 <option value="asc">Low to High</option>

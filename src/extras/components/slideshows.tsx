@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { usePosts } from '../../posts/hooks/usePosts';
 
 type Banner = { image: string; alt?: string; link?: string };
 
@@ -14,7 +16,11 @@ export function HeroSlideshow() {
   const touchStartX = useRef<number | null>(null);
   const touchDeltaX = useRef(0);
 
-  const API = (import.meta as any).env.VITE_SLIDER_COMPONENT_URL;
+  // Fetch posts from the "Slideshow" category
+  const { posts: slideshowPosts, loading: postsLoading, error: postsError } = usePosts({
+    initialFilters: { category: 'slideshow', perPage: 10 },
+    autoFetch: true
+  });
 
   // Default fallback banners
   const defaultBanners: Banner[] = [
@@ -32,31 +38,41 @@ export function HeroSlideshow() {
     },
   ];
 
-  // Fetch banners
+  // Convert blog posts to banner format
   useEffect(() => {
-    (async () => {
-      // If no API URL is configured, use default banners
-      if (!API) {
-        console.log('📸 No slider API URL configured, using default banners');
-        setBanners(defaultBanners);
-        return;
-      }
+    if (postsLoading) {
+      console.log('📸 Loading slideshow posts...');
+      return;
+    }
 
-      try {
-        console.log('📸 Fetching banners from:', API);
-        const response = await fetch(API);
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        const data = await response.json();
-        console.log('✅ Successfully loaded banners:', data);
-        setBanners(data);
-      } catch (error) {
-        console.warn('⚠️ Failed to fetch banners from API, using defaults:', error);
+    if (postsError) {
+      console.warn('⚠️ Failed to fetch slideshow posts:', postsError);
+      setBanners(defaultBanners);
+      return;
+    }
+
+    if (slideshowPosts && slideshowPosts.length > 0) {
+      console.log('📸 Converting', slideshowPosts.length, 'slideshow posts to banners');
+      const convertedBanners: Banner[] = slideshowPosts
+        .filter(post => post.featuredImage) // Only include posts with featured images
+        .map(post => ({
+          image: post.featuredImage,
+          alt: post.featuredImageAlt || post.title,
+          link: `/posts/${post.slug}` // Link to the blog post
+        }));
+      
+      if (convertedBanners.length > 0) {
+        console.log('✅ Successfully converted posts to banners:', convertedBanners);
+        setBanners(convertedBanners);
+      } else {
+        console.log('⚠️ No posts with featured images found, using default banners');
         setBanners(defaultBanners);
       }
-    })();
-  }, [API]);
+    } else {
+      console.log('📸 No slideshow posts found, using default banners');
+      setBanners(defaultBanners);
+    }
+  }, [slideshowPosts, postsLoading, postsError]);
 
   // Auto-advance slideshow
   useEffect(() => {
@@ -101,9 +117,28 @@ export function HeroSlideshow() {
     touchDeltaX.current = 0;
   };
 
-  // Click handler - redirect to shop page
+  // Click handler - always redirect to shop page
   const onClick = () => {
     navigate('/shop');
+  };
+
+  // Navigation handlers
+  const goToPrevious = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent slideshow click
+    setFadeOpacity(0);
+    setTimeout(() => {
+      setI((x) => (x - 1 + banners.length) % banners.length);
+      setFadeOpacity(1);
+    }, 300);
+  };
+
+  const goToNext = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent slideshow click
+    setFadeOpacity(0);
+    setTimeout(() => {
+      setI((x) => (x + 1) % banners.length);
+      setFadeOpacity(1);
+    }, 300);
   };
 
   // Styles
@@ -111,10 +146,12 @@ export function HeroSlideshow() {
     width: '100%',
     position: 'relative',
     display: 'flex',
+    flexDirection: 'column', // Ensure vertical layout
     justifyContent: 'center',
+    alignItems: 'center',
     padding: isMobile ? '0 12px' : '0',
-    paddingTop: isMobile ? '80px' : '60px', // Reduced top padding to make banner shorter
-    paddingBottom: isMobile ? '0px' : '0px', // No bottom padding for tightest spacing
+    paddingTop: isMobile ? '80px' : '60px',
+    paddingBottom: isMobile ? '10px' : '20px', // Minimal bottom padding
     overflow: 'hidden',
   };
 
@@ -123,7 +160,7 @@ export function HeroSlideshow() {
      width: '100%',
      maxWidth: '1024px',
      margin: '0 auto 2rem auto',
-     height: isMobile ? '280px' : '500px', // Increased mobile height for better image display
+     height: isMobile ? '200px' : '350px', // Decreased height for more compact slideshow
      zIndex: 10,
      backgroundColor: '#000000',
      overflow: 'hidden',
@@ -144,7 +181,7 @@ export function HeroSlideshow() {
     inset: 0,
     width: '100%',
     height: '100%',
-    objectFit: 'contain', // Use contain for both mobile and desktop to show full product
+    objectFit: 'cover', // Use cover to fill the container completely
     objectPosition: 'center',
     transition: 'opacity 0.2s ease-in-out',
     opacity: fadeOpacity,
@@ -182,8 +219,9 @@ export function HeroSlideshow() {
         style={{ 
           backgroundImage: 'url(/assets/Banners/cover-background.png)',
           filter: 'brightness(0.8)',
-          height: '120%', // Extend the background beyond the section
-          top: '-10%', // Position it higher to create the extended effect
+          opacity: '0.7',
+          height: '200%', // Extended background height to cover blurb section
+          top: '-20%', // Position it higher to create the extended effect
         }}
       />
       
@@ -214,6 +252,75 @@ export function HeroSlideshow() {
               <span key={idx} style={dotStyle(idx === i)} />
             ))}
           </div>
+        )}
+
+        {/* Navigation Arrows */}
+        {banners.length > 1 && (
+          <>
+            {/* Previous Arrow */}
+            <button
+              onClick={goToPrevious}
+              style={{
+                position: 'absolute',
+                left: isMobile ? '8px' : '16px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                zIndex: 6,
+                background: 'transparent',
+                border: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                color: 'white',
+                opacity: 0.8,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.opacity = '1';
+                e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = '0.8';
+                e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
+              }}
+              aria-label="Previous banner"
+            >
+              <ChevronLeft size={isMobile ? 20 : 24} />
+            </button>
+
+            {/* Next Arrow */}
+            <button
+              onClick={goToNext}
+              style={{
+                position: 'absolute',
+                right: isMobile ? '8px' : '16px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                zIndex: 6,
+                background: 'transparent',
+                border: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                color: 'white',
+                opacity: 0.8,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.opacity = '1';
+                e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = '0.8';
+                e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
+              }}
+              aria-label="Next banner"
+            >
+              <ChevronRight size={isMobile ? 20 : 24} />
+            </button>
+          </>
         )}
 
         {/* Shop Now Button - Bottom Right */}
@@ -259,6 +366,21 @@ export function HeroSlideshow() {
           >
             SHOP NOW
           </button>
+        </div>
+      </div>
+
+      {/* About Invictus Nutrition Blurb - Underneath slideshow container */}
+      <div className="relative z-10 mt-6 mb-0 w-full">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-xl md:text-2xl font-bold text-tertiary mb-4">
+              WELCOME TO INVICTUS NUTRITION
+            </h2>
+            <p className="text-white text-base leading-relaxed">
+              We're passionate about providing premium quality supplements that help you achieve your fitness goals. 
+              Our carefully curated selection features only the most trusted brands in the industry.
+            </p>
+          </div>
         </div>
       </div>
     </section>

@@ -404,9 +404,10 @@ export async function getRelatedPosts(postId: number, limit: number = 3): Promis
     const post = await fetchPost(postId);
     const allPosts = await fetchPosts({ perPage: 100 });
     
-    // Filter out the current post and get posts with similar categories
+    // Filter out the current post, slideshow posts, and get posts with similar categories
     const relatedPosts = allPosts.posts
       .filter(p => p.id !== postId)
+      .filter(p => !p.categories.some(cat => cat.toLowerCase() === 'slideshow'))
       .slice(0, limit);
     
     return relatedPosts;

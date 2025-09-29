@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Phone, Mail, MapPin } from 'lucide-react';
+import { Phone, Mail, MapPin, Instagram, Facebook } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
@@ -19,7 +19,7 @@ export const Footer: React.FC = () => {
             className="h-16 mx-auto"
           />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto text-center">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto text-center">
           <div>
             <h4 className="mb-4 text-tertiary">CONTACT US</h4>
             <div className="space-y-4">
@@ -65,7 +65,38 @@ export const Footer: React.FC = () => {
                   PRIVACY POLICY
                 </Link>
               </li>
+              <li>
+                <Link to="/cookies-policy" className="hover:text-tertiary transition-colors text-white">
+                  COOKIES POLICY
+                </Link>
+              </li>
             </ul>
+          </div>
+          <div>
+            <h4 className="mb-4 text-tertiary">FOLLOW US</h4>
+            <div className="flex justify-center gap-4">
+              <a
+                href="https://www.instagram.com/invictus_nutritionza?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 hover:scale-110 transition-transform duration-300 group"
+                aria-label="Follow us on Instagram"
+              >
+                <Instagram size={24} className="text-tertiary group-hover:scale-110 transition-transform" />
+              </a>
+              <a
+                href="https://www.facebook.com/people/Invictus-Nutritionza/61577002406246/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 hover:scale-110 transition-transform duration-300 group"
+                aria-label="Follow us on Facebook"
+              >
+                <Facebook size={24} className="text-tertiary group-hover:scale-110 transition-transform" />
+              </a>
+            </div>
+            <p className="text-white/80 text-sm mt-4">
+              Stay connected for the latest updates and offers
+            </p>
           </div>
         </div>
         <div className="mt-12 pt-8 border-t border-gray-200 text-center text-white">
