@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Navigation } from '../components/Navigation';
-import { Footer } from '../components/Footer';
+import { useState, useEffect } from 'react';
+import { Navigation } from '../components/Navigation';  
 import { Helmet } from 'react-helmet';
 
 export default function About() {
@@ -34,14 +33,6 @@ export default function About() {
             backed by science and delivered with excellence. Our mission is to help you achieve your 
             goals through superior nutrition and expert guidance.
           </p>
-          <div className="flex justify-center">
-            <button
-              onClick={() => window.location.href = '/shop'}
-              className="bg-primary text-white border-2 border-tertiary hover:bg-tertiary hover:text-primary hover:scale-105 hover:shadow-lg transition-all duration-300 px-8 py-4 text-lg font-semibold"
-            >
-              START YOUR JOURNEY
-            </button>
-          </div>
         </div>
       </section>
 
@@ -93,6 +84,10 @@ export default function About() {
                     alt="Dr Saidur Molla - Founder of Invictus Nutrition" 
                     className="w-full h-full object-cover object-center scale-90"
                   />
+                </div>
+                <div className="mt-6 text-center">
+                  <p className="italic text-white text-base">"Strength is forged in persistence."</p>
+                  <p className="text-secondary text-sm mt-1">— Dr Saidur Molla</p>
                 </div>
               </div>
             </div>
@@ -268,6 +263,8 @@ export default function About() {
           </div>
         </div>
       </section>
+
+     
     </div>
   );
 }

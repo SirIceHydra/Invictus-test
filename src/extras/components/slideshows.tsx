@@ -41,18 +41,15 @@ export function HeroSlideshow() {
   // Convert blog posts to banner format
   useEffect(() => {
     if (postsLoading) {
-      console.log('📸 Loading slideshow posts...');
       return;
     }
 
     if (postsError) {
-      console.warn('⚠️ Failed to fetch slideshow posts:', postsError);
       setBanners(defaultBanners);
       return;
     }
 
     if (slideshowPosts && slideshowPosts.length > 0) {
-      console.log('📸 Converting', slideshowPosts.length, 'slideshow posts to banners');
       const convertedBanners: Banner[] = slideshowPosts
         .filter(post => post.featuredImage) // Only include posts with featured images
         .map(post => ({
@@ -62,14 +59,11 @@ export function HeroSlideshow() {
         }));
       
       if (convertedBanners.length > 0) {
-        console.log('✅ Successfully converted posts to banners:', convertedBanners);
         setBanners(convertedBanners);
       } else {
-        console.log('⚠️ No posts with featured images found, using default banners');
         setBanners(defaultBanners);
       }
     } else {
-      console.log('📸 No slideshow posts found, using default banners');
       setBanners(defaultBanners);
     }
   }, [slideshowPosts, postsLoading, postsError]);

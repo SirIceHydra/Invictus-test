@@ -80,7 +80,6 @@ export default function Checkout({ className = '' }: CheckoutProps) {
             
             setShippingCalculated(true);
           } catch (error) {
-            console.error('Auto-shipping calculation failed:', error);
           } finally {
             setAutoCalculating(false);
           }
@@ -122,7 +121,6 @@ export default function Checkout({ className = '' }: CheckoutProps) {
       
       setShippingCalculated(true);
     } catch (error) {
-      console.error('Error calculating shipping:', error);
       alert('Failed to calculate shipping rates. Please try again.');
     }
   };
@@ -141,9 +139,6 @@ export default function Checkout({ className = '' }: CheckoutProps) {
       const shippingCost = getSelectedShippingCost();
       const totalWithShipping = cart.total + shippingCost;
       
-      console.log('Selected shipping option:', shippingRates.selectedOption);
-      console.log('Shipping cost:', shippingCost);
-      console.log('Total with shipping:', totalWithShipping);
       
       const orderResult = await createOrder(cart.items, formData, shippingRates.selectedOption || undefined);
       if (!orderResult.success || !orderResult.orderId) throw new Error(orderResult.error || 'Failed to create order');
@@ -162,7 +157,6 @@ export default function Checkout({ className = '' }: CheckoutProps) {
         throw new Error(paymentResult.error || 'Payment processing failed');
       }
     } catch (err) {
-      console.error('Checkout error:', err);
       alert(err instanceof Error ? err.message : 'Checkout failed. Please try again.');
     }
   };

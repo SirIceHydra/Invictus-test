@@ -88,7 +88,6 @@ class WooCommerceBrandsService {
       
       return [];
     } catch (error) {
-      console.error('Error fetching brands from WooCommerce:', error);
       return [];
     }
   }
@@ -103,7 +102,6 @@ class WooCommerceBrandsService {
       }
       return brands;
     } catch (error) {
-      console.error('Error in fetchBrandsWithFallback:', error);
       // Return empty array on error
       return [];
     }

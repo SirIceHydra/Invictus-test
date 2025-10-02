@@ -111,12 +111,6 @@ export class BobGoService {
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('BobGo API Error:', {
-          status: response.status,
-          statusText: response.statusText,
-          error: errorText
-        });
-        
         throw new Error(`BobGo API error: ${response.status} ${response.statusText}. ${errorText}`);
       }
 
@@ -124,7 +118,6 @@ export class BobGoService {
 
       // Check if the response has the expected structure
       if (!data) {
-        console.error('BobGo API returned empty response');
         throw new Error('Empty response from BobGo API');
       }
 
@@ -170,7 +163,6 @@ export class BobGoService {
       };
 
     } catch (error) {
-      console.error('Error fetching BobGo rates:', error);
       
       // Provide fallback rates for testing when API fails
       const fallbackRates = [

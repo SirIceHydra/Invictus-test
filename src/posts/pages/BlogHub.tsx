@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, BookOpen, Dumbbell, ChevronRight, Home, FileText, Phone, Mail, MapPin, Search, Loader2 } from 'lucide-react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { ArrowLeft, BookOpen, Dumbbell, FileText, Search, Loader2 } from 'lucide-react';
 import { fetchCategories } from '../services/wordpress-api';
 import { fetchPosts } from '../services/wordpress-api';
 import { Loading } from '../../components/ui/Loading';
 import { Navigation } from '../../components/Navigation';
 import { Post } from '../types/post';
-import { Footer } from '../../components/Footer';
 
 interface Category {
   id: number;
@@ -38,7 +37,7 @@ const BlogHub: React.FC = () => {
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
   const [mobileOpenParentId, setMobileOpenParentId] = useState<number | null>(null);
   
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
@@ -311,14 +310,6 @@ const BlogHub: React.FC = () => {
           <p className="text-center max-w-2xl mx-auto text-white mb-8">
             DISCOVER NUTRITION TIPS, WORKOUT ROUTINES, AND LIFESTYLE ADVICE TO HELP YOU ACHIEVE YOUR FITNESS GOALS.
           </p>
-          <div className="flex justify-center">
-            <Link 
-              to="/shop" 
-              className="bg-primary text-white border-2 border-tertiary hover:bg-tertiary hover:text-primary hover:scale-105 hover:shadow-lg transition-all duration-300 px-8 py-4 text-lg font-semibold"
-            >
-              SHOP NOW
-            </Link>
-          </div>
         </div>
       </section>
 
@@ -505,7 +496,12 @@ const BlogHub: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredPosts.map((post) => {
               return (
-                <article key={post.id} className="bg-primary border border-tertiary/20 overflow-hidden shadow-sm hover:shadow-md hover:border-tertiary/40 transition-all duration-300">
+                <Link
+                  key={post.id}
+                  to={`/posts/${post.slug}`}
+                  aria-label={`Read post: ${post.title}`}
+                  className="block bg-primary border border-tertiary/20 overflow-hidden shadow-sm hover:shadow-md hover:border-tertiary/40 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-tertiary focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
+                >
                   {/* Featured Image */}
                   <div className="aspect-video overflow-hidden">
                     <img
@@ -514,7 +510,7 @@ const BlogHub: React.FC = () => {
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                     />
                   </div>
-                  
+
                   {/* Content */}
                   <div className="p-6">
                     {/* Category */}
@@ -525,26 +521,24 @@ const BlogHub: React.FC = () => {
                         </span>
                       </div>
                     )}
-                    
+
                     {/* Title */}
-                    <h2 className="text-xl font-bold mb-3 line-clamp-2 text-secondary hover:text-tertiary transition-colors">
-                      <Link to={`/posts/${post.slug}`}>
-                        {post.title}
-                      </Link>
+                    <h2 className="text-xl font-bold mb-3 line-clamp-2 text-secondary group-hover:text-tertiary transition-colors">
+                      {post.title}
                     </h2>
-                    
+
                     {/* Excerpt */}
                     <p className="text-secondary/80 text-sm mb-4 line-clamp-3">
                       {post.excerpt || 'No excerpt available'}
                     </p>
-                    
+
                     {/* Meta */}
                     <div className="flex items-center justify-between text-xs text-secondary/60">
                       <span>{new Date(post.date).toLocaleDateString()}</span>
                       <span>{post.readingTime || 1} min read</span>
                     </div>
                   </div>
-                </article>
+                </Link>
               );
             })}
           </div>
@@ -565,6 +559,21 @@ const BlogHub: React.FC = () => {
           </div>
         )}
       </div>
+      {/* CTA to Shop (full-width) */}
+      <section className="mt-12 bg-primary border-t-2 border-b-2 border-white py-16">
+        <div className="container mx-auto px-4 text-center">
+          <h3 className="mb-4 text-tertiary">FUEL YOUR JOURNEY</h3>
+          <p className="text-secondary/90 mb-8 max-w-3xl mx-auto">
+            Ready to put these tips into action? Explore premium supplements and gear in our shop.
+          </p>
+          <Link
+            to="/shop"
+            className="inline-flex items-center justify-center gap-3 bg-primary text-white border-2 border-tertiary hover:bg-tertiary hover:text-primary hover:scale-105 hover:shadow-lg transition-all duration-300 px-12 sm:px-16 py-5 sm:py-6 text-xl sm:text-2xl font-semibold"
+          >
+            Start Shopping
+          </Link>
+        </div>
+      </section>
     </div>
   );
 };

@@ -295,9 +295,7 @@ Enable debug logging:
 ```tsx
 // Add to your component
 useEffect(() => {
-  console.log('Posts:', posts);
-  console.log('Loading:', loading);
-  console.log('Error:', error);
+  // Debug posts state if needed
 }, [posts, loading, error]);
 ```
 

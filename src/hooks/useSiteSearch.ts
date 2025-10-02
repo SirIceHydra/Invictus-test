@@ -182,10 +182,6 @@ export function useSiteSearch(options: UseSiteSearchOptions = {}) {
 
       setSuggestions(sortedSuggestions);
     } catch (error) {
-      console.error('Search error:', error);
-      console.log('Products:', products);
-      console.log('Posts:', posts);
-      console.log('Search term:', term);
       setSuggestions([]);
     } finally {
       setLoading(false);

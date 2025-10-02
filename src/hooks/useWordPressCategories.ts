@@ -36,7 +36,6 @@ export function useWordPressCategories(): UseWordPressCategoriesReturn {
       setCategories(filteredCategories);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch WordPress categories');
-      console.error('Error fetching WordPress categories:', err);
     } finally {
       setLoading(false);
     }

@@ -21,7 +21,6 @@ export function useBlogCategories(): UseBlogCategoriesReturn {
       setCategories(categoriesData);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch blog categories');
-      console.error('Error fetching blog categories:', err);
     } finally {
       setLoading(false);
     }

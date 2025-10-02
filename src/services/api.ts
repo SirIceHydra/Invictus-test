@@ -27,7 +27,6 @@ apiClient.interceptors.request.use(
     return config;
   },
   (error) => {
-    console.error('API Request Error:', error);
     return Promise.reject(error);
   }
 );
@@ -38,7 +37,6 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.error('API Response Error:', error);
     
     // Handle different types of errors
     if (error.response) {
@@ -77,7 +75,6 @@ export async function apiRequest<T>(
     const response = await apiClient(config);
     return response.data;
   } catch (error) {
-    console.error('API Request Failed:', error);
     throw error;
   }
 }

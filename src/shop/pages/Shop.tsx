@@ -28,12 +28,6 @@ export default function Shop() {
   const { categories, loading: catsLoading, fetchCategories } = useCategories();
   const { brands, loading: brandsLoading, error: brandsError, refetch: fetchBrands } = useBrands();
   
-  // Debug logging for brands
-  useEffect(() => {
-    console.log('=== Shop: Brands updated ===', brands);
-    console.log('=== Shop: Brands loading ===', brandsLoading);
-    console.log('=== Shop: Brands error ===', brandsError);
-  }, [brands, brandsLoading, brandsError]);
 
   useEffect(() => {
     fetchProducts();

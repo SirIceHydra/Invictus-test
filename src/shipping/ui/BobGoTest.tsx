@@ -46,17 +46,14 @@ export function BobGoTest() {
         company: 'Test Company'
       };
 
-      console.log('Testing BobGo API with:', { testItems, testAddress });
 
       const response = await bobGoService.getCheckoutRates(testAddress, testItems, 599.98);
       
       setResult(response);
-      console.log('BobGo API Response:', response);
 
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       setError(errorMessage);
-      console.error('BobGo API Test Error:', err);
     } finally {
       setLoading(false);
     }

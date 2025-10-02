@@ -52,32 +52,22 @@ export function usePosts(options: UsePostsOptions = {}): UsePostsReturn {
   const [currentPage, setCurrentPage] = useState(1);
 
   // Debug state changes
-  useEffect(() => {
-    console.log('📊 usePosts: Posts state changed to:', posts.length, 'posts');
-  }, [posts]);
 
   const fetchPostsData = useCallback(async (filters: PostFilters = {}) => {
-    console.log('🚀 usePosts: Starting fetch with filters:', filters);
     setLoading(true);
     setError(null);
     
     try {
       const response: PostsResponse = await fetchPosts(filters);
-      console.log('📥 usePosts: Got response:', response);
-      console.log('📝 usePosts: Posts array:', response.posts);
       
       setPosts(response.posts);
       setTotal(response.total);
       setTotalPages(response.totalPages);
       setCurrentPage(response.currentPage);
-      
-      console.log('✅ usePosts: State updated successfully');
     } catch (err) {
-      console.error('❌ usePosts: Error occurred:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch posts');
     } finally {
       setLoading(false);
-      console.log('🏁 usePosts: Loading finished');
     }
   }, []);
 
@@ -93,7 +83,6 @@ export function usePosts(options: UsePostsOptions = {}): UsePostsReturn {
       setCurrentPage(response.currentPage);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to search posts');
-      console.error('Error in usePosts search:', err);
     } finally {
       setLoading(false);
     }
@@ -105,7 +94,6 @@ export function usePosts(options: UsePostsOptions = {}): UsePostsReturn {
 
   // Initial fetch
   useEffect(() => {
-    console.log('🔄 usePosts: Initial fetch triggered');
     if (autoFetch) {
       fetchPostsData(initialFilters);
     }
@@ -141,7 +129,6 @@ export function usePost(options: UsePostOptions = {}): UsePostReturn {
       setPost(postData);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch post');
-      console.error('Error in usePost:', err);
     } finally {
       setLoading(false);
     }
@@ -156,7 +143,6 @@ export function usePost(options: UsePostOptions = {}): UsePostReturn {
       setPost(postData);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch post');
-      console.error('Error in usePost by slug:', err);
     } finally {
       setLoading(false);
     }
@@ -191,7 +177,6 @@ export function useRelatedPosts(): UseRelatedPostsReturn {
       setRelatedPosts(posts);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch related posts');
-      console.error('Error in useRelatedPosts:', err);
     } finally {
       setLoading(false);
     }
@@ -224,7 +209,6 @@ export function usePostsWithPagination(initialFilters: PostFilters = {}) {
   }, []);
 
   const setCategory = useCallback((category: string) => {
-    console.log('🎯 Setting category filter:', category);
     setFilters(prev => ({ ...prev, category, page: 1 }));
   }, []);
 
@@ -250,7 +234,6 @@ export function usePostsWithPagination(initialFilters: PostFilters = {}) {
 
   // Refetch when filters change
   useEffect(() => {
-    console.log('🔄 usePostsWithPagination: Filters changed to:', filters);
     postsHook.fetchPosts(filters);
   }, [filters, postsHook.fetchPosts]);
 

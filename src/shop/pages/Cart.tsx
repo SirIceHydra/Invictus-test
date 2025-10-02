@@ -1,5 +1,5 @@
 // Inline export removed (legacy file deleted). Bring current implementation by re-importing from app export if needed.
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { ShoppingCart as CartIcon, Trash2, ArrowLeft, CreditCard, Package, Plus, Minus } from 'lucide-react';
 import { useCart } from '../core/cart/CartContext';
@@ -42,21 +42,13 @@ export default function Cart({ className = '' }: CartProps) {
         <Helmet><title>Cart - Invictus Nutrition</title><meta name="description" content="Your shopping cart" /></Helmet>
         
         {/* Hero Banner Section */}
-        <section className="min-h-[400px] relative flex items-center justify-center">
+        <section className="min-h-[240px] relative flex items-center justify-center">
           <div className="absolute inset-0 bg-cover bg-center opacity-100" style={{ backgroundImage: "url(/assets/Banners/cover-background.png)" }} />
           <div className="absolute inset-0 bg-black/60" />
           <div className="container mx-auto px-4 relative z-10">
             <div className="text-center">
               <h1 className="mb-4 text-tertiary">YOUR CART</h1>
               <p className="mb-8 text-white">Review your selected products</p>
-              <div className="flex justify-center">
-                <Link 
-                  to="/shop" 
-                  className="bg-primary text-white border-2 border-tertiary hover:bg-tertiary hover:text-primary hover:scale-105 hover:shadow-lg transition-all duration-300 px-8 py-4 text-lg font-semibold"
-                >
-                  Continue Shopping
-                </Link>
-              </div>
             </div>
           </div>
         </section>
@@ -103,21 +95,13 @@ export default function Cart({ className = '' }: CartProps) {
       <Helmet><title>Cart - Invictus Nutrition</title><meta name="description" content="Your shopping cart" /></Helmet>
       
       {/* Hero Banner Section */}
-      <section className="min-h-[400px] relative flex items-center justify-center">
+      <section className="min-h-[240px] relative flex items-center justify-center">
         <div className="absolute inset-0 bg-cover bg-center opacity-100" style={{ backgroundImage: "url(/assets/Banners/cover-background.png)" }} />
         <div className="absolute inset-0 bg-black/60" />
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center">
             <h1 className="mb-4 text-tertiary">YOUR CART</h1>
             <p className="mb-8 text-white">Review your selected products</p>
-            <div className="flex justify-center">
-              <Link 
-                to="/shop" 
-                className="bg-primary text-white border-2 border-tertiary hover:bg-tertiary hover:text-primary hover:scale-105 hover:shadow-lg transition-all duration-300 px-8 py-4 text-lg font-semibold"
-              >
-                Continue Shopping
-              </Link>
-            </div>
           </div>
         </div>
       </section>
@@ -132,17 +116,6 @@ export default function Cart({ className = '' }: CartProps) {
       </section>
       
       <div className="container mx-auto px-4 py-12">
-        <div className="text-center mb-12">
-          <p className="text-xl text-white mb-6">{cart.itemCount} {cart.itemCount === 1 ? 'item' : 'items'} in your cart</p>
-          <Button
-            variant="underline"
-            size="lg"
-            className="text-tertiary after:bg-tertiary"
-            onClick={() => window.location.href = '/shop'}
-          >
-            <ArrowLeft className="w-5 h-5" /> Continue Shopping
-          </Button>
-        </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8 overflow-hidden">
           <div className="lg:col-span-2 overflow-hidden">
             <div className="bg-primary border-2 border-white shadow-lg overflow-hidden">
@@ -189,6 +162,12 @@ export default function Cart({ className = '' }: CartProps) {
               <div className="space-y-3">
                 <button onClick={handleCheckout} disabled={checkoutLoading || cart.items.length === 0} className="w-full bg-gradient-to-r from-tertiary to-primarySupport text-white py-4 px-6 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed transition-transform flex items-center justify-center gap-2 font-semibold text-lg">{checkoutLoading ? (<Loading size="sm" text="Processing..." />) : (<><CreditCard className="w-5 h-5" />Proceed to Checkout</>)}</button>
                 <button onClick={clearCart} className="w-full bg-primary text-white border-2 border-tertiary hover:bg-tertiary hover:text-primary hover:scale-105 hover:shadow-lg transition-all duration-300 py-3 px-6 font-medium">Clear Cart</button>
+                <Link to="/shop" className="w-full block text-center bg-primary text-white border-2 border-tertiary hover:bg-tertiary hover:text-primary hover:scale-105 hover:shadow-lg transition-all duration-300 py-3 px-6 font-medium">
+                  <div className="flex items-center justify-center gap-2">
+                    <ArrowLeft className="w-5 h-5" />
+                    Continue Shopping
+                  </div>
+                </Link>
               </div>
               <div className="mt-6 pt-6 border-t border-black/20">
                 <div className="text-center">

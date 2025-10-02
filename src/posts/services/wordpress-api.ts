@@ -166,13 +166,10 @@ export function transformWordPressPost(wpPost: WordPressPost, media?: WordPressM
 export async function fetchPosts(filters: PostFilters = {}): Promise<PostsResponse> {
   const cacheKey = `posts_${JSON.stringify(filters)}`;
   
-  console.log('🔍 Cache check for key:', cacheKey);
   const cached = getCachedData<PostsResponse>(cacheKey);
   if (cached) {
-    console.log('✅ Using cached data');
     return cached;
   }
-  console.log('❌ No cache found, fetching fresh data');
 
   const params = {
     [WORDPRESS_PARAMS.STATUS]: WORDPRESS_CONFIG.POST_STATUS.PUBLISH,
@@ -196,19 +193,13 @@ export async function fetchPosts(filters: PostFilters = {}): Promise<PostsRespon
         params[WORDPRESS_PARAMS.CATEGORIES] = categoryId;
       } else {
         // If it's not numeric, treat it as a slug and find the category ID
-        console.log('🔍 Looking up category ID for slug:', filters.category);
         const categories = await fetchCategories();
         const category = categories.find(cat => cat.slug === filters.category);
         if (category) {
-          console.log('✅ Found category ID:', category.id, 'for slug:', filters.category);
           params[WORDPRESS_PARAMS.CATEGORIES] = category.id;
-        } else {
-          console.warn('⚠️ Category not found for slug:', filters.category);
-          // Continue without category filter if not found
         }
       }
     } catch (error) {
-      console.error('❌ Error resolving category:', error);
       // Continue without category filter if there's an error
     }
   }
@@ -221,30 +212,12 @@ export async function fetchPosts(filters: PostFilters = {}): Promise<PostsRespon
   }
 
   try {
-    console.log('🔍 Fetching posts with params:', params);
     const wpPosts: WordPressPost[] = await apiRequest(WORDPRESS_CONFIG.ENDPOINTS.POSTS, params);
-    console.log('📦 Found', wpPosts.length, 'posts from WordPress');
     
-    // Debug: Log the first post structure
-    if (wpPosts.length > 0) {
-      console.log('🔍 First post raw data:', {
-        id: wpPosts[0].id,
-        title: wpPosts[0].title,
-        excerpt: wpPosts[0].excerpt,
-        embedded: wpPosts[0]._embedded,
-        categories: wpPosts[0]._embedded?.['wp:term']
-      });
-    }
     
     // Transform posts immediately without fetching media separately
     const posts = wpPosts.map((wpPost) => {
       const transformed = transformWordPressPost(wpPost);
-      console.log('🔄 Transformed post:', {
-        id: transformed.id,
-        title: transformed.title,
-        categories: transformed.categories,
-        excerpt: transformed.excerpt?.substring(0, 50)
-      });
       return transformed;
     });
 
@@ -255,11 +228,9 @@ export async function fetchPosts(filters: PostFilters = {}): Promise<PostsRespon
       currentPage: filters.page || 1,
     };
 
-    console.log('✅ Successfully processed', posts.length, 'posts');
     setCachedData(cacheKey, result);
     return result;
   } catch (error) {
-    console.error('❌ Error fetching posts:', error);
     throw error;
   }
 }
@@ -287,7 +258,6 @@ export async function fetchPost(id: number): Promise<Post> {
       try {
         media = await fetchMedia(wpPost.featured_media);
       } catch (error) {
-        console.warn(`Failed to fetch media for post ${id}:`, error);
       }
     }
 
@@ -295,7 +265,6 @@ export async function fetchPost(id: number): Promise<Post> {
     setCachedData(cacheKey, post);
     return post;
   } catch (error) {
-    console.error(`Error fetching post ${id}:`, error);
     throw error;
   }
 }
@@ -329,7 +298,6 @@ export async function fetchPostBySlug(slug: string): Promise<Post> {
       try {
         media = await fetchMedia(wpPost.featured_media);
       } catch (error) {
-        console.warn(`Failed to fetch media for post ${wpPost.id}:`, error);
       }
     }
 
@@ -337,7 +305,6 @@ export async function fetchPostBySlug(slug: string): Promise<Post> {
     setCachedData(cacheKey, post);
     return post;
   } catch (error) {
-    console.error(`Error fetching post with slug "${slug}":`, error);
     throw error;
   }
 }
@@ -354,7 +321,6 @@ export async function fetchMedia(id: number): Promise<WordPressMedia> {
     setCachedData(cacheKey, media);
     return media;
   } catch (error) {
-    console.error(`Error fetching media ${id}:`, error);
     throw error;
   }
 }
@@ -371,7 +337,6 @@ export async function fetchCategories(): Promise<any[]> {
     setCachedData(cacheKey, categories);
     return categories;
   } catch (error) {
-    console.error('Error fetching categories:', error);
     throw error;
   }
 }
@@ -388,7 +353,6 @@ export async function fetchTags(): Promise<any[]> {
     setCachedData(cacheKey, tags);
     return tags;
   } catch (error) {
-    console.error('Error fetching tags:', error);
     throw error;
   }
 }
@@ -412,7 +376,6 @@ export async function getRelatedPosts(postId: number, limit: number = 3): Promis
     
     return relatedPosts;
   } catch (error) {
-    console.error('Error fetching related posts:', error);
     return [];
   }
 }

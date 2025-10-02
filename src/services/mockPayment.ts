@@ -24,13 +24,11 @@ export async function submitMockPayment(
     simulateError = null,
   } = options;
 
-  console.log('Mock Payment - Processing payment:', paymentData);
 
   // Simulate processing delay
   await new Promise(resolve => setTimeout(resolve, simulateDelay));
 
   if (simulateError) {
-    console.log('Mock Payment - Simulating error:', simulateError);
     return {
       success: false,
       error: simulateError,
@@ -38,7 +36,6 @@ export async function submitMockPayment(
   }
 
   if (simulateSuccess) {
-    console.log('Mock Payment - Payment successful');
     
     // Extract order ID from custom field
     const orderId = paymentData.custom_str1 ? parseInt(paymentData.custom_str1, 10) : null;
@@ -47,9 +44,7 @@ export async function submitMockPayment(
       try {
         // Update order status to completed
         await updateOrderStatus(orderId, 'completed');
-        console.log('Mock Payment - Order status updated to completed');
       } catch (error) {
-        console.error('Mock Payment - Failed to update order status:', error);
       }
     }
 
@@ -75,7 +70,6 @@ export function handleMockPaymentSuccess(orderId: number): {
   orderId: number;
   message: string;
 } {
-  console.log('Mock Payment - Success page for order:', orderId);
   
   return {
     success: true,
@@ -92,7 +86,6 @@ export function handleMockPaymentFailure(orderId: number): {
   orderId: number;
   message: string;
 } {
-  console.log('Mock Payment - Failure page for order:', orderId);
   
   return {
     success: false,

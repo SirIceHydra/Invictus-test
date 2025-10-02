@@ -56,10 +56,6 @@ export function generatePayFastPaymentData(orderData: {
   paymentData.confirmation_address = orderData.customerEmail;
   paymentData.payment_method = 'eft';
   
-  console.log('=== PayFast Payment Data ===');
-  console.log('Raw Payment Data:', paymentData);
-  console.log('Payment Data Keys in Order:', Object.keys(paymentData));
-  console.log('================================');
   
   return paymentData;
 }
@@ -71,8 +67,6 @@ export function generatePayFastPaymentData(orderData: {
  */
 export function generatePayFastFormData(paymentData: PayFastPaymentData): PayFastPaymentData & { signature: string } {
   // Generate signature with passphrase
-  console.log('PayFast Config Passphrase:', PAYFAST_CONFIG.PASSPHRASE);
-  console.log('Environment Variable:', import.meta.env.VITE_PAYFAST_PASSPHRASE);
   
   const signature = generatePayFastSignature(paymentData, PAYFAST_CONFIG.PASSPHRASE);
   
@@ -91,25 +85,15 @@ export async function submitPayFastPayment(paymentData: PayFastPaymentData): Pro
   try {
     // Check if PayFast is properly configured
     if (!isPayFastConfigured()) {
-      console.log('PayFast - Not properly configured, using mock payment');
       
       // Import mock payment service dynamically
       const { submitMockPayment } = await import('./mockPayment');
       return await submitMockPayment(paymentData);
     }
     
-    console.log('PayFast - Using', PAYFAST_CONFIG.TEST_MODE ? 'sandbox' : 'production', 'mode');
-    console.log('PayFast Configuration:', {
-      merchantId: PAYFAST_CONFIG.MERCHANT_ID,
-      returnUrl: PAYFAST_CONFIG.RETURN_URL,
-      cancelUrl: PAYFAST_CONFIG.CANCEL_URL,
-      testMode: PAYFAST_CONFIG.TEST_MODE,
-      processUrl: API_ENDPOINTS.PAYFAST_PROCESS
-    });
     
     // Generate form data with signature
     const formData = generatePayFastFormData(paymentData);
-    console.log('PayFast Form Data:', formData);
     
     // Create form element
     const form = document.createElement('form');
@@ -139,7 +123,6 @@ export async function submitPayFastPayment(paymentData: PayFastPaymentData): Pro
       redirectUrl: API_ENDPOINTS.PAYFAST_PROCESS,
     };
   } catch (error) {
-    console.error('Error submitting PayFast payment:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to submit payment',
@@ -157,7 +140,6 @@ export function validatePayFastResponse(responseData: Record<string, string>): b
     // Extract signature from response
     const receivedSignature = responseData.signature;
     if (!receivedSignature) {
-      console.error('No signature in PayFast response');
       return false;
     }
     
@@ -167,7 +149,6 @@ export function validatePayFastResponse(responseData: Record<string, string>): b
     // Compare signatures
     return receivedSignature === expectedSignature;
   } catch (error) {
-    console.error('Error validating PayFast response:', error);
     return false;
   }
 }
@@ -205,7 +186,6 @@ export function processPayFastPaymentStatus(statusData: PayFastPaymentStatus): {
       customerEmail: statusData.email_address,
     };
   } catch (error) {
-    console.error('Error processing PayFast payment status:', error);
     return {
       isValid: false,
       error: 'Failed to process payment status',
@@ -259,7 +239,6 @@ export async function handlePayFastSuccess(responseData: Record<string, string>)
       message: 'Payment completed successfully',
     };
   } catch (error) {
-    console.error('Error handling PayFast success:', error);
     return {
       success: false,
       message: 'Failed to process payment success',
@@ -287,7 +266,6 @@ export async function handlePayFastFailure(responseData: Record<string, string>)
       message: 'Payment failed or was cancelled',
     };
   } catch (error) {
-    console.error('Error handling PayFast failure:', error);
     return {
       success: false,
       message: 'Failed to process payment failure',

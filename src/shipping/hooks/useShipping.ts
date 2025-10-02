@@ -105,7 +105,6 @@ export function useShipping(): UseShippingReturn {
         });
       }
     } catch (error) {
-      console.error('Error fetching shipping rates:', error);
       const cartTotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
       const defaultOption = bobGoService.getDefaultShippingOption(cartTotal);
       

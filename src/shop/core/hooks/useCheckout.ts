@@ -46,11 +46,6 @@ export function useCheckout(): UseCheckoutReturn {
         throw new Error(ERROR_MESSAGES.CART_EMPTY);
       }
 
-      console.log('=== USECHECKOUT DEBUG ===');
-      console.log('About to call createOrder with shippingOption:', shippingOption);
-      console.log('shippingOption type:', typeof shippingOption);
-      console.log('shippingOption is null?', shippingOption === null);
-      console.log('shippingOption is undefined?', shippingOption === undefined);
       
       const order = await createOrder(cartItems, formData, shippingOption);
       setOrderId(order.id);

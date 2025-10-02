@@ -19,15 +19,6 @@ export async function createOrder(
   shippingOption?: ShippingOption
 ): Promise<Order> {
   try {
-    console.log('=== ORDER CREATION DEBUG ===');
-    console.log('shippingOption received:', shippingOption);
-    console.log('shippingOption type:', typeof shippingOption);
-    console.log('shippingOption is null?', shippingOption === null);
-    console.log('shippingOption is undefined?', shippingOption === undefined);
-    console.log('shippingOption keys:', shippingOption ? Object.keys(shippingOption) : 'N/A');
-    console.log('shippingOption.id:', shippingOption?.id);
-    console.log('shippingOption.name:', shippingOption?.name);
-    console.log('shippingOption.price:', shippingOption?.price);
     
     // Transform cart items to WooCommerce line items
     const lineItems = cartItems.map(item => ({
@@ -86,13 +77,9 @@ export async function createOrder(
       customer_note: 'Order placed via React frontend',
     };
 
-    console.log('Creating WooCommerce order with data:', orderData);
-    console.log('Shipping option passed:', shippingOption);
-    console.log('Shipping lines in order data:', orderData.shipping_lines);
 
     const response = await apiPost<WooCommerceOrder>(API_ENDPOINTS.ORDERS, orderData);
     
-    console.log('WooCommerce order created successfully:', response);
 
     // Transform WooCommerce order to our Order type
     const order: Order = {
@@ -169,7 +156,6 @@ export async function createOrder(
 
     return order;
   } catch (error) {
-    console.error('Error creating WooCommerce order:', error);
     throw new Error(ERROR_MESSAGES.ORDER_CREATION_FAILED);
   }
 }
@@ -255,7 +241,6 @@ export async function getOrder(orderId: number): Promise<Order> {
 
     return order;
   } catch (error) {
-    console.error('Error fetching order:', error);
     throw new Error(ERROR_MESSAGES.ORDER_FETCH_FAILED);
   }
 }
@@ -288,7 +273,6 @@ export async function updateOrderStatus(orderId: number, status: OrderStatus): P
 
     return order;
   } catch (error) {
-    console.error('Error updating order status:', error);
     throw new Error(ERROR_MESSAGES.ORDER_UPDATE_FAILED);
   }
 }
@@ -375,7 +359,6 @@ export async function getCustomerOrders(customerId: number): Promise<Order[]> {
       transactionId: order.transaction_id,
     }));
   } catch (error) {
-    console.error('Error fetching customer orders:', error);
     throw new Error(ERROR_MESSAGES.ORDERS_FETCH_FAILED);
   }
 } 
