@@ -53,16 +53,17 @@ export default function Cart({ className = '' }: CartProps) {
           </div>
         </section>
         
-        {/* Border Section */}
-        <section className="bg-primary border-t-2 border-white border-b-2 border-white shadow-sm">
-          <div className="container mx-auto px-4 py-6">
-            <div className="text-center">
-              <p className="text-white">Ready to start shopping?</p>
-            </div>
+      {/* Border Section */}
+      <section className="bg-primary border-t-2 border-white border-b-2 border-white shadow-sm">
+        <div className="container mx-auto px-4 py-6">
+          <div className="text-center">
+            <p className="text-white">Ready to start shopping?</p>
           </div>
-        </section>
-        
-        <div className="container mx-auto px-4 py-12">
+        </div>
+      </section>
+
+      <section className="py-12">
+        <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <Button
               variant="underline"
@@ -85,6 +86,7 @@ export default function Cart({ className = '' }: CartProps) {
             </Link>
           </div>
         </div>
+      </section>
       </div>
     );
   }
@@ -114,8 +116,9 @@ export default function Cart({ className = '' }: CartProps) {
           </div>
         </div>
       </section>
-      
-      <div className="container mx-auto px-4 py-12">
+
+      <section className="py-12">
+        <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8 overflow-hidden">
           <div className="lg:col-span-2 overflow-hidden">
             <div className="bg-primary border-2 border-white shadow-lg overflow-hidden">
@@ -181,7 +184,8 @@ export default function Cart({ className = '' }: CartProps) {
             </div>
           </div>
         </div>
-      </div>
+        </div>
+      </section>
     </div>
   );
 }

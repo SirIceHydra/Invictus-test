@@ -20,18 +20,9 @@ interface WooCommerceResponse {
 
 class WooCommerceBlogCategoriesService {
   private baseUrl: string;
-  private consumerKey: string;
-  private consumerSecret: string;
 
   constructor() {
     this.baseUrl = import.meta.env.VITE_WORDPRESS_URL || '';
-    this.consumerKey = import.meta.env.VITE_WOOCOMMERCE_CONSUMER_KEY || '';
-    this.consumerSecret = import.meta.env.VITE_WOOCOMMERCE_CONSUMER_SECRET || '';
-  }
-
-  private getAuthHeader(): string {
-    const credentials = btoa(`${this.consumerKey}:${this.consumerSecret}`);
-    return `Basic ${credentials}`;
   }
 
   async fetchBlogCategories(): Promise<WooCommerceBlogCategory[]> {

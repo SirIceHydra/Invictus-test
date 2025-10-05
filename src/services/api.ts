@@ -4,25 +4,21 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { WOOCOMMERCE_CONFIG, ERROR_MESSAGES } from '../utils/constants';
 
-// Create axios instance with default configuration
+// Create axios instance with default configuration (now pointing to WordPress endpoints)
 const apiClient: AxiosInstance = axios.create({
-  baseURL: `${WOOCOMMERCE_CONFIG.BASE_URL}/wp-json/wc/v3`,
+  baseURL: `${WOOCOMMERCE_CONFIG.BASE_URL}/wp-json/${WOOCOMMERCE_CONFIG.API_VERSION}`,
   timeout: WOOCOMMERCE_CONFIG.TIMEOUT,
   headers: {
     'Content-Type': 'application/json',
+    'X-API-Key': import.meta.env.VITE_WORDPRESS_API_KEY || 'invictus-react-2024', // WordPress API key from environment
   },
 });
 
-// Request interceptor to add authentication
+// Request interceptor (no more WooCommerce secrets!)
 apiClient.interceptors.request.use(
   (config) => {
-    // Add WooCommerce authentication parameters
-    const params = new URLSearchParams(config.params || {});
-    params.append('consumer_key', WOOCOMMERCE_CONFIG.CONSUMER_KEY);
-    params.append('consumer_secret', WOOCOMMERCE_CONFIG.CONSUMER_SECRET);
-    config.params = params;
-    
-
+    // No need to add consumer_key and consumer_secret anymore!
+    // WordPress handles WooCommerce internally
     
     return config;
   },
@@ -139,8 +135,9 @@ export function getCachedData<T>(key: string): T | null {
   const cached = cache.get(key);
   if (!cached) return null;
   
-  // Check if cache is still valid
-  if (Date.now() - cached.timestamp > WOOCOMMERCE_CONFIG.CACHE_DURATION) {
+  // Check if cache is still valid (5 minutes)
+  const CACHE_DURATION = 5 * 60 * 1000;
+  if (Date.now() - cached.timestamp > CACHE_DURATION) {
     cache.delete(key);
     return null;
   }

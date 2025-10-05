@@ -32,12 +32,7 @@ export const LOADING_STATES = {
 
 // PayFast Configuration
 export const PAYFAST_CONFIG = {
-  // Merchant credentials (should be in environment variables)
-  MERCHANT_ID: import.meta.env.VITE_PAYFAST_MERCHANT_ID || '',
-  MERCHANT_KEY: import.meta.env.VITE_PAYFAST_MERCHANT_KEY || '',
-  PASSPHRASE: import.meta.env.VITE_PAYFAST_PASSPHRASE || '',
-  
-  // URLs
+  // URLs (no more secrets in frontend!)
   SANDBOX_URL: 'https://sandbox.payfast.co.za/eng/process',
   PRODUCTION_URL: 'https://www.payfast.co.za/eng/process',
   
@@ -55,10 +50,8 @@ export const WOOCOMMERCE_CONFIG = {
   // Base URL (should be in environment variables)
   BASE_URL: import.meta.env.VITE_WORDPRESS_URL,
   
-  // API Configuration
-  API_VERSION: 'wc/v3',
-  CONSUMER_KEY: import.meta.env.VITE_WOOCOMMERCE_CONSUMER_KEY,
-  CONSUMER_SECRET: import.meta.env.VITE_WOOCOMMERCE_CONSUMER_SECRET,
+  // API Configuration (no more secrets in frontend!)
+  API_VERSION: 'invictus/v1', // Use our secure WordPress endpoints
   
   // Pagination
   PRODUCTS_PER_PAGE: 12,

@@ -59,19 +59,33 @@ export async function getProducts(params: {
       Object.entries(defaultParams).filter(([_, value]) => value !== undefined && value !== null)
     );
     
-    const response = await apiGet<WooCommerceProduct[]>(API_ENDPOINTS.PRODUCTS, cleanParams);
+    const response = await apiGet<any>(API_ENDPOINTS.PRODUCTS, cleanParams);
     
-
+    // Unwrap WordPress response format: { success: true, data: [...], total: N }
+    let wooProducts: WooCommerceProduct[] = [];
+    
+    if (response && response.success && Array.isArray(response.data)) {
+      wooProducts = response.data;
+    } else if (Array.isArray(response)) {
+      wooProducts = response;
+    } else {
+      wooProducts = [];
+    }
+    
+    // Validate we have an array
+    if (!Array.isArray(wooProducts)) {
+      throw new Error('Invalid response format from WordPress - expected array of products');
+    }
     
     // Transform the response
-    const transformedProducts = transformWooCommerceProducts(response);
+    const transformedProducts = transformWooCommerceProducts(wooProducts);
     
     
     
     const result: WooCommerceResponse<Product> = {
       data: transformedProducts,
-      total: response.length, // WooCommerce doesn't return total in array response
-      totalPages: Math.ceil(response.length / (defaultParams.per_page || WOOCOMMERCE_CONFIG.PRODUCTS_PER_PAGE)),
+      total: response.total || wooProducts.length, // Use WordPress total or fallback to array length
+      totalPages: Math.ceil((response.total || wooProducts.length) / (defaultParams.per_page || WOOCOMMERCE_CONFIG.PRODUCTS_PER_PAGE)),
       currentPage: defaultParams.page || 1,
     };
     

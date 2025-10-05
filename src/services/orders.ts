@@ -6,7 +6,7 @@ import { ShippingOption } from '../shipping/types/shipping';
 import { WOOCOMMERCE_CONFIG, ERROR_MESSAGES } from '../utils/constants';
 
 const API_ENDPOINTS = {
-  ORDERS: '/orders',
+  ORDERS: '/orders/create',
   ORDER: (id: number) => `/orders/${id}`,
 } as const;
 
@@ -77,81 +77,85 @@ export async function createOrder(
       customer_note: 'Order placed via React frontend',
     };
 
-
-    const response = await apiPost<WooCommerceOrder>(API_ENDPOINTS.ORDERS, orderData);
+    const response = await apiPost<any>(API_ENDPOINTS.ORDERS, orderData);
     
+    // Check if WordPress returned the expected format
+    if (!response.success) {
+      throw new Error(response.error || 'Order creation failed on WordPress');
+    }
 
-    // Transform WooCommerce order to our Order type
+    // WordPress returns { success: true, order_id: N, order_number: "123" }
+    // Create a minimal Order object with the data we have
     const order: Order = {
-      id: response.id,
-      number: response.number,
-      status: response.status as OrderStatus,
-      dateCreated: response.date_created,
-      dateModified: response.date_modified,
-      total: parseFloat(response.total),
-      subtotal: parseFloat(response.subtotal),
-      totalTax: parseFloat(response.total_tax),
-      shippingTotal: parseFloat(response.shipping_total),
-      currency: response.currency,
-      paymentMethod: response.payment_method,
-      paymentMethodTitle: response.payment_method_title,
-      setPaid: response.set_paid,
+      id: response.order_id,
+      number: response.order_number,
+      status: 'pending' as OrderStatus,
+      dateCreated: new Date().toISOString(),
+      dateModified: new Date().toISOString(),
+      total,
+      subtotal,
+      totalTax: 0,
+      shippingTotal: shippingCost,
+      currency: 'ZAR',
+      paymentMethod: 'payfast',
+      paymentMethodTitle: 'PayFast',
+      setPaid: false,
       billing: {
-        firstName: response.billing.first_name,
-        lastName: response.billing.last_name,
-        company: response.billing.company || '',
-        address1: response.billing.address_1,
-        address2: response.billing.address_2 || '',
-        city: response.billing.city,
-        state: response.billing.state || '',
-        postcode: response.billing.postcode,
-        country: response.billing.country,
-        email: response.billing.email || '',
-        phone: response.billing.phone || '',
+        firstName: customerData.firstName,
+        lastName: customerData.lastName,
+        company: '',
+        address1: customerData.address,
+        address2: '',
+        city: customerData.city,
+        state: customerData.province,
+        postcode: customerData.postalCode,
+        country: customerData.country,
+        email: customerData.email,
+        phone: customerData.phone,
       },
       shipping: {
-        firstName: response.shipping.first_name,
-        lastName: response.shipping.last_name,
-        company: response.shipping.company || '',
-        address1: response.shipping.address_1,
-        address2: response.shipping.address_2 || '',
-        city: response.shipping.city,
-        state: response.shipping.state || '',
-        postcode: response.shipping.postcode,
-        country: response.shipping.country,
-        email: response.shipping.email || '',
-        phone: response.shipping.phone || '',
+        firstName: customerData.firstName,
+        lastName: customerData.lastName,
+        company: '',
+        address1: customerData.address,
+        address2: '',
+        city: customerData.city,
+        state: customerData.province,
+        postcode: customerData.postalCode,
+        country: customerData.country,
+        email: '',
+        phone: '',
       },
-      lineItems: response.line_items.map(item => ({
-        id: item.product_id,
+      lineItems: cartItems.map(item => ({
+        id: item.id,
         name: item.name,
-        productId: item.product_id,
+        productId: item.productId,
         quantity: item.quantity,
         taxClass: '',
-        subtotal: parseFloat(item.total || '0'),
+        subtotal: item.price * item.quantity,
         subtotalTax: 0,
-        total: parseFloat(item.total || '0'),
-        totalTax: 0,
-        taxes: [],
-        metaData: item.meta_data || [],
-        sku: '',
-        price: parseFloat(item.price),
-      })),
-      shippingLines: response.shipping_lines.map(line => ({
-        id: 0,
-        methodTitle: line.method_title,
-        methodId: line.method_id,
-        total: parseFloat(line.total),
+        total: item.price * item.quantity,
         totalTax: 0,
         taxes: [],
         metaData: [],
+        sku: '',
+        price: item.price,
       })),
-      feeLines: response.fee_lines || [],
-      couponLines: response.coupon_lines || [],
-      metaData: response.meta_data || [],
-      customerNote: response.customer_note,
-      customerId: response.customer_id,
-      transactionId: response.transaction_id,
+      shippingLines: shippingOption ? [{
+        id: 0,
+        methodTitle: shippingOption.name,
+        methodId: shippingOption.id,
+        total: shippingOption.price,
+        totalTax: 0,
+        taxes: [],
+        metaData: [],
+      }] : [],
+      feeLines: [],
+      couponLines: [],
+      metaData: [],
+      customerNote: 'Order placed via React frontend',
+      customerId: 0,
+      transactionId: '',
     };
 
     return order;

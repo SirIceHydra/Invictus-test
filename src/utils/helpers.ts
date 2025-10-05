@@ -22,16 +22,20 @@ export function stripHtmlTags(html: string): string {
  * @returns Simplified Product object for React components
  */
 export function transformWooCommerceProduct(wooProduct: WooCommerceProduct): Product {
+  // Validate input
+  if (!wooProduct || typeof wooProduct !== 'object') {
+    throw new Error('Invalid product data received');
+  }
+
   // Extract brand from attributes
   let brand = undefined;
   
-  if (wooProduct.attributes && wooProduct.attributes.length > 0) {
+  if (wooProduct.attributes && Array.isArray(wooProduct.attributes) && wooProduct.attributes.length > 0) {
     const brandAttr = wooProduct.attributes.find(attr => 
-      attr.name.toLowerCase() === 'brand' || 
-      attr.name.toLowerCase() === 'pa_brand'
+      attr.name && (attr.name.toLowerCase() === 'brand' || attr.name.toLowerCase() === 'pa_brand')
     );
     
-    if (brandAttr && brandAttr.options && brandAttr.options.length > 0) {
+    if (brandAttr && brandAttr.options && Array.isArray(brandAttr.options) && brandAttr.options.length > 0) {
       brand = brandAttr.options[0];
     }
   }
@@ -57,20 +61,20 @@ export function transformWooCommerceProduct(wooProduct: WooCommerceProduct): Pro
 
   return {
     id: wooProduct.id,
-    name: wooProduct.name,
-    description: wooProduct.description,
-    shortDescription: stripHtmlTags(wooProduct.short_description),
+    name: wooProduct.name || 'Unnamed Product',
+    description: wooProduct.description || '',
+    shortDescription: stripHtmlTags(wooProduct.short_description || ''),
     price: parseFloat(wooProduct.price) || 0,
     regularPrice: parseFloat(wooProduct.regular_price) || 0,
     salePrice: wooProduct.sale_price ? parseFloat(wooProduct.sale_price) : undefined,
-    onSale: wooProduct.on_sale,
-    images: wooProduct.images.map(img => img.src),
-    stockStatus: wooProduct.stock_status,
+    onSale: wooProduct.on_sale || false,
+    images: Array.isArray(wooProduct.images) ? wooProduct.images.map(img => img.src) : [],
+    stockStatus: wooProduct.stock_status || 'instock',
     stockQuantity: wooProduct.stock_quantity || undefined,
-    categories: wooProduct.categories.map(cat => cat.name),
+    categories: Array.isArray(wooProduct.categories) ? wooProduct.categories.map(cat => cat.name) : [],
     brand,
-    slug: wooProduct.slug,
-    permalink: wooProduct.permalink,
+    slug: wooProduct.slug || '',
+    permalink: wooProduct.permalink || '',
   };
 }
 
@@ -128,16 +132,17 @@ export function formatPriceNumber(price: number): string {
 
 /**
  * Generate WooCommerce API URL with authentication
+ * @deprecated This function is deprecated - use WordPress secure endpoints instead
  * @param endpoint - API endpoint
  * @param params - Query parameters
  * @returns Complete API URL with authentication
  */
 export function generateWooCommerceUrl(endpoint: string, params: Record<string, any> = {}): string {
-  const url = new URL(`${WOOCOMMERCE_CONFIG.BASE_URL}/wp-json/wc/v3${endpoint}`);
   
-  // Add authentication parameters
-  url.searchParams.append('consumer_key', WOOCOMMERCE_CONFIG.CONSUMER_KEY);
-  url.searchParams.append('consumer_secret', WOOCOMMERCE_CONFIG.CONSUMER_SECRET);
+  const url = new URL(`${WOOCOMMERCE_CONFIG.BASE_URL}/wp-json/invictus/v1${endpoint}`);
+  
+  // Add API key header instead of consumer key/secret
+  // This should be handled by the fetch call, not in the URL
   
   // Add additional parameters
   Object.entries(params).forEach(([key, value]) => {

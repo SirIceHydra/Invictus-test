@@ -4,8 +4,7 @@ import {
   CartItemWithShipping 
 } from '../types/shipping';
 
-const BOBGO_API_KEY = import.meta.env.VITE_BOBGO_API_KEY;
-const BOBGO_BASE_URL = import.meta.env.VITE_BOBGO_BASE_URL;
+const WORDPRESS_URL = import.meta.env.VITE_WORDPRESS_URL;
 const BOBGO_TEST_MODE = import.meta.env.VITE_BOBGO_TEST_MODE === 'true';
 
 // Default shipping origin from environment variables
@@ -31,17 +30,15 @@ const DEFAULT_PRODUCT_DIMENSIONS = {
 const DEFAULT_HANDLING_TIME = 1;
 
 export class BobGoService {
-  private apiKey: string;
-  private baseUrl: string;
+  private wordpressUrl: string;
   private testMode: boolean;
 
   constructor() {
-    if (!BOBGO_API_KEY) {
-      throw new Error('BobGo API key is not configured. Please check your environment variables.');
+    if (!WORDPRESS_URL) {
+      throw new Error('WordPress URL is not configured. Please check your environment variables.');
     }
     
-    this.apiKey = BOBGO_API_KEY;
-    this.baseUrl = BOBGO_BASE_URL || 'https://api.sandbox.bobgo.co.za/v2';
+    this.wordpressUrl = WORDPRESS_URL;
     this.testMode = BOBGO_TEST_MODE;
   }
 
@@ -97,13 +94,12 @@ export class BobGoService {
         handling_time: DEFAULT_HANDLING_TIME
       };
 
-      // Make API request to BobGo
-
-      const response = await fetch(`${this.baseUrl}/rates-at-checkout`, {
+      // Make API request to WordPress endpoint (which calls BobGo)
+      const response = await fetch(`${this.wordpressUrl}/wp-json/invictus/v1/shipping/calculate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.apiKey}`,
+          'X-API-Key': 'invictus-react-2024',
           'Accept': 'application/json'
         },
         body: JSON.stringify(requestBody)
@@ -315,8 +311,7 @@ export class BobGoService {
    */
   getConfig() {
     return {
-      apiKey: this.apiKey.substring(0, 8) + '...', // Masked for security
-      baseUrl: this.baseUrl,
+      wordpressUrl: this.wordpressUrl,
       testMode: this.testMode,
       origin: SHIPPING_ORIGIN
     };

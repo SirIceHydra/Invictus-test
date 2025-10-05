@@ -2,7 +2,7 @@
 // This handles PayFast payment gateway integration with WooCommerce
 
 import { PayFastPaymentData, PayFastResponse, PayFastPaymentStatus } from '../types/cart';
-import { PAYFAST_CONFIG, API_ENDPOINTS, DEFAULTS } from '../utils/constants';
+import { PAYFAST_CONFIG, API_ENDPOINTS, DEFAULTS, WOOCOMMERCE_CONFIG } from '../utils/constants';
 import { generatePayFastSignature } from '../utils/helpers';
 
 /**
@@ -25,12 +25,10 @@ export function generatePayFastPaymentData(orderData: {
   const firstName = nameParts[0] || 'Customer';
   const lastName = nameParts.slice(1).join(' ') || '';
   
-  // Create payment data in the exact order PayFast expects for signature generation
+  // Create payment data (no more secrets needed!)
   const paymentData: PayFastPaymentData = {};
   
-  // Add fields in PayFast's expected order
-  paymentData.merchant_id = PAYFAST_CONFIG.MERCHANT_ID;
-  paymentData.merchant_key = PAYFAST_CONFIG.MERCHANT_KEY;
+  // Add fields (no merchant credentials needed - handled by WordPress)
   paymentData.return_url = PAYFAST_CONFIG.RETURN_URL;
   paymentData.cancel_url = PAYFAST_CONFIG.CANCEL_URL;
   paymentData.notify_url = PAYFAST_CONFIG.NOTIFY_URL;
@@ -62,18 +60,13 @@ export function generatePayFastPaymentData(orderData: {
 
 /**
  * Generate PayFast payment form data
+ * NOTE: Signature generation now handled by WordPress backend
  * @param paymentData - PayFast payment data
- * @returns Form data with signature
+ * @returns Form data (signature will be added by WordPress)
  */
-export function generatePayFastFormData(paymentData: PayFastPaymentData): PayFastPaymentData & { signature: string } {
-  // Generate signature with passphrase
-  
-  const signature = generatePayFastSignature(paymentData, PAYFAST_CONFIG.PASSPHRASE);
-  
-  return {
-    ...paymentData,
-    signature,
-  };
+export function generatePayFastFormData(paymentData: PayFastPaymentData): PayFastPaymentData {
+  // Return payment data without signature - WordPress will add it
+  return paymentData;
 }
 
 /**
@@ -83,30 +76,46 @@ export function generatePayFastFormData(paymentData: PayFastPaymentData): PayFas
  */
 export async function submitPayFastPayment(paymentData: PayFastPaymentData): Promise<PayFastResponse> {
   try {
-    // Check if PayFast is properly configured
-    if (!isPayFastConfigured()) {
-      
-      // Import mock payment service dynamically
-      const { submitMockPayment } = await import('./mockPayment');
-      return await submitMockPayment(paymentData);
+    // Call WordPress endpoint to generate PayFast payment data
+    const response = await fetch(`${WOOCOMMERCE_CONFIG.BASE_URL}/wp-json/invictus/v1/payments/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': 'invictus-react-2024',
+      },
+      body: JSON.stringify({
+        customer_name: paymentData.name_first + ' ' + (paymentData.name_last || ''),
+        customer_email: paymentData.email_address,
+        amount: paymentData.amount,
+        item_name: paymentData.item_name,
+        order_id: paymentData.custom_str1,
+        return_url: paymentData.return_url,
+        cancel_url: paymentData.cancel_url,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`WordPress API error: ${response.status}`);
     }
-    
-    
-    // Generate form data with signature
-    const formData = generatePayFastFormData(paymentData);
-    
-    // Create form element
+
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error(result.error || 'Failed to create payment');
+    }
+
+    // Create form element with server-generated payment data
     const form = document.createElement('form');
     form.method = 'POST';
-    form.action = API_ENDPOINTS.PAYFAST_PROCESS;
+    form.action = result.payment_url;
     form.style.display = 'none';
     
-    // Add form fields
-    Object.entries(formData).forEach(([key, value]) => {
+    // Add form fields from WordPress response
+    Object.entries(result.form_data).forEach(([key, value]) => {
       const input = document.createElement('input');
       input.type = 'hidden';
       input.name = key;
-      input.value = value;
+      input.value = String(value);
       form.appendChild(input);
     });
     
@@ -120,7 +129,7 @@ export async function submitPayFastPayment(paymentData: PayFastPaymentData): Pro
     return {
       success: true,
       message: 'Payment form submitted successfully',
-      redirectUrl: API_ENDPOINTS.PAYFAST_PROCESS,
+      redirectUrl: result.payment_url,
     };
   } catch (error) {
     return {
@@ -132,22 +141,18 @@ export async function submitPayFastPayment(paymentData: PayFastPaymentData): Pro
 
 /**
  * Validate PayFast payment response
+ * NOTE: Signature validation should be done on WordPress backend
  * @param responseData - Response data from PayFast
- * @returns Boolean indicating if response is valid
+ * @returns Boolean indicating if response has required fields
  */
 export function validatePayFastResponse(responseData: Record<string, string>): boolean {
   try {
-    // Extract signature from response
-    const receivedSignature = responseData.signature;
-    if (!receivedSignature) {
-      return false;
-    }
-    
-    // Generate expected signature
-    const expectedSignature = generatePayFastSignature(responseData, PAYFAST_CONFIG.PASSPHRASE);
-    
-    // Compare signatures
-    return receivedSignature === expectedSignature;
+    // Basic validation - check for required fields
+    return !!(
+      responseData.payment_status &&
+      responseData.amount_gross &&
+      responseData.email_address
+    );
   } catch (error) {
     return false;
   }
@@ -195,14 +200,14 @@ export function processPayFastPaymentStatus(statusData: PayFastPaymentStatus): {
 
 /**
  * Create PayFast payment URL for direct access
+ * NOTE: This function is deprecated - use WordPress endpoint instead
  * @param paymentData - PayFast payment data
  * @returns Complete PayFast payment URL
  */
 export function createPayFastPaymentUrl(paymentData: PayFastPaymentData): string {
-  const formData = generatePayFastFormData(paymentData);
   const params = new URLSearchParams();
   
-  Object.entries(formData).forEach(([key, value]) => {
+  Object.entries(paymentData).forEach(([key, value]) => {
     if (value) {
       params.append(key, value);
     }
@@ -290,10 +295,9 @@ export function getPayFastTestCredentials(): { merchantId: string; merchantKey: 
  */
 export function isPayFastConfigured(): boolean {
   return !!(
-    PAYFAST_CONFIG.MERCHANT_ID &&
-    PAYFAST_CONFIG.MERCHANT_KEY &&
     PAYFAST_CONFIG.RETURN_URL &&
-    PAYFAST_CONFIG.CANCEL_URL
+    PAYFAST_CONFIG.CANCEL_URL &&
+    WOOCOMMERCE_CONFIG.BASE_URL
   );
 }
 
@@ -304,13 +308,11 @@ export function isPayFastConfigured(): boolean {
 export function getPayFastConfigStatus(): {
   isConfigured: boolean;
   isTestMode: boolean;
-  merchantId: string;
   hasValidUrls: boolean;
 } {
   return {
     isConfigured: isPayFastConfigured(),
     isTestMode: PAYFAST_CONFIG.TEST_MODE,
-    merchantId: PAYFAST_CONFIG.MERCHANT_ID,
     hasValidUrls: !!(PAYFAST_CONFIG.RETURN_URL && PAYFAST_CONFIG.CANCEL_URL),
   };
 } 

@@ -23,67 +23,37 @@ class WooCommerceBrandsService {
 
   constructor() {
     this.baseUrl = import.meta.env.VITE_WORDPRESS_URL || '';
-    this.consumerKey = import.meta.env.VITE_WOOCOMMERCE_CONSUMER_KEY || '';
-    this.consumerSecret = import.meta.env.VITE_WOOCOMMERCE_CONSUMER_SECRET || '';
+    this.consumerKey = ''; // No longer needed
+    this.consumerSecret = ''; // No longer needed
   }
 
   private getAuthHeader(): string {
-    const credentials = btoa(`${this.consumerKey}:${this.consumerSecret}`);
-    return `Basic ${credentials}`;
+    // No longer needed - using WordPress API key instead
+    return '';
   }
 
   async fetchBrands(): Promise<WooCommerceBrand[]> {
-    try { // eslint-disable-line no-unused-vars
-      
-      // Try to fetch brands from the product_brand taxonomy
-      const brandsUrl = `${this.baseUrl}/wp-json/wc/v3/products/brands?per_page=100`;
+    try {
+      // Call WordPress secure endpoint
+      const brandsUrl = `${this.baseUrl}/wp-json/invictus/v1/products/brands?per_page=100`;
       
       const response = await fetch(brandsUrl, {
         method: 'GET',
         headers: {
-          'Authorization': this.getAuthHeader(),
+          'X-API-Key': 'invictus-react-2024',
           'Content-Type': 'application/json',
         },
       });
 
-      if (response.ok) {
-        const data: WooCommerceBrand[] = await response.json();
-        
-        // Don't filter by count for now - return all brands
-        const filteredBrands = data
-          .sort((a, b) => a.name.localeCompare(b.name));
-        return filteredBrands;
+      if (!response.ok) {
+        return [];
       }
+
+      const result = await response.json();
       
-      
-      // Try alternative endpoints for brands
-      const alternativeEndpoints = [
-        `${this.baseUrl}/wp-json/wc/v3/products/brand?per_page=100`,
-        `${this.baseUrl}/wp-json/wc/v3/products/attributes/3/terms?per_page=100`,
-        `${this.baseUrl}/wp-json/wp/v2/product_brand?per_page=100`
-      ];
-      
-      for (const endpoint of alternativeEndpoints) {
-        try {
-          const altResponse = await fetch(endpoint, {
-            method: 'GET',
-            headers: {
-              'Authorization': this.getAuthHeader(),
-              'Content-Type': 'application/json',
-            },
-          });
-          
-          if (altResponse.ok) {
-            const data: WooCommerceBrand[] = await altResponse.json();
-            
-            const filteredBrands = data
-              .filter(brand => brand.count && brand.count > 0)
-              .sort((a, b) => a.name.localeCompare(b.name));
-            
-            return filteredBrands;
-          }
-        } catch (error) {
-        }
+      // WordPress endpoint returns { success: true, data: [...], total: N }
+      if (result.success && result.data) {
+        return result.data.sort((a: WooCommerceBrand, b: WooCommerceBrand) => a.name.localeCompare(b.name));
       }
       
       return [];

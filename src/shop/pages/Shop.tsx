@@ -44,20 +44,24 @@ export default function Shop() {
     const brandParam = searchParams.get('brand');
     const onSaleParam = searchParams.get('onSale');
     
+    // Reset filters to match URL params (important for clearing filters when switching)
     if (categoryParam) {
       const categoryId = parseInt(categoryParam);
       if (!isNaN(categoryId)) {
         setCategoryId(categoryId);
       }
+    } else {
+      setCategoryId('');
     }
     
     if (brandParam) {
       setBrandId(brandParam);
+    } else {
+      setBrandId('');
     }
 
-    if (onSaleParam) {
-      setOnSale(onSaleParam === 'true');
-    }
+    // Reset onSale based on URL param (important - if not in URL, reset to false)
+    setOnSale(onSaleParam === 'true');
     
     // Fetch products with all filters
     fetchProducts({ 

@@ -20,42 +20,38 @@ interface WooCommerceResponse {
 
 class WooCommerceCategoriesService {
   private baseUrl: string;
-  private consumerKey: string;
-  private consumerSecret: string;
 
   constructor() {
     this.baseUrl = import.meta.env.VITE_WORDPRESS_URL || '';
-    this.consumerKey = import.meta.env.VITE_WOOCOMMERCE_CONSUMER_KEY || '';
-    this.consumerSecret = import.meta.env.VITE_WOOCOMMERCE_CONSUMER_SECRET || '';
-  }
-
-  private getAuthHeader(): string {
-    const credentials = btoa(`${this.consumerKey}:${this.consumerSecret}`);
-    return `Basic ${credentials}`;
   }
 
   async fetchCategories(): Promise<WooCommerceCategory[]> {
     try {
-      const url = `${this.baseUrl}/wp-json/wc/v3/products/categories?per_page=100&hide_empty=true`;
+      // Call WordPress secure endpoint
+      const url = `${this.baseUrl}/wp-json/invictus/v1/products/categories?per_page=100&hide_empty=true`;
       
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'Authorization': this.getAuthHeader(),
+          'X-API-Key': 'invictus-react-2024',
           'Content-Type': 'application/json',
         },
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        return [];
       }
 
-      const data: WooCommerceCategory[] = await response.json();
+      const result = await response.json();
       
-      // Filter out categories with count 0 (no products) and sort by name
-      return data
-        .filter(category => category.count && category.count > 0)
-        .sort((a, b) => a.name.localeCompare(b.name));
+      // WordPress endpoint returns { success: true, data: [...], total: N }
+      if (result.success && result.data) {
+        return result.data
+          .filter((category: WooCommerceCategory) => category.count && category.count > 0)
+          .sort((a: WooCommerceCategory, b: WooCommerceCategory) => a.name.localeCompare(b.name));
+      }
+      
+      return [];
     } catch (error) {
       return [];
     }

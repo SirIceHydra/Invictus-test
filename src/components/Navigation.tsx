@@ -549,8 +549,8 @@ export function Navigation({}: NavigationProps) {
       }`}>
         <div className="bg-gradient-to-r from-primary to-primarySupport border-t border-tertiary/20">
           <div className="container mx-auto px-4 py-2">
-            <div className="flex items-center justify-center">
-              {/* Centered Content */}
+            <div className="flex flex-col items-center justify-center">
+              {/* Main shipping banner content */}
               <div className="flex items-center gap-6 text-center">
                 <div className="flex items-center gap-2">
                   <div className="bg-tertiary/20 p-1.5 rounded-full">
@@ -558,7 +558,6 @@ export function Navigation({}: NavigationProps) {
                   </div>
                   <div>
                     <span className="text-tertiary font-bold text-sm">Free Shipping on orders over R{freeShippingThreshold}</span>
-
                   </div>
                 </div>
                 
@@ -578,20 +577,18 @@ export function Navigation({}: NavigationProps) {
                     View shipping policy
                   </Link>
                 </div>
-
               </div>
-
+              
+              {/* Mobile shipping policy link - properly integrated */}
+              <div className="sm:hidden mt-1">
+                <Link 
+                  to="/shipping-policy" 
+                  className="text-blue-400 hover:text-blue-300 underline text-xs transition-colors"
+                >
+                  View shipping policy
+                </Link>
+              </div>
             </div>
-          </div>
-          
-          {/* Mobile shipping policy link */}
-          <div className="sm:hidden px-4 pb-2">
-            <Link 
-              to="/shipping-policy" 
-              className="text-blue-400 hover:text-blue-300 underline text-xs transition-colors"
-            >
-              View shipping policy
-            </Link>
           </div>
         </div>
       </div>
