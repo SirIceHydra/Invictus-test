@@ -22,59 +22,28 @@ export function stripHtmlTags(html: string): string {
  * @returns Simplified Product object for React components
  */
 export function transformWooCommerceProduct(wooProduct: WooCommerceProduct): Product {
-  // Validate input
-  if (!wooProduct || typeof wooProduct !== 'object') {
-    throw new Error('Invalid product data received');
-  }
-
-  // Extract brand from attributes
-  let brand = undefined;
-  
-  if (wooProduct.attributes && Array.isArray(wooProduct.attributes) && wooProduct.attributes.length > 0) {
-    const brandAttr = wooProduct.attributes.find(attr => 
-      attr.name && (attr.name.toLowerCase() === 'brand' || attr.name.toLowerCase() === 'pa_brand')
-    );
-    
-    if (brandAttr && brandAttr.options && Array.isArray(brandAttr.options) && brandAttr.options.length > 0) {
-      brand = brandAttr.options[0];
-    }
-  }
-  
-  // If still not found, try to extract from product name (fallback)
-  if (!brand && wooProduct.name) {
-    const brandNames = [
-      'Optimum Nutrition', 
-      'MyProtein', 
-      'Muscletech', 
-      'Pharmafreak',
-      'Applied Nutrition'
-    ];
-    for (const brandName of brandNames) {
-      if (wooProduct.name.toLowerCase().includes(brandName.toLowerCase())) {
-        brand = brandName;
-        break;
-      }
-    }
-  }
+  // Extract brand from WordPress response
+  // WordPress sends brand directly via the format_product_data() function
+  let brand = (wooProduct as any).brand || undefined;
   
 
 
   return {
     id: wooProduct.id,
-    name: wooProduct.name || 'Unnamed Product',
-    description: wooProduct.description || '',
-    shortDescription: stripHtmlTags(wooProduct.short_description || ''),
+    name: wooProduct.name,
+    description: wooProduct.description,
+    shortDescription: stripHtmlTags(wooProduct.short_description),
     price: parseFloat(wooProduct.price) || 0,
     regularPrice: parseFloat(wooProduct.regular_price) || 0,
     salePrice: wooProduct.sale_price ? parseFloat(wooProduct.sale_price) : undefined,
-    onSale: wooProduct.on_sale || false,
-    images: Array.isArray(wooProduct.images) ? wooProduct.images.map(img => img.src) : [],
-    stockStatus: wooProduct.stock_status || 'instock',
+    onSale: wooProduct.on_sale,
+    images: wooProduct.images.map(img => img.src),
+    stockStatus: wooProduct.stock_status,
     stockQuantity: wooProduct.stock_quantity || undefined,
-    categories: Array.isArray(wooProduct.categories) ? wooProduct.categories.map(cat => cat.name) : [],
+    categories: wooProduct.categories.map(cat => cat.name),
     brand,
-    slug: wooProduct.slug || '',
-    permalink: wooProduct.permalink || '',
+    slug: wooProduct.slug,
+    permalink: wooProduct.permalink,
   };
 }
 
@@ -132,26 +101,10 @@ export function formatPriceNumber(price: number): string {
 
 /**
  * Generate WooCommerce API URL with authentication
- * @deprecated This function is deprecated - use WordPress secure endpoints instead
- * @param endpoint - API endpoint
- * @param params - Query parameters
- * @returns Complete API URL with authentication
+ * @deprecated This function is deprecated. Use WordPress secure endpoints via api.ts instead.
  */
 export function generateWooCommerceUrl(endpoint: string, params: Record<string, any> = {}): string {
-  
-  const url = new URL(`${WOOCOMMERCE_CONFIG.BASE_URL}/wp-json/invictus/v1${endpoint}`);
-  
-  // Add API key header instead of consumer key/secret
-  // This should be handled by the fetch call, not in the URL
-  
-  // Add additional parameters
-  Object.entries(params).forEach(([key, value]) => {
-    if (value !== undefined && value !== null) {
-      url.searchParams.append(key, value.toString());
-    }
-  });
-  
-  return url.toString();
+  throw new Error('generateWooCommerceUrl is deprecated. Use WordPress secure endpoints instead.');
 }
 
 /**

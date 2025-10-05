@@ -328,12 +328,23 @@ export async function getCategories(params: {
   if (cached) return cached;
   
   try {
-    const response = await apiGet<any[]>(API_ENDPOINTS.CATEGORIES, params);
+    const response = await apiGet<any>(API_ENDPOINTS.CATEGORIES, params);
+    
+    // Unwrap WordPress response format: { success: true, data: [...], total: N }
+    let categories: any[] = [];
+    
+    if (response && response.success && Array.isArray(response.data)) {
+      categories = response.data;
+    } else if (Array.isArray(response)) {
+      categories = response;
+    } else {
+      categories = [];
+    }
     
     // Cache the result
-    setCachedData(cacheKey, response);
+    setCachedData(cacheKey, categories);
     
-    return response;
+    return categories;
   } catch (error) {
     throw error;
   }

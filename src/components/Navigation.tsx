@@ -145,7 +145,7 @@ export function Navigation({}: NavigationProps) {
                 brands.map((brand) => (
                   <Link
                     key={brand.id}
-                    to={`/shop?brand=${brand.name}`}
+                    to={`/shop?brand=${encodeURIComponent(brand.name)}`}
                     className="block px-4 py-2 hover:bg-primary hover:text-white transition-colors text-tertiary"
                   >
                     {brand.name}
